@@ -1,0 +1,416 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity Intents API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Intents
+paths:
+  /intents:
+    post:
+      tags:
+      - Intents
+      summary: Propose an intent
+      description: 'Propose a dangerous or irreversible action for human approval. Returns a `review_url`
+
+        where a human must review the impact and approve before the action executes.
+
+
+        The entity that proposes an intent can never approve it. Approval always happens
+
+        on Wefunder''s UI by a user with permission on the resource.
+
+
+        See [Intents documentation](/concepts/intents) for the full pattern.
+
+        '
+      operationId: createIntent
+      security:
+      - bearerAuth:
+        - write:syndicates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - action_name
+              - resource_type
+              - resource_id
+              properties:
+                action_name:
+                  type: string
+                  description: The action to perform
+                  example: syndicates.close_deal
+                  enum:
+                  - syndicates.close_deal
+                  - syndicates.finalize_deal
+                  - syndicates.publish
+                  - syndicates.remove_member
+                  - syndicates.delete_draft
+                resource_type:
+                  type: string
+                  example: Club
+                  description: The model class name of the resource
+                resource_id:
+                  type: integer
+                  example: 42
+                params:
+                  type: object
+                  description: Action-specific parameters
+                  example:
+                    fundraise_id: 99
+                idempotency_key:
+                  type: string
+                  description: Client-provided deduplication key. If a pending/executed intent exists with this key, the existing intent is returned.
+                  example: close-acme-series-a
+                requested_by_agent:
+                  type: string
+                  description: Human-readable name of the agent proposing the action
+                  example: Claude via MCP
+      responses:
+        '201':
+          description: Intent created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntentEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: Duplicate idempotency key (returns existing intent)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntentEnvelope'
+        '422':
+          description: Invalid action or parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+      - Intents
+      summary: List intents
+      description: List intents created by the current token, optionally filtered by status or resource.
+      operationId: listIntents
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - pending
+          - approved
+          - executed
+          - expired
+          - rejected
+          - failed
+      - name: resource_type
+        in: query
+        schema:
+          type: string
+      - name: resource_id
+        in: query
+        schema:
+          type: integer
+      - name: cursor
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 25
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntentListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /intents/{intent_id}:
+    get:
+      tags:
+      - Intents
+      summary: Get intent status
+      description: 'Check the current status of an intent. Use this to poll for approval
+
+        after proposing an intent, or subscribe to `intent.*` webhook events instead.
+
+        '
+      operationId: getIntent
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - name: intent_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Intent UUID
+        example: intent_abc123
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntentEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Intent not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    IntentListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Intent'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    Intent:
+      type: object
+      description: JSON:API resource representing an intent (proposed dangerous action)
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        type:
+          type: string
+          example: intent
+        attributes:
+          type: object
+          properties:
+            action:
+              type: string
+              example: syndicates.close_deal
+            status:
+              type: string
+              enum:
+              - pending
+              - approved
+              - executing
+              - executed
+              - expired
+              - rejected
+              - failed
+              example: pending
+            resource_type:
+              type: string
+              example: Club
+            resource_id:
+              type: integer
+              example: 42
+            impact_summary:
+              type: string
+              example: Close the Acme Corp Series A deal. 47 investors have committed $2.3M.
+            review_url:
+              type: string
+              format: uri
+              example: https://wefunder.com/intents/a1b2c3d4-e5f6-7890-abcd-ef1234567890/review
+              description: URL where a human can review and approve/reject this intent
+            requested_by_agent:
+              type: string
+              nullable: true
+              description: Human-readable name of the agent that proposed this intent
+              example: Claude via MCP
+            expires_at:
+              type: string
+              format: date-time
+              nullable: true
+              example: '2025-03-01T12:00:00Z'
+            approved_at:
+              type: string
+              format: date-time
+              nullable: true
+              example: '2025-03-01T12:00:00Z'
+            executed_at:
+              type: string
+              format: date-time
+              nullable: true
+              example: '2025-03-01T12:00:00Z'
+            rejection_reason:
+              type: string
+              nullable: true
+              example: Example text
+            execution_result:
+              type: object
+              nullable: true
+              description: Action-specific result data (only present when status is executed)
+            created_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+            updated_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type: integer
+          nullable: true
+          example: 12345
+    IntentEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Intent'
+  responses:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.

@@ -1,0 +1,243 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity Users API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Users
+paths:
+  /users/me:
+    get:
+      tags:
+      - Users
+      summary: Get current user profile
+      description: 'Retrieves the profile information for the currently authenticated user. This endpoint returns
+
+        basic user details including name, email, and account status.
+
+
+        Use this endpoint to:
+
+        - Display user information in your application
+
+        - Verify the identity of the authenticated user
+
+        - Check user account status and permissions
+
+
+        The response includes the user''s unique ID which can be used to reference the user in other API calls.
+
+        '
+      operationId: getCurrentUser
+      security:
+      - bearerAuth:
+        - read:profile
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+components:
+  responses:
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: 'Too many requests in a short time period. The API enforces rate limits to ensure
+
+        fair usage and system stability. When you exceed the limit, you''ll receive this
+
+        error along with headers indicating when you can retry.
+
+
+        Check the `X-RateLimit-Reset` header to know when your limit will reset.
+
+        Consider implementing exponential backoff in your application.
+
+        '
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Request limit per hour
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Remaining requests
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: UTC timestamp when the limit resets
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        type:
+          type: string
+          example: user
+        attributes:
+          type: object
+          properties:
+            email:
+              type: string
+              example: user@example.com
+            username:
+              type: string
+              example: john_doe
+            name:
+              type: string
+              example: John
+            full_name:
+              type: string
+              example: John Doe
+            bio:
+              type: string
+              nullable: true
+              example: Entrepreneur and investor
+            city:
+              type: string
+              nullable: true
+              example: San Francisco
+            country:
+              type: string
+              nullable: true
+              example: USA
+            avatar_url:
+              type: string
+              nullable: true
+              example: https://example.com/avatar.jpg
+            created_at:
+              type: string
+              format: date-time
+              example: '2023-01-15T10:30:00Z'
+            certified_at:
+              type: string
+              format: date-time
+              nullable: true
+              example: '2023-02-01T14:20:00Z'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    UserEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/User'
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.

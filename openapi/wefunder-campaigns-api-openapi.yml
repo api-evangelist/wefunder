@@ -1,0 +1,300 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity Campaigns API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Campaigns
+paths:
+  /campaigns:
+    get:
+      tags:
+      - Campaigns
+      summary: List founder campaigns
+      description: 'Retrieves all fundraising campaigns for companies where the authenticated user is a founder.
+
+        This endpoint returns comprehensive campaign data including funding progress, investor counts,
+
+        and campaign status.
+
+
+        Use this endpoint to:
+
+        - Build custom founder dashboards
+
+        - Monitor fundraising progress across multiple campaigns
+
+        - Generate reports on campaign performance
+
+        - Integrate campaign data into your own tools
+
+
+        Only founders with the appropriate permissions can access this endpoint. The response includes
+
+        both active and closed campaigns, with detailed metrics for each.
+
+        '
+      operationId: listCampaigns
+      security:
+      - bearerAuth:
+        - read:offerings
+      parameters:
+      - $ref: '#/components/parameters/cursor'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+components:
+  responses:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: 'Too many requests in a short time period. The API enforces rate limits to ensure
+
+        fair usage and system stability. When you exceed the limit, you''ll receive this
+
+        error along with headers indicating when you can retry.
+
+
+        Check the `X-RateLimit-Reset` header to know when your limit will reset.
+
+        Consider implementing exponential backoff in your application.
+
+        '
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Request limit per hour
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Remaining requests
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: UTC timestamp when the limit resets
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+
+        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+
+        first page.
+
+        '
+      schema:
+        type: integer
+      example: 12345
+  schemas:
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 789
+        type:
+          type: string
+          example: campaign
+        attributes:
+          type: object
+          properties:
+            state:
+              type: string
+              example: active
+            company_id:
+              type: integer
+              example: 101
+            company_name:
+              type: string
+              example: My Startup Inc.
+            company_url:
+              type: string
+              nullable: true
+              example: my-startup-inc
+            created_at:
+              type: string
+              format: date-time
+              example: '2023-01-10T09:00:00Z'
+            updated_at:
+              type: string
+              format: date-time
+              example: '2023-03-15T14:30:00Z'
+            closed_at:
+              type: string
+              format: date-time
+              nullable: true
+              example: '2023-06-30T23:59:59Z'
+            amount_raised:
+              type: number
+              format: float
+              nullable: true
+              example: 25000
+            investor_count:
+              type: integer
+              example: 42
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type: integer
+          nullable: true
+          example: 12345
+    CampaignListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.

@@ -1,0 +1,642 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity Attribution Webhooks API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Attribution Webhooks
+paths:
+  /campaigns/{campaign_id}/attribution/webhooks:
+    get:
+      tags:
+      - Attribution Webhooks
+      summary: List attribution webhook subscriptions
+      description: 'Returns all active webhook subscriptions for this campaign belonging to
+
+        your OAuth application.
+
+
+        **Tier 1** endpoint requiring admin-approved access with the
+
+        `read:attribution:anonymized` scope.
+
+        '
+      operationId: listWebhookSubscriptions
+      security:
+      - bearerAuth:
+        - read:attribution:anonymized
+      parameters:
+      - $ref: '#/components/parameters/campaign_id'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSubscriptionListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags:
+      - Attribution Webhooks
+      summary: Create webhook subscription
+      description: 'Creates a new webhook subscription for this campaign. When attributed
+
+        investments change state, we''ll POST a JSON payload to your target URL.
+
+
+        **Tier 1** endpoint requiring admin-approved access.
+
+
+        ## Webhook Payload
+
+
+        Payloads include anonymized data (tokens, amount tiers) matching the
+
+        `/attribution/investments` endpoint.
+
+
+        ## Security
+
+
+        - `target_url` must use HTTPS
+
+        - `target_url` cannot resolve to private/internal IPs (SSRF protection)
+
+        - Payloads are signed with HMAC-SHA256 using the returned `secret`
+
+
+        ## Verification
+
+
+        Verify webhook signatures using the `X-Wefunder-Signature` header:
+
+        ```
+
+        timestamp = headers[''X-Wefunder-Timestamp'']
+
+        signature = headers[''X-Wefunder-Signature'']
+
+        expected = "sha256=" + HMAC-SHA256(secret, timestamp + "." + raw_body)
+
+        ```
+
+
+        Reject requests where:
+
+        - Signature doesn''t match
+
+        - Timestamp is more than 5 minutes old (replay protection)
+
+        '
+      operationId: createWebhookSubscription
+      security:
+      - bearerAuth:
+        - read:attribution:anonymized
+      parameters:
+      - $ref: '#/components/parameters/campaign_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - target_url
+              - events
+              properties:
+                target_url:
+                  type: string
+                  format: uri
+                  description: HTTPS URL to receive webhook POSTs
+                  example: https://yourapp.com/webhooks/wefunder
+                events:
+                  type: array
+                  description: Events to subscribe to
+                  items:
+                    type: string
+                    enum:
+                    - investment.applied
+                    - investment.confirmed
+                    - investment.canceled
+                  example:
+                  - investment.applied
+                  - investment.confirmed
+      responses:
+        '201':
+          description: Subscription created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSubscriptionWithSecretEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          description: Validation error (invalid URL, events, or limit reached)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /campaigns/{campaign_id}/attribution/webhooks/{webhook_id}:
+    get:
+      tags:
+      - Attribution Webhooks
+      summary: Get webhook subscription details
+      description: 'Returns details for a specific webhook subscription including recent
+
+        delivery history.
+
+        '
+      operationId: getWebhookSubscription
+      security:
+      - bearerAuth:
+        - read:attribution:anonymized
+      parameters:
+      - $ref: '#/components/parameters/campaign_id'
+      - $ref: '#/components/parameters/webhook_id'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSubscriptionWithRecentDeliveriesEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Subscription not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+      - Attribution Webhooks
+      summary: Delete webhook subscription
+      description: 'Deactivates a webhook subscription. The subscription will stop receiving
+
+        events but historical delivery data is retained for 7 days.
+
+        '
+      operationId: deleteWebhookSubscription
+      security:
+      - bearerAuth:
+        - read:attribution:anonymized
+      parameters:
+      - $ref: '#/components/parameters/campaign_id'
+      - $ref: '#/components/parameters/webhook_id'
+      responses:
+        '204':
+          description: Subscription deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Subscription not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /campaigns/{campaign_id}/attribution/webhooks/{webhook_id}/test:
+    post:
+      tags:
+      - Attribution Webhooks
+      summary: Send test webhook
+      description: 'Sends a test webhook to verify your endpoint is working correctly.
+
+        The test payload includes a `"event": "test"` field to distinguish
+
+        it from real events.
+
+        '
+      operationId: testWebhookSubscription
+      security:
+      - bearerAuth:
+        - read:attribution:anonymized
+      parameters:
+      - $ref: '#/components/parameters/campaign_id'
+      - $ref: '#/components/parameters/webhook_id'
+      responses:
+        '200':
+          description: Test webhook queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookTestResultEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Subscription not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Subscription is inactive
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /campaigns/{campaign_id}/attribution/webhooks/{webhook_id}/regenerate_secret:
+    post:
+      tags:
+      - Attribution Webhooks
+      summary: Regenerate webhook signing secret
+      description: 'Generates a new HMAC signing secret for the webhook subscription.
+
+        The old secret is immediately invalidated.
+
+
+        **Important**: Store the new secret securely - it cannot be retrieved later.
+
+        '
+      operationId: regenerateWebhookSecret
+      security:
+      - bearerAuth:
+        - read:attribution:anonymized
+      parameters:
+      - $ref: '#/components/parameters/campaign_id'
+      - $ref: '#/components/parameters/webhook_id'
+      responses:
+        '200':
+          description: Secret regenerated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSubscriptionWithSecret2Envelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Subscription not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /campaigns/{campaign_id}/attribution/webhooks/{webhook_id}/reactivate:
+    post:
+      tags:
+      - Attribution Webhooks
+      summary: Reactivate disabled webhook
+      description: 'Reactivates a webhook subscription that was auto-disabled after
+
+        consecutive failures. Resets the failure counter to 0.
+
+
+        Use this after fixing issues with your webhook endpoint.
+
+        '
+      operationId: reactivateWebhookSubscription
+      security:
+      - bearerAuth:
+        - read:attribution:anonymized
+      parameters:
+      - $ref: '#/components/parameters/campaign_id'
+      - $ref: '#/components/parameters/webhook_id'
+      responses:
+        '200':
+          description: Webhook reactivated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookSubscriptionEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Subscription not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Webhook is already active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    WebhookDelivery:
+      type: object
+      description: A single webhook delivery attempt
+      properties:
+        id:
+          type: integer
+          example: 456
+        delivery_uuid:
+          type: string
+          format: uuid
+          description: Unique delivery identifier (use for idempotency)
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        event_type:
+          type: string
+          description: The event that triggered this delivery
+          example: investment.applied
+        status:
+          type: string
+          enum:
+          - pending
+          - delivered
+          - failed
+          example: delivered
+        attempts:
+          type: integer
+          description: Number of delivery attempts
+          example: 1
+        response_code:
+          type: integer
+          nullable: true
+          description: HTTP status code from the last attempt
+          example: 200
+        last_attempt_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: '2025-03-15T10:31:00Z'
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-03-15T10:30:00Z'
+    WebhookSubscriptionWithRecentDeliveriesEnvelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              recent_deliveries:
+                type: array
+                description: Last 10 delivery attempts
+                items:
+                  $ref: '#/components/schemas/WebhookDelivery'
+    WebhookSubscriptionWithSecret2Envelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              secret:
+                type: string
+                description: New HMAC signing secret
+                example: whsec_a1b2c3d4e5f6g7h8i9j0...
+    WebhookTestResultEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookTestResult'
+    WebhookSubscriptionListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookSubscription'
+        meta:
+          type: object
+          properties:
+            total:
+              type: integer
+              description: Number of active subscriptions
+              example: 2
+            limit:
+              type: integer
+              description: Maximum subscriptions per application
+              example: 10
+    WebhookSubscriptionEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookSubscription'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    WebhookSubscriptionWithSecretEnvelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              secret:
+                type: string
+                description: 'HMAC signing secret. **Only returned on create.**
+
+                  Store this securely - it cannot be retrieved later.
+
+                  '
+                example: whsec_a1b2c3d4e5f6g7h8i9j0...
+    WebhookTestResult:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Test webhook queued for delivery
+        delivery_id:
+          type: string
+          format: uuid
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        payload_preview:
+          type: object
+          description: The payload that was sent
+    WebhookSubscription:
+      type: object
+      description: A webhook subscription for attribution events
+      properties:
+        id:
+          type: integer
+          example: 123
+        campaign_id:
+          type: integer
+          example: 789
+        target_url:
+          type: string
+          format: uri
+          example: https://yourapp.com/webhooks/wefunder
+        events:
+          type: array
+          items:
+            type: string
+            enum:
+            - investment.applied
+            - investment.confirmed
+            - investment.canceled
+          example:
+          - investment.applied
+          - investment.confirmed
+        active:
+          type: boolean
+          description: Whether the subscription is active
+          example: true
+        consecutive_failures:
+          type: integer
+          description: Number of consecutive delivery failures (resets on success)
+          example: 0
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-03-15T10:30:00Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2025-03-15T10:30:00Z'
+  parameters:
+    campaign_id:
+      name: campaign_id
+      in: path
+      required: true
+      description: The fundraise/campaign ID
+      schema:
+        type: integer
+      example: 789
+    webhook_id:
+      name: webhook_id
+      in: path
+      required: true
+      description: The webhook subscription ID
+      schema:
+        type: integer
+      example: 123
+  responses:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.

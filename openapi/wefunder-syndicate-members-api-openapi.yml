@@ -1,0 +1,838 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity Syndicate Members API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Syndicate Members
+paths:
+  /syndicates/{syndicate_id}/members:
+    get:
+      tags:
+      - Syndicate Members
+      summary: List members
+      description: 'Returns the member directory for a syndicate with role, status, tags, sidebar notes,
+
+        and investment history summaries. Supports filtering, sorting, search, and pagination.
+
+        '
+      operationId: listSyndicateMembers
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - name: role
+        in: query
+        schema:
+          type: string
+        description: Filter by role (e.g. creator, manager, member, invitee, applicant)
+      - name: permission
+        in: query
+        schema:
+          type: string
+          enum:
+          - full_access
+          - operator
+        description: Filter by syndicate permission level
+      - name: search
+        in: query
+        schema:
+          type: string
+        description: Search by name or email
+      - name: sort
+        in: query
+        schema:
+          type: string
+          enum:
+          - relevance
+          - newest
+          - oldest
+          - alphabetical
+          - last_activity
+        description: Sort order for results
+      - name: has_invested
+        in: query
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+        description: Filter by whether the member has invested in any syndicate deal
+      - name: accredited
+        in: query
+        schema:
+          type: string
+          enum:
+          - 'true'
+        description: Filter to accredited members only
+      - name: tag
+        in: query
+        schema:
+          type: string
+        description: Filter by 'can help with' tag (ILIKE match)
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateMemberListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /syndicates/{syndicate_id}/members/invite:
+    post:
+      tags:
+      - Syndicate Members
+      summary: Invite member
+      description: Send an invitation to join the syndicate by email.
+      operationId: inviteSyndicateMember
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: jane@example.com
+                name:
+                  type: string
+                  description: Display name for the invitee
+                syndicate_permission:
+                  type: string
+                  enum:
+                  - full_access
+                  - operator
+                  default: operator
+                  description: Permission level. Only the syndicate creator can assign full_access (admin).
+      responses:
+        '201':
+          description: Invitation sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateMemberEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          description: Validation error (e.g. already a member)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /syndicates/{syndicate_id}/members/{member_id}:
+    patch:
+      tags:
+      - Syndicate Members
+      summary: Update member
+      description: Update title and carry override for a member. Requires operator permission.
+      operationId: updateSyndicateMember
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/member_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - member
+              properties:
+                member:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: Lead Investor
+                    carry_percentage_override:
+                      type: string
+                      example: '20.0'
+      responses:
+        '200':
+          description: Member updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateMemberEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    delete:
+      tags:
+      - Syndicate Members
+      summary: Remove member (requires intent)
+      description: 'Removing a member is irreversible and requires human approval through the Intent system.
+
+        This endpoint always returns 422 with a `use_intents` error directing you to
+
+        `POST /v2/intents` with action `syndicates.remove_member`.
+
+        '
+      operationId: removeSyndicateMember
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/member_id'
+      responses:
+        '422':
+          description: Use intents for this action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /syndicates/{syndicate_id}/members/{member_id}/approve:
+    post:
+      tags:
+      - Syndicate Members
+      summary: Approve applicant
+      description: Approve a pending applicant. Only applicants can be approved via API; invitees must accept their invite link.
+      operationId: approveSyndicateMember
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/member_id'
+      responses:
+        '200':
+          description: Member approved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateMemberEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /syndicates/{syndicate_id}/members/{member_id}/hide:
+    post:
+      tags:
+      - Syndicate Members
+      summary: Exile member
+      description: Exile (hide) a member from the syndicate. Sets their role to exiled.
+      operationId: hideSyndicateMember
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/member_id'
+      responses:
+        '200':
+          description: Member hidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateMemberEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /syndicates/{syndicate_id}/members/{member_id}/promote:
+    post:
+      tags:
+      - Syndicate Members
+      summary: Promote member to admin
+      description: Promote a member to full_access (admin) role. Only the syndicate creator can promote members.
+      operationId: promoteSyndicateMember
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/member_id'
+      responses:
+        '200':
+          description: Member promoted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateMemberEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /syndicates/{syndicate_id}/members/{member_id}/demote:
+    post:
+      tags:
+      - Syndicate Members
+      summary: Demote member to operator
+      description: Demote a member from full_access (admin) to operator permission.
+      operationId: demoteSyndicateMember
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/member_id'
+      responses:
+        '200':
+          description: Member demoted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateMemberEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /syndicates/{syndicate_id}/members/{member_id}/restore:
+    post:
+      tags:
+      - Syndicate Members
+      summary: Restore exiled or resigned member
+      description: Restore a member who was previously exiled or resigned. Sets their role back to member.
+      operationId: restoreSyndicateMember
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/member_id'
+      responses:
+        '200':
+          description: Member restored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateMemberEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /syndicates/{syndicate_id}/members/{member_id}/resend_invite:
+    post:
+      tags:
+      - Syndicate Members
+      summary: Resend invitation
+      operationId: resendSyndicateInvite
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/member_id'
+      responses:
+        '200':
+          description: Invitation resent
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /syndicates/{syndicate_id}/members/reorder:
+    post:
+      tags:
+      - Syndicate Members
+      summary: Reorder members
+      description: Set the display order for the member directory.
+      operationId: reorderSyndicateMembers
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - member_ids
+              properties:
+                member_ids:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                  - cr_123
+                  - cr_456
+                  - cr_789
+      responses:
+        '200':
+          description: Order updated
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /syndicates/{syndicate_id}/members/export_csv:
+    post:
+      tags:
+      - Syndicate Members
+      summary: Export members CSV
+      description: 'Generate a CSV export of the member directory. Returns the CSV data directly
+
+        with Content-Type text/csv. Requires operator permission.
+
+        '
+      operationId: exportSyndicateMembersCsv
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      responses:
+        '200':
+          description: CSV data
+          content:
+            text/csv:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /syndicates/{syndicate_id}/members/{member_id}/investments:
+    get:
+      tags:
+      - Syndicate Members
+      summary: List member investments
+      description: 'Returns this member''s investments in syndicate deals. Scoped to the syndicate''s
+
+        selected deals (one per company, matching directory semantics).
+
+
+        All monetary values are strings representing cents to avoid floating-point precision issues.
+
+        '
+      operationId: listSyndicateMemberInvestments
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/member_id'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberInvestmentListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Member not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  responses:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    SyndicateMember:
+      type: object
+      description: JSON:API resource representing a syndicate member (ClubRole)
+      properties:
+        id:
+          type: integer
+          example: 123
+        type:
+          type: string
+          example: syndicate_member
+        attributes:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              nullable: true
+              description: User ID (null for invitees who haven't signed up)
+              example: 123
+            user_name:
+              type: string
+              nullable: true
+              example: Jane Smith
+            user_email:
+              type: string
+              nullable: true
+              description: '**Moderator-only.** User email (or invite_email for pending invitees).
+
+                Returns null for non-moderator callers. Requires the requesting user
+
+                to be a manager/operator of the syndicate.
+
+                '
+              example: user@example.com
+            role:
+              type: string
+              example: member
+              description: Current role (creator, manager, member, invitee, applicant, exiled, resigned, etc.)
+            invite_role:
+              type: string
+              nullable: true
+              description: The role the member was invited as
+              example: admin
+            syndicate_permission:
+              type: string
+              enum:
+              - full_access
+              - operator
+              description: Permission level within the syndicate
+            title:
+              type: string
+              nullable: true
+              description: Custom title for the member
+              example: Example title
+            sort_order:
+              type: integer
+              nullable: true
+              description: Display order position
+              example: 5
+            carry_percentage_override:
+              type: string
+              nullable: true
+              example: '20.0'
+              description: Override carry percentage for this member
+            avatar_url:
+              type: string
+              nullable: true
+              description: User profile photo URL (null for invitees without a user account)
+              example: https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg
+            bio:
+              type: string
+              nullable: true
+              description: User bio with fallback chain (bio -> thesis -> about). Null for invitees without a user account.
+              example: Example text
+            city:
+              type: string
+              nullable: true
+              description: User's city
+              example: San Francisco
+            country:
+              type: string
+              nullable: true
+              description: User's country
+              example: US
+            last_activity_at:
+              type: string
+              format: date-time
+              nullable: true
+              description: ISO 8601 timestamp of user's last login. Null for invitees without a user account.
+              example: '2025-03-01T12:00:00Z'
+            profile_url:
+              type: string
+              nullable: true
+              description: Relative path to user's profile (e.g. '/janedoe'). Null for invitees without a user account.
+              example: /janedoe
+            tags:
+              type: array
+              items:
+                type: string
+              description: '''Can help with'' tags from the user''s investor profile. Empty array for invitees.'
+              example:
+              - Fundraising
+              - Product Strategy
+            joined_at:
+              type: string
+              format: date-time
+              description: ISO 8601 join date (alias for created_at)
+              example: '2025-03-01T12:00:00Z'
+            investment_total:
+              type: string
+              nullable: true
+              description: Total amount invested in syndicate deals, in cents. String to avoid floating-point precision issues.
+              example: '500000'
+            deal_count:
+              type: integer
+              nullable: true
+              description: Number of syndicate deals the member has invested in
+              example: 2
+            accredited:
+              type: boolean
+              description: '**Moderator-only.** Whether the user is an accredited investor.
+
+                Only included when the requesting user is a manager/operator.
+
+                '
+              example: true
+            legal_name:
+              type: string
+              nullable: true
+              description: '**Moderator-only.** Full legal name of the user.
+
+                Only included when the requesting user is a manager/operator.
+
+                '
+              example: Example Name
+            starred:
+              type: boolean
+              description: '**Moderator-only.** Whether the current moderator has starred this member.
+
+                Only included when the requesting user is a manager/operator.
+
+                '
+              example: true
+            private_tags:
+              type: array
+              items:
+                type: string
+              description: '**Moderator-only.** Labels assigned by moderators via ClubMemberLabel.
+
+                Only included when the requesting user is a manager/operator.
+
+                '
+              example:
+              - VIP
+              - Follow up
+            created_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+            updated_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+    SyndicateMemberListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyndicateMember'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    MemberInvestmentListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberInvestment'
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of investments
+            total_amount:
+              type: string
+              description: Sum of all investment amounts in cents, as a string
+              example: '800000'
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type: integer
+          nullable: true
+          example: 12345
+    SyndicateMemberEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateMember'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    MemberInvestment:
+      type: object
+      description: 'JSON:API resource representing a member''s investment in a syndicate deal.
+
+        Scoped to the syndicate''s selected deals (one per company, matching directory semantics).
+
+        '
+      properties:
+        id:
+          type: integer
+          description: Investment ID
+          example: 789
+        type:
+          type: string
+          example: member_investment
+        attributes:
+          type: object
+          properties:
+            fundraise_id:
+              type: integer
+              description: Deal (fundraise) ID
+              example: 75496
+            company_name:
+              type: string
+              nullable: true
+              description: Name of the company the deal is for
+              example: Substack
+            amount:
+              type: string
+              description: Investment amount in cents, as a string to avoid floating-point precision issues
+              example: '500000'
+            state:
+              type: string
+              description: Investment state
+              example: confirmed
+            created_at:
+              type: string
+              format: date-time
+              description: ISO 8601 timestamp when the investment was created
+              example: '2025-03-01T12:00:00Z'
+  parameters:
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
+    member_id:
+      name: member_id
+      in: path
+      required: true
+      description: The member ID
+      schema:
+        type: string
+      example: cr_123
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.

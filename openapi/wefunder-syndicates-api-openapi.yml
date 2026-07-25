@@ -1,0 +1,390 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity Syndicates API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Syndicates
+paths:
+  /syndicates:
+    get:
+      tags:
+      - Syndicates
+      summary: List syndicates
+      description: 'Returns syndicates the authenticated user can manage, based on their roles.
+
+        Results can be filtered by status and sorted by name or creation date.
+
+        '
+      operationId: listSyndicates
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - name: cursor
+        in: query
+        schema:
+          type: string
+        description: Pagination cursor from previous response
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 25
+          maximum: 100
+        description: Results per page
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /syndicates/{syndicate_id}:
+    get:
+      tags:
+      - Syndicates
+      summary: Get syndicate details
+      description: Returns full details for a specific syndicate including settings, team configuration, and summary metrics.
+      operationId: getSyndicate
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateDetailEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Syndicate not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      tags:
+      - Syndicates
+      summary: Update syndicate settings
+      description: 'Update syndicate configuration. Currently supports name, description, and tagline.
+
+        Requires `write:syndicates` scope and at least operator permission.
+
+        '
+      operationId: updateSyndicate
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - syndicate
+              properties:
+                syndicate:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Acme Syndicate
+                    description:
+                      type: string
+                    tagline:
+                      type: string
+      responses:
+        '200':
+          description: Syndicate updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateDetailEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    SyndicateDetailEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateDetail'
+    SyndicateListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Syndicate'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    Syndicate:
+      type: object
+      description: JSON:API resource representing a syndicate
+      properties:
+        id:
+          type: integer
+          example: 42
+        type:
+          type: string
+          example: syndicate
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Acme Syndicate
+            slug:
+              type: string
+              example: acme-syndicate
+            tagline:
+              type: string
+              nullable: true
+              description: Short description / tagline for the syndicate
+              example: Investing in the future of AI
+            description:
+              type: string
+              nullable: true
+              example: Example text
+            avatar_url:
+              type: string
+              nullable: true
+              description: Syndicate icon/avatar URL
+              example: https://uploads.wefunder.com/uploads/club/icon/42/large_avatar.png
+            published:
+              type: boolean
+              example: true
+            launched:
+              type: boolean
+              example: true
+            membership_open:
+              type: boolean
+              description: Whether the syndicate is accepting new members (nil defaults to true)
+              example: true
+            member_count:
+              type: integer
+              example: 47
+            deal_count:
+              type: integer
+              description: Number of linked deals (fundraises) in this syndicate
+              example: 3
+            created_by_user_id:
+              type: integer
+              example: 123
+            created_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+            updated_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type: integer
+          nullable: true
+          example: 12345
+    SyndicateDetail:
+      description: Same as Syndicate (show and index use the same serializer)
+      allOf:
+      - $ref: '#/components/schemas/Syndicate'
+  responses:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: 'Too many requests in a short time period. The API enforces rate limits to ensure
+
+        fair usage and system stability. When you exceed the limit, you''ll receive this
+
+        error along with headers indicating when you can retry.
+
+
+        Check the `X-RateLimit-Reset` header to know when your limit will reset.
+
+        Consider implementing exponential backoff in your application.
+
+        '
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Request limit per hour
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Remaining requests
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: UTC timestamp when the limit resets
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.

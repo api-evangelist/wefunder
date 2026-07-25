@@ -1,0 +1,501 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity Syndicate Deals API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Syndicate Deals
+paths:
+  /syndicates/{syndicate_id}/deals:
+    get:
+      tags:
+      - Syndicate Deals
+      summary: List deals
+      description: Returns all deals (fundraises) within a syndicate with status, terms, and metrics.
+      operationId: listSyndicateDeals
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateDealListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /syndicates/{syndicate_id}/deals/{fundraise_id}:
+    get:
+      tags:
+      - Syndicate Deals
+      summary: Get deal details
+      description: Returns full details for a specific deal including investor breakdown.
+      operationId: getSyndicateDeal
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/fundraise_id'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateDealDetailEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Deal not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /syndicates/{syndicate_id}/deals/{fundraise_id}/investors:
+    get:
+      tags:
+      - Syndicate Deals
+      summary: List deal investors
+      description: 'Returns syndicate members who invested in this deal. Results are scoped to
+
+        syndicate member user IDs only and sorted by amount descending.
+
+
+        The `user_email` field is **moderator-only** — it returns null for non-moderator
+
+        callers (i.e., users who are not a manager/operator of the syndicate).
+
+
+        All monetary values are strings representing cents to avoid floating-point precision issues.
+
+        '
+      operationId: listSyndicateDealInvestors
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/fundraise_id'
+      - name: cursor
+        in: query
+        schema:
+          type: string
+        description: Pagination cursor from previous response
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 25
+          maximum: 100
+        description: Results per page
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DealInvestorListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Deal not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /syndicates/{syndicate_id}/deals/{fundraise_id}/close:
+    post:
+      tags:
+      - Syndicate Deals
+      summary: Close deal (requires intent)
+      description: 'Closing a deal is irreversible and requires human approval through the Intent system.
+
+        This endpoint always returns 422 with a `use_intents` error directing you to
+
+        `POST /v2/intents` with action `syndicates.close_deal`.
+
+        '
+      operationId: closeSyndicateDeal
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/fundraise_id'
+      responses:
+        '422':
+          description: Use intents for this action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /syndicates/{syndicate_id}/deals/{fundraise_id}/finalize:
+    post:
+      tags:
+      - Syndicate Deals
+      summary: Finalize deal (requires intent)
+      description: 'Finalizing a deal triggers disbursement and is irreversible. It requires human approval
+
+        through the Intent system. This endpoint always returns 422 with a `use_intents` error
+
+        directing you to `POST /v2/intents` with action `syndicates.finalize_deal`.
+
+        '
+      operationId: finalizeSyndicateDeal
+      security:
+      - bearerAuth:
+        - write:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      - $ref: '#/components/parameters/fundraise_id'
+      responses:
+        '422':
+          description: Use intents for this action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  parameters:
+    fundraise_id:
+      name: fundraise_id
+      in: path
+      required: true
+      description: The deal (fundraise) ID
+      schema:
+        type: integer
+      example: 99
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
+  responses:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    DealInvestor:
+      type: object
+      description: 'JSON:API resource representing a syndicate member''s investment in a specific deal.
+
+        Only syndicate members'' investments are included (scoped by member user IDs).
+
+        '
+      properties:
+        id:
+          type: integer
+          description: Investment ID
+          example: 12345
+        type:
+          type: string
+          example: deal_investor
+        attributes:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: Investor's user ID
+              example: 456
+            user_name:
+              type: string
+              nullable: true
+              example: Jane Smith
+            user_email:
+              type: string
+              nullable: true
+              description: '**Moderator-only.** Investor''s email address.
+
+                Returns null for non-moderator callers (users who are not a manager/operator).
+
+                '
+              example: user@example.com
+            avatar_url:
+              type: string
+              nullable: true
+              description: Investor's profile photo URL
+              example: https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg
+            amount:
+              type: string
+              description: Investment amount in cents, as a string to avoid floating-point precision issues
+              example: '500000'
+            state:
+              type: string
+              description: Investment state
+              example: confirmed
+            invested_at:
+              type: string
+              format: date-time
+              description: ISO 8601 timestamp when the investment was created
+              example: '2025-03-01T12:00:00Z'
+    DealInvestorListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DealInvestor'
+        meta:
+          type: object
+          properties:
+            has_more:
+              type: boolean
+            count:
+              type: integer
+              description: Number of investors on this page
+    SyndicateDeal:
+      type: object
+      description: JSON:API resource representing a syndicate deal (Fundraise)
+      properties:
+        id:
+          type: integer
+          example: 99
+        type:
+          type: string
+          example: syndicate_deal
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Acme Corp Series A
+            state:
+              type: string
+              description: Fundraise state
+              example: open
+            company_name:
+              type: string
+              example: Acme Corp
+            company_id:
+              type: integer
+              description: Company ID
+              example: 1234
+            company_url:
+              type: string
+              nullable: true
+              description: Company slug/URL path
+              example: acme-corp
+            company_logo_url:
+              type: string
+              nullable: true
+              description: Company logo URL
+              example: https://uploads.wefunder.com/uploads/company/logo/1234/large_logo.png
+            amount_raised:
+              type: string
+              nullable: true
+              description: Amount in escrow in cents, as a string to avoid floating-point precision issues
+              example: '23000000'
+            investor_count:
+              type: integer
+              description: Count of distinct active investors
+              example: 47
+            funding_target:
+              type: string
+              nullable: true
+              description: Target funding amount in cents, as a string
+              example: '50000000'
+            offering_type:
+              type: string
+              nullable: true
+              description: Offering type (e.g. '506(c)', '4(a)(6)')
+              example: 506(c)
+            structure:
+              type: string
+              nullable: true
+              description: Deal structure (e.g. 'equity', 'safe', 'convertible_note')
+              example: safe
+            min_investment:
+              type: string
+              nullable: true
+              description: Minimum investment amount in cents, as a string
+              example: '10000'
+            max_investment:
+              type: string
+              nullable: true
+              description: Maximum investment amount in cents, as a string
+              example: '5000000'
+            description:
+              type: string
+              nullable: true
+              description: Deal funding purpose / description
+              example: Example text
+            created_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+            updated_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+            closed_at:
+              type: string
+              format: date-time
+              nullable: true
+              example: '2025-03-01T12:00:00Z'
+            funding_started_at:
+              type: string
+              format: date-time
+              nullable: true
+              description: ISO 8601 timestamp when funding opened
+              example: '2025-03-01T12:00:00Z'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    SyndicateDealListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyndicateDeal'
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+    SyndicateDealDetailEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateDealDetail'
+    SyndicateDealDetail:
+      description: Same as SyndicateDeal (show and index use the same serializer)
+      allOf:
+      - $ref: '#/components/schemas/SyndicateDeal'
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.

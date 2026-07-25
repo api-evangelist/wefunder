@@ -1,0 +1,538 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity Attribution Partners API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Attribution Partners
+paths:
+  /attribution/me:
+    get:
+      tags:
+      - Attribution Partners
+      summary: Get current user's attribution profile
+      description: 'Returns the authenticated user''s marketing partner profile and connected campaigns.
+
+        If the user is not registered as a marketing partner, returns partner info as null.
+
+        '
+      operationId: getAttributionMe
+      security:
+      - bearerAuth:
+        - read:attribution:aggregate
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttributionMeEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /attribution/campaigns:
+    get:
+      tags:
+      - Attribution Partners
+      summary: List campaigns accessible to the current user
+      description: 'Returns all campaigns the authenticated user can access for attribution data.
+
+        For founders, this includes their own campaigns.
+
+        For marketing partners, this includes campaigns they''ve been granted access to.
+
+        '
+      operationId: listAttributionCampaigns
+      security:
+      - bearerAuth:
+        - read:attribution:aggregate
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttributionCampaignSummaryListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /attribution/partners/register:
+    post:
+      tags:
+      - Attribution Partners
+      summary: Register as a marketing partner
+      description: 'Registers the authenticated user as a marketing partner.
+
+        After registration, the partner can create invites to request access to campaigns.
+
+        '
+      operationId: registerAsPartner
+      security:
+      - bearerAuth:
+        - read:attribution:aggregate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - company_name
+              properties:
+                company_name:
+                  type: string
+                  description: Name of the marketing/agency company
+                  example: Acme Marketing Agency
+                website:
+                  type: string
+                  format: uri
+                  description: Company website URL
+                  example: https://acme-marketing.com
+      responses:
+        '201':
+          description: Partner registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketingPartnerEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          description: Already registered or validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /attribution/invites:
+    get:
+      tags:
+      - Attribution Partners
+      summary: List partner invites
+      description: 'Returns all invites created by or sent to the authenticated user.
+
+        Includes both pending and accepted invites.
+
+        '
+      operationId: listPartnerInvites
+      security:
+      - bearerAuth:
+        - read:attribution:aggregate
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerInviteListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags:
+      - Attribution Partners
+      summary: Create a partner invite
+      description: 'Creates an invite to establish a partner-company connection.
+
+
+        **Directions**:
+
+        - `partner_to_founder`: Marketing partner invites a founder to grant access
+
+        - `founder_to_partner`: Founder invites a marketing partner to access their campaign
+
+
+        For `partner_to_founder`: Creates a shareable invite link.
+
+        For `founder_to_partner`: Sends an email to the partner.
+
+        '
+      operationId: createPartnerInvite
+      security:
+      - bearerAuth:
+        - read:attribution:aggregate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - direction
+              properties:
+                direction:
+                  type: string
+                  enum:
+                  - partner_to_founder
+                  - founder_to_partner
+                company_id:
+                  type: integer
+                  description: Required for founder_to_partner direction
+                partner_email:
+                  type: string
+                  format: email
+                  description: Required for founder_to_partner direction
+                access_level:
+                  type: integer
+                  default: 1
+                  description: 1=anonymized (default), 2=detailed (future)
+      responses:
+        '201':
+          description: Invite created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerInviteEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Not authorized to create this invite
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /attribution/invites/{token}:
+    delete:
+      tags:
+      - Attribution Partners
+      summary: Revoke a partner invite
+      description: 'Revokes a pending invite. Only the creator can revoke an invite.
+
+        Accepted invites cannot be revoked (delete the connection instead).
+
+        '
+      operationId: revokePartnerInvite
+      security:
+      - bearerAuth:
+        - read:attribution:aggregate
+      parameters:
+      - name: token
+        in: path
+        required: true
+        description: The invite token
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Invite revoked
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Not authorized to revoke this invite
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Invite not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    MarketingPartnerEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/MarketingPartner'
+    AttributionCampaignSummaryListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionCampaignSummary'
+    AttributionUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        email:
+          type: string
+          example: user@example.com
+        name:
+          type: string
+          example: Example Name
+    PartnerInviteListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerInvite'
+    MarketingPartner:
+      type: object
+      description: A registered marketing partner
+      properties:
+        id:
+          type: integer
+          example: 123
+        user_id:
+          type: integer
+          example: 456
+        company_name:
+          type: string
+          example: Acme Marketing Agency
+        website:
+          type: string
+          format: uri
+          nullable: true
+          example: https://acme-marketing.com
+        status:
+          type: string
+          enum:
+          - pending
+          - approved
+          - rejected
+          example: approved
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-03-15T10:30:00Z'
+    AttributionCampaignAccess:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        company_name:
+          type: string
+          example: Example Name
+        company_id:
+          type: integer
+          example: 123
+        access_level:
+          type: integer
+          example: 1
+    AttributionCampaignSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        company_name:
+          type: string
+          example: Example Name
+        company_id:
+          type: integer
+          example: 123
+        state:
+          type: string
+          example: active
+        access_level:
+          type: integer
+          description: 1=anonymized, 2=detailed (future)
+          example: 1
+    AttributionMeEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AttributionMe'
+    PartnerInviteEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PartnerInvite'
+    PartnerInvite:
+      type: object
+      description: An invite to establish a partner-company connection
+      properties:
+        id:
+          type: integer
+          example: 123
+        token:
+          type: string
+          description: Unique invite token (use in accept URL)
+          example: abc123xyz789
+        direction:
+          type: string
+          enum:
+          - partner_to_founder
+          - founder_to_partner
+          description: Who initiated the invite
+          example: partner_to_founder
+        status:
+          type: string
+          enum:
+          - pending
+          - accepted
+          - expired
+          - revoked
+          example: pending
+        access_level:
+          type: integer
+          description: Access level granted on acceptance (1=anonymized, 2=detailed)
+          example: 1
+        company_id:
+          type: integer
+          nullable: true
+          description: Target company (null for partner_to_founder until accepted)
+          example: 789
+        company_name:
+          type: string
+          nullable: true
+          example: My Startup Inc.
+        partner_email:
+          type: string
+          nullable: true
+          description: Partner email (for founder_to_partner invites)
+          example: partner@agency.com
+        expires_at:
+          type: string
+          format: date-time
+          example: '2025-04-15T10:30:00Z'
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-03-15T10:30:00Z'
+        accept_url:
+          type: string
+          format: uri
+          description: URL to accept the invite
+          example: https://wefunder.com/attribution/invites/abc123xyz789
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    AttributionPartner:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: integer
+          example: 123
+        company_name:
+          type: string
+          example: Example Name
+        website:
+          type: string
+          example: https://example.com
+        status:
+          type: string
+          enum:
+          - pending
+          - approved
+          - rejected
+    AttributionMe:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/AttributionUser'
+        partner:
+          $ref: '#/components/schemas/AttributionPartner'
+        campaigns:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionCampaignAccess'
+  responses:
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.

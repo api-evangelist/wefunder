@@ -1,0 +1,702 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity Attribution API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Attribution
+paths:
+  /campaigns/{campaign_id}/attribution/stats:
+    get:
+      tags:
+      - Attribution
+      summary: Get aggregate attribution statistics
+      description: 'Returns aggregate attribution statistics for a campaign. This is a **Tier 0** endpoint
+
+        available to all OAuth applications with the `read:attribution:aggregate` scope.
+
+
+        Use this endpoint to:
+
+        - Track overall marketing campaign performance
+
+        - Measure conversion rates by UTM source/campaign
+
+        - Monitor investment quality metrics
+
+        - Build performance dashboards
+
+
+        The response includes totals and breakdowns by UTM parameters. All counts exclude
+
+        disputed attributions.
+
+
+        **Privacy**: This endpoint returns aggregate data only. No individual investor
+
+        information is exposed.
+
+        '
+      operationId: getAttributionStats
+      security:
+      - bearerAuth:
+        - read:attribution:aggregate
+      parameters:
+      - $ref: '#/components/parameters/campaign_id'
+      - $ref: '#/components/parameters/start_date'
+      - $ref: '#/components/parameters/end_date'
+      - $ref: '#/components/parameters/utm_source'
+      - $ref: '#/components/parameters/utm_campaign'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttributionStatsEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /campaigns/{campaign_id}/attribution/investments:
+    get:
+      tags:
+      - Attribution
+      summary: List attributed investments
+      description: 'Returns a list of attributed investments. The detail level depends on your access:
+
+
+        **Tier 1 (Marketing Partners)** - Anonymized data:
+
+        - Investor identity represented by opaque tokens (not real IDs)
+
+        - Tokens are campaign-scoped (different token per campaign for same investor)
+
+        - Investment amounts shown as tiers (small/medium/large), not exact values
+
+        - No PII (email, name, address) is returned
+
+
+        **Tier 2 (Founders/Employees)** - Full data with `detail_level=full`:
+
+        - Real investment IDs (linkable to Wefunder admin)
+
+        - Investor name, email, and username
+
+        - Exact dollar amounts
+
+
+        **Access**: Requires Tier 1+ access approval from Wefunder admin.
+
+        '
+      operationId: listAttributedInvestments
+      security:
+      - bearerAuth:
+        - read:attribution:anonymized
+      parameters:
+      - $ref: '#/components/parameters/campaign_id'
+      - $ref: '#/components/parameters/cursor'
+      - $ref: '#/components/parameters/start_date'
+      - $ref: '#/components/parameters/end_date'
+      - $ref: '#/components/parameters/utm_source'
+      - $ref: '#/components/parameters/utm_campaign'
+      - name: detail_level
+        in: query
+        description: 'Level of detail to return:
+
+          - `anonymized` (default): Opaque tokens, amount tiers
+
+          - `full`: Real IDs, exact amounts, investor PII (founders only)
+
+
+          Marketing partners always receive anonymized data regardless of this parameter.
+
+          '
+        schema:
+          type: string
+          enum:
+          - anonymized
+          - full
+          default: anonymized
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttributedInvestmentListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: 'Access denied. This typically means:
+
+            - Your OAuth application hasn''t been approved for Tier 1 access
+
+            - Your token doesn''t include the `read:attribution:anonymized` scope
+
+
+            To request Tier 1 access, visit https://wefunder.com/api/request-access
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+components:
+  schemas:
+    AttributionStatsEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AttributionStats'
+    AttributedInvestmentListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          description: 'Returns AnonymizedAttribution or FullAttribution objects
+
+            depending on detail_level and user permissions.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AnonymizedAttribution'
+            - $ref: '#/components/schemas/FullAttribution'
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/PaginationMeta'
+          - type: object
+            properties:
+              detail_level:
+                type: string
+                enum:
+                - anonymized
+                - full
+                description: The detail level returned in this response
+                example: anonymized
+              can_view_full:
+                type: boolean
+                description: Whether the user can request full details
+                example: false
+    AttributionStats:
+      type: object
+      description: Aggregate attribution statistics for a campaign
+      properties:
+        campaign_id:
+          type: integer
+          example: 789
+        period:
+          type: object
+          properties:
+            start_date:
+              type: string
+              format: date
+              example: '2025-01-01'
+            end_date:
+              type: string
+              format: date
+              example: '2025-03-31'
+        totals:
+          type: object
+          properties:
+            investment_count:
+              type: integer
+              description: Total number of attributed investments
+              example: 142
+            total_amount:
+              type: number
+              format: float
+              description: Total dollar amount of attributed investments
+              example: 425000
+            unique_investors:
+              type: integer
+              description: Count of unique investors
+              example: 138
+            conversion_rate:
+              type: number
+              format: float
+              description: UTM clicks to investments (percentage)
+              example: 3.08
+        quality_breakdown:
+          type: object
+          description: Attribution quality metrics
+          properties:
+            direct:
+              type: integer
+              description: Conversions within 1 hour of click
+              example: 98
+            assisted:
+              type: integer
+              description: Conversions 1-24 hours after click
+              example: 35
+            delayed:
+              type: integer
+              description: Conversions over 24 hours after click
+              example: 9
+        by_source:
+          type: array
+          description: Breakdown by UTM source
+          items:
+            type: object
+            properties:
+              utm_source:
+                type: string
+                example: GoogleAds
+              investment_count:
+                type: integer
+                example: 47
+              total_amount:
+                type: number
+                format: float
+                example: 142500
+        by_campaign:
+          type: array
+          description: Breakdown by UTM campaign
+          items:
+            type: object
+            properties:
+              utm_campaign:
+                type: string
+                example: winter_2025
+              investment_count:
+                type: integer
+                example: 47
+              total_amount:
+                type: number
+                format: float
+                example: 142500
+    AnonymizedAttribution:
+      type: object
+      description: 'An attributed investment with anonymized investor data.
+
+        No PII is exposed - investor identity is represented by opaque tokens.
+
+        '
+      properties:
+        investment_token:
+          type: string
+          description: Opaque token identifying the investment (32 characters)
+          example: inv_abc123xyz789def456uvw012ghi345
+        investor_token:
+          type: string
+          description: 'Opaque token identifying the investor (32 characters).
+
+            Same investor gets different tokens for different campaigns.
+
+            '
+          example: usr_def456uvw789abc123xyz012ghi345
+        amount_tier:
+          type: string
+          description: 'Investment amount tier (not exact value).
+
+            Ranges: small ($1-999), medium ($1,000-9,999), large ($10,000+)
+
+            '
+          enum:
+          - small
+          - medium
+          - large
+          example: medium
+        invested_at:
+          type: string
+          format: date-time
+          description: When the investment was applied
+          example: '2025-02-15T14:30:00Z'
+        status:
+          type: object
+          description: Current investment status
+          properties:
+            bucket:
+              type: string
+              description: Investment processing stage (matches /manage page)
+              enum:
+              - draft
+              - no_payment_yet
+              - pending
+              - is_ready
+              - confirmed
+              - canceled
+              example: confirmed
+            progress_bar:
+              type: boolean
+              description: Whether the investment appears on founder progress bar (likely to complete)
+              example: true
+        attribution:
+          type: object
+          description: UTM attribution data
+          properties:
+            utm_source:
+              type: string
+              example: GoogleAds
+            utm_campaign:
+              type: string
+              example: winter_2025
+            utm_medium:
+              type: string
+              nullable: true
+              example: cpc
+            utm_content:
+              type: string
+              nullable: true
+              example: video_ad_v2
+            clicked_at:
+              type: string
+              format: date-time
+              description: When the UTM link was clicked
+              example: '2025-02-15T14:15:00Z'
+            time_to_invest_bucket:
+              type: string
+              description: Time from click to investment
+              enum:
+              - direct
+              - assisted
+              - delayed
+              example: direct
+            quality_score:
+              type: string
+              description: Attribution quality assessment
+              enum:
+              - high
+              - medium
+              - low
+              - suspicious
+              example: high
+            competing_sources:
+              type: integer
+              description: Number of other UTM sources in the attribution window
+              example: 0
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    FullAttribution:
+      type: object
+      description: 'Full attribution data with investor PII (Tier 2 - founders only).
+
+        Returned when detail_level=full is requested by an authorized founder.
+
+        '
+      properties:
+        investment_id:
+          type: integer
+          description: Real Wefunder investment ID
+          example: 12345
+        investment_token:
+          type: string
+          description: Opaque token (same as anonymized response)
+          example: inv_abc123xyz789def456uvw012ghi345
+        investor:
+          type: object
+          description: Full investor details
+          properties:
+            id:
+              type: integer
+              example: 6789
+            name:
+              type: string
+              example: John Smith
+            email:
+              type: string
+              format: email
+              example: john@example.com
+            username:
+              type: string
+              example: johnsmith
+        amount:
+          type: number
+          format: float
+          description: Exact investment amount in dollars
+          example: 5000
+        invested_at:
+          type: string
+          format: date-time
+          example: '2025-02-15T14:30:00Z'
+        status:
+          type: object
+          properties:
+            bucket:
+              type: string
+              enum:
+              - draft
+              - no_payment_yet
+              - pending
+              - is_ready
+              - confirmed
+              - canceled
+              example: confirmed
+            progress_bar:
+              type: boolean
+              example: true
+        attribution:
+          type: object
+          description: UTM attribution data (same as anonymized)
+          properties:
+            utm_source:
+              type: string
+              example: example
+            utm_campaign:
+              type: string
+              example: example
+            utm_medium:
+              type: string
+              nullable: true
+              example: example
+            utm_content:
+              type: string
+              nullable: true
+              example: example
+            clicked_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+            time_to_invest_bucket:
+              type: string
+              enum:
+              - direct
+              - assisted
+              - delayed
+            quality_score:
+              type: string
+              enum:
+              - high
+              - medium
+              - low
+              - suspicious
+            competing_sources:
+              type: integer
+              example: 1
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type: integer
+          nullable: true
+          example: 12345
+  responses:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: 'Too many requests in a short time period. The API enforces rate limits to ensure
+
+        fair usage and system stability. When you exceed the limit, you''ll receive this
+
+        error along with headers indicating when you can retry.
+
+
+        Check the `X-RateLimit-Reset` header to know when your limit will reset.
+
+        Consider implementing exponential backoff in your application.
+
+        '
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Request limit per hour
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Remaining requests
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: UTC timestamp when the limit resets
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    campaign_id:
+      name: campaign_id
+      in: path
+      required: true
+      description: The fundraise/campaign ID
+      schema:
+        type: integer
+      example: 789
+    utm_source:
+      name: utm_source
+      in: query
+      description: Filter by UTM source (e.g., "GoogleAds", "facebook", "Klaviyo")
+      schema:
+        type: string
+      example: GoogleAds
+    cursor:
+      name: cursor
+      in: query
+      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+
+        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+
+        first page.
+
+        '
+      schema:
+        type: integer
+      example: 12345
+    start_date:
+      name: start_date
+      in: query
+      description: 'Filter results to attributions on or after this date. Format: YYYY-MM-DD.
+
+        Defaults to 90 days ago if not specified.
+
+        '
+      schema:
+        type: string
+        format: date
+      example: '2025-01-01'
+    end_date:
+      name: end_date
+      in: query
+      description: 'Filter results to attributions on or before this date. Format: YYYY-MM-DD.
+
+        Defaults to today if not specified.
+
+        '
+      schema:
+        type: string
+        format: date
+      example: '2025-03-31'
+    utm_campaign:
+      name: utm_campaign
+      in: query
+      description: Filter by UTM campaign name
+      schema:
+        type: string
+      example: winter_2025
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.

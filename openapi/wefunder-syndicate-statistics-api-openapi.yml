@@ -1,0 +1,245 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity Syndicate Statistics API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Syndicate Statistics
+paths:
+  /syndicates/{syndicate_id}/statistics:
+    get:
+      tags:
+      - Syndicate Statistics
+      summary: Get syndicate statistics
+      description: 'Returns aggregate metrics for a syndicate including member counts, deal counts,
+
+        total raised, and recent activity.
+
+
+        `total_raised` and `total_investors` are computed from directory-selected deals
+
+        (one per company). `total_deals` and `live_deals` use all linked deals.
+
+
+        All monetary values are strings representing cents to avoid floating-point precision issues.
+
+        '
+      operationId: getSyndicateStatistics
+      security:
+      - bearerAuth:
+        - read:syndicates
+      parameters:
+      - $ref: '#/components/parameters/syndicate_id'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyndicateStatisticsEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          description: Syndicate not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  responses:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    SyndicateStatistics:
+      type: object
+      description: Aggregate metrics for a syndicate
+      properties:
+        type:
+          type: string
+          example: syndicate_statistics
+        attributes:
+          type: object
+          properties:
+            total_members:
+              type: integer
+              description: Count of active members (excludes resigned and exiled, filters out soft-deleted and hellbanned users)
+              example: 45
+            members_by_role:
+              type: object
+              description: Member count grouped by role
+              additionalProperties:
+                type: integer
+              example:
+                manager: 3
+                member: 35
+                invitee: 5
+                creator: 1
+                applicant: 1
+            total_deals:
+              type: integer
+              description: Total number of linked deals (all linked fundraises)
+              example: 3
+            live_deals:
+              type: integer
+              description: Number of currently live deals (open/oversubscribed/closing states)
+              example: 1
+            total_raised:
+              type: string
+              description: 'Total amount raised across directory-selected deals (one per company), in cents.
+
+                String to avoid floating-point precision issues.
+
+                '
+              example: '10780000'
+            total_investors:
+              type: integer
+              description: Count of distinct investors across directory-selected deals (one per company)
+              example: 6527
+            recent_activity_count:
+              type: integer
+              description: Count of audit events in the last 30 days for this syndicate
+              example: 4
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    SyndicateStatisticsEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateStatistics'
+  parameters:
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.

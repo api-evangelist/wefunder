@@ -1,0 +1,399 @@
+openapi: 3.0.1
+info:
+  title: Wefunder API v2 Activity API
+  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
+
+
+    ## Authentication
+
+
+    This API uses OAuth 2.0 for authentication. To get started:
+
+
+    1. Create an OAuth application at `/oauth/applications`
+
+    2. Get your Client ID and Client Secret
+
+    3. Implement the OAuth 2.0 Authorization Code flow
+
+    4. Use the access token to make API requests
+
+
+    ## Rate Limits
+
+
+    - Standard API: 1,000 requests/hour per token
+
+    - Admin API: 10,000 requests/hour per token
+
+
+    ## Base URL
+
+
+    All API requests should be made to: `https://api.wefunder.com/api/v2`
+
+    '
+  version: '2.0'
+  contact:
+    name: Wefunder API Support
+    email: api@wefunder.com
+servers:
+- url: https://{environment}.wefunder.com/api/v2
+  variables:
+    environment:
+      default: api
+      enum:
+      - api
+      - staging
+tags:
+- name: Activity
+paths:
+  /activity:
+    get:
+      tags:
+      - Activity
+      summary: List activity events
+      description: 'Returns actions taken by OAuth apps authorized by the current user.
+
+        This is the API backing the user-facing activity feed at Settings > Activity.
+
+        '
+      operationId: listActivity
+      security:
+      - bearerAuth:
+        - read:profile
+      parameters:
+      - name: app_id
+        in: query
+        schema:
+          type: integer
+        description: Filter by connected app
+      - name: action_pattern
+        in: query
+        schema:
+          type: string
+        description: Filter by action pattern (e.g. syndicates.* or syndicates.member.*)
+      - name: resource_type
+        in: query
+        schema:
+          type: string
+        description: Filter by resource type (e.g. Club). Must be used with resource_id.
+      - name: resource_id
+        in: query
+        schema:
+          type: integer
+        description: Filter by specific resource ID. Must be used with resource_type.
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - success
+          - failure
+          - denied
+      - name: since
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: until
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: cursor
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 25
+          maximum: 100
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditEventListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /connected-apps:
+    get:
+      tags:
+      - Activity
+      summary: List connected apps
+      description: Returns all OAuth apps the user has authorized, with summary stats.
+      operationId: listConnectedApps
+      security:
+      - bearerAuth:
+        - read:profile
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedAppListEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /connected-apps/{app_id}:
+    delete:
+      tags:
+      - Activity
+      summary: Revoke connected app
+      description: 'Revoke all tokens for this app. Any pending intents from this app are automatically expired.
+
+        '
+      operationId: revokeConnectedApp
+      security:
+      - bearerAuth:
+        - write:profile
+      parameters:
+      - name: app_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: App revoked, all tokens and pending intents expired
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedAppRevocationEnvelope'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: App not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ConnectedAppRevocationEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ConnectedAppRevocation'
+    ConnectedApp:
+      type: object
+      description: An OAuth application authorized by the user
+      properties:
+        id:
+          type: integer
+          example: 123
+        type:
+          type: string
+          example: connected_app
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              example: ChatGPT via Wefunder MCP
+            scopes:
+              type: array
+              items:
+                type: string
+              example:
+              - read:syndicates
+              - write:syndicates
+              description: All scopes across active tokens for this app
+            last_active_at:
+              type: string
+              format: date-time
+              nullable: true
+              description: When the most recent token was last used
+              example: '2025-03-01T12:00:00Z'
+            action_count:
+              type: integer
+              description: Total audit events for this app
+              example: 34
+            created_at:
+              type: string
+              format: date-time
+              nullable: true
+              description: When the user first authorized this app
+              example: '2025-03-01T12:00:00Z'
+    AuditEventListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEvent'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    AuditEvent:
+      type: object
+      description: JSON:API resource representing an audit event
+      properties:
+        id:
+          type: integer
+          example: 123
+        type:
+          type: string
+          example: audit_event
+        attributes:
+          type: object
+          properties:
+            occurred_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+            actor_type:
+              type: string
+              description: Type of actor (e.g. user, agent, system)
+              example: example
+            actor_name:
+              type: string
+              example: ChatGPT via Wefunder MCP
+            action:
+              type: string
+              example: syndicates.member.invited
+            resource_type:
+              type: string
+              example: Club
+            resource_id:
+              type: integer
+              example: 123
+            resource_label:
+              type: string
+              nullable: true
+              example: Acme Syndicate
+            old_values:
+              type: object
+              nullable: true
+              description: Previous values of changed fields
+            new_values:
+              type: object
+              nullable: true
+              description: New values of changed fields
+            changed_fields:
+              type: array
+              nullable: true
+              items:
+                type: string
+              description: List of field names that changed
+            status:
+              type: string
+              enum:
+              - success
+              - failure
+              - denied
+            error_message:
+              type: string
+              nullable: true
+              example: Example text
+            intent_id:
+              type: string
+              nullable: true
+              description: Associated intent ID if this event was triggered by an intent
+              example: example
+            created_at:
+              type: string
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+    ConnectedAppListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectedApp'
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type: integer
+          nullable: true
+          example: 12345
+    ConnectedAppRevocation:
+      type: object
+      properties:
+        revoked:
+          type: boolean
+          example: true
+        tokens_revoked:
+          type: integer
+          example: 2
+  responses:
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: oauth2
+      description: OAuth 2.0 authorization with access tokens
+      flows:
+        authorizationCode:
+          authorizationUrl: https://wefunder.com/oauth/authorize
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data (explore offerings); requires no user context
+            read:profile: Read user profile information
+            read:investments: Read user investment data
+            read:campaigns: Read campaign information for companies you founded
+            read:attribution:aggregate: Read aggregate attribution statistics (Tier 0)
+            read:attribution:anonymized: Read anonymized attribution data (Tier 1 - requires approval)
+            read:attribution:full: Read full attribution data with investor PII (Tier 2 - founders only)
+            admin:attribution: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+            read:syndicates: View syndicates, members, deals, and portfolio
+            write:syndicates: Manage members, update settings, operate on deals
+            read:spvs: View partner SPVs, their invites, sessions, and investments
+            write:spvs: Create and manage partner SPVs, invites, and investment sessions
+            read:webhooks: View webhook subscriptions
+            write:webhooks: Create, update, and delete webhook subscriptions
+        clientCredentials:
+          tokenUrl: https://wefunder.com/oauth/token
+          scopes:
+            read:public: Read public deal data. The only scope a server-side (client_credentials) key may hold — it acts as the app, with no user, so it can never read user-scoped data.
