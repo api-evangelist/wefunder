@@ -1,0 +1,115 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/wefunder-openapi-original.yml + https://wefunder.com/.well-known/oauth-authorization-server
+docs: https://docs.wefunder.com/api-reference
+notes: >-
+  Scope catalog derived from the public-tier OpenAPI and confirmed against the live
+  RFC 8414 authorization-server metadata (saved at
+  well-known/wefunder-oauth-authorization-server.json), which advertises
+  scopes_supported [read:syndicates, read:profile], PKCE S256, authorization_code +
+  refresh_token grants, and a dynamic client registration endpoint
+  (https://wefunder.com/oauth/register). client_credentials tokens may only hold
+  read:public. Attribution scopes are tiered (0 aggregate, 1 anonymized - approval
+  required, 2 full PII - founders only, 3 admin).
+schemes:
+- name: bearerAuth
+  source: openapi/wefunder-openapi-original.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://wefunder.com/oauth/authorize
+    tokenUrl: https://wefunder.com/oauth/token
+  - flow: clientCredentials
+    tokenUrl: https://wefunder.com/oauth/token
+  description: OAuth 2.0 authorization with access tokens
+scopes:
+- scope: admin:attribution
+  description: Administrative access to attribution system (Tier 3 - Wefunder admins only)
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:attribution:aggregate
+  description: Read aggregate attribution statistics (Tier 0)
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:attribution:anonymized
+  description: Read anonymized attribution data (Tier 1 - requires approval)
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:attribution:full
+  description: Read full attribution data with investor PII (Tier 2 - founders only)
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:campaigns
+  description: Read campaign information for companies you founded
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:investments
+  description: Read user investment data
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:offerings
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:profile
+  description: Read user profile information
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:public
+  description: Read public deal data (explore offerings); requires no user context
+  flows:
+  - authorizationCode
+  - clientCredentials
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:spvs
+  description: View partner SPVs, their invites, sessions, and investments
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:syndicates
+  description: View syndicates, members, deals, and portfolio
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: read:webhooks
+  description: View webhook subscriptions
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: write:profile
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: write:spvs
+  description: Create and manage partner SPVs, invites, and investment sessions
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: write:syndicates
+  description: Manage members, update settings, operate on deals
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml
+- scope: write:webhooks
+  description: Create, update, and delete webhook subscriptions
+  flows:
+  - authorizationCode
+  sources:
+  - openapi/wefunder-openapi-original.yml

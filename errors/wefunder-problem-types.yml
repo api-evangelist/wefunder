@@ -1,0 +1,48 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wefunder-openapi-original.yml
+format: vendor-envelope
+envelope:
+  shape: "error.{type,message,details,request_id,remediation}"
+  content_type: application/json
+  request_id: error.request_id (example req_abc123) — quote in support tickets.
+  remediation: error.remediation — when present, a hint on how to resolve the error.
+problems:
+  - status: 401
+    title: Unauthorized
+    detail: Authentication required or token is invalid/expired — no Authorization
+      header, or the access token is invalid, expired, or revoked.
+    example_type: unauthorized
+    remediation: Obtain a new access token using the OAuth 2.0 flow.
+  - status: 403
+    title: Forbidden
+    detail: The authenticated user does not have permission — authenticated but lacking
+      the required scope (insufficient_scope), the OAuth application is not approved for
+      the requested tier, or the resource belongs to someone else.
+  - status: 404
+    title: Not found
+    detail: The requested resource does not exist or is not visible to this token
+      (syndicate, member, deal, offering, intent, webhook subscription).
+  - status: 409
+    title: Conflict
+    detail: The request conflicts with the resource's current state (e.g. opening an
+      SPV that is already open); on intent creation, a duplicate idempotency key returns
+      the existing intent.
+  - status: 422
+    title: Validation failed
+    detail: One or more request fields failed validation (invalid URL, unknown events,
+      subscription limit reached, already registered, or "use intents for this action").
+  - status: 429
+    title: Rate limit exceeded
+    detail: Too many requests. Standard tier 1,000 requests/hour per token; admin
+      10,000/hour. Check X-RateLimit-Reset for when the limit resets; the official SDK
+      retries idempotent GETs honoring it.
+  - status: 501
+    title: Not implemented
+    detail: Endpoint is defined but not yet implemented — published so partners and
+      tooling can build against the contract ahead of release.
+  - status: 403
+    title: Sandbox only
+    detail: Endpoint only works with sandbox (at_test_) tokens; refused with a
+      production (at_live_) token because it mints fake investors and money.
+    note: Documented as the SandboxOnly response component.

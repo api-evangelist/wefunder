@@ -1,0 +1,45 @@
+# generated: 2026-07-21 | method: generated | source: API Evangelist enrichment pipeline
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Wefunder API v2
+  version: 1.0.0
+extends: openapi/wefunder-openapi-original.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist:
+        provider: wefunder
+        catalog: https://github.com/api-evangelist/wefunder
+        enriched: '2026-07-21'
+      contact:
+        name: Wefunder Support
+        email: support@wefunder.com
+        url: https://help.wefunder.com
+  - target: $.info
+    update:
+      x-sdk:
+        typescript:
+          package: "@wefunder/sdk"
+          registry: npm
+          install: npm install @wefunder/sdk@beta
+          repository: https://github.com/Wefunder/wefunder-node
+  - target: $.info
+    update:
+      x-versioning:
+        model: dated-version-header
+        header: Wefunder-Version
+        example: '2025-01-15'
+        note: The API base is version-free (https://api.wefunder.com); /api/v2 remains
+          a working back-compat alias. Header resolution not yet enforced server-side.
+  - target: $.info
+    update:
+      x-conventions:
+        pagination: opaque cursor (meta.next_cursor)
+        rate_limit_headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset]
+        error_envelope: "error.{type,message,details,request_id,remediation}"
+        idempotency: Idempotency-Key header on writes; intents carry idempotency_key
+          with 409 duplicate semantics
+  - target: $.externalDocs
+    update:
+      description: Wefunder API Reference
+      url: https://docs.wefunder.com/api-reference

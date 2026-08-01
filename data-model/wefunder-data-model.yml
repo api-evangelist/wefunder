@@ -1,0 +1,67 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wefunder-openapi-original.yml
+notes: >-
+  Resources use a JSON:API-flavored shape ({id, type, attributes}) wrapped in
+  vendor envelopes (data + meta). Relationships are derived from URL nesting and
+  reference fields; the spec keeps schemas flat (few $refs).
+id_prefixes:
+  - {prefix: req_, entity: request (error envelope request_id)}
+  - {prefix: evt_, entity: webhook event}
+  - {prefix: whs_, entity: webhook subscription}
+  - {prefix: whsec_, entity: webhook signing secret}
+  - {prefix: pk_test_/pk_live_, entity: OAuth client credential (mode-carrying)}
+  - {prefix: at_test_/at_live_, entity: access token (mode-carrying)}
+entities:
+  - name: Offering
+    description: Public deal on the explore surface (keyed by external_id; carries etag).
+  - name: User
+    description: The authenticated user (read:profile).
+  - name: Investment
+    description: An investment made by the user or attributed to a campaign.
+  - name: Campaign
+    description: A fundraise campaign for a company the user founded.
+  - name: Syndicate
+    description: A syndicate led by the user; has settings, statistics, portfolio.
+  - name: SyndicateMember
+    description: Membership in a syndicate (invite/approve/hide/promote/demote lifecycle).
+  - name: SyndicateDeal
+    description: A deal (fundraise) run through a syndicate; can be closed and finalized.
+  - name: Intent
+    description: A write intent with client-provided idempotency_key deduplication.
+  - name: ConnectedApp
+    description: An OAuth application connected to the user's account.
+  - name: WebhookSubscription
+    description: Attribution webhook subscription on a campaign.
+  - name: WebhookDelivery
+    description: A delivery attempt for a webhook event (delivery_uuid, attempts, status).
+  - name: AttributionPartner
+    description: A registered attribution partner.
+  - name: Invite
+    description: A partner invite (token-addressed).
+  - name: Spv
+    description: Partner SPV (preview tier) with terms, settings, metrics, close status.
+  - name: InvestmentSession
+    description: Partner SPV investment session (preview tier).
+  - name: AuditEvent
+    description: Account activity / audit trail entry.
+relationships:
+  - {from: Syndicate, to: SyndicateMember, kind: has_many, via: "/syndicates/{syndicate_id}/members"}
+  - {from: Syndicate, to: SyndicateDeal, kind: has_many, via: "/syndicates/{syndicate_id}/deals"}
+  - {from: SyndicateDeal, to: DealInvestor, kind: has_many, via: "/syndicates/{syndicate_id}/deals/{fundraise_id}/investors"}
+  - {from: SyndicateMember, to: MemberInvestment, kind: has_many, via: "/syndicates/{syndicate_id}/members/{member_id}/investments"}
+  - {from: Syndicate, to: SyndicateStatistics, kind: has_one, via: "/syndicates/{syndicate_id}/statistics"}
+  - {from: Campaign, to: WebhookSubscription, kind: has_many, via: "/campaigns/{campaign_id}/attribution/webhooks"}
+  - {from: Campaign, to: Investment, kind: has_many, via: "/campaigns/{campaign_id}/attribution/investments"}
+  - {from: Campaign, to: AttributionStats, kind: has_one, via: "/campaigns/{campaign_id}/attribution/stats"}
+  - {from: WebhookSubscription, to: Campaign, kind: belongs_to, via: campaign_id}
+  - {from: WebhookSubscription, to: WebhookDelivery, kind: has_many, via: recent deliveries envelope}
+  - {from: User, to: Investment, kind: has_many, via: /investments}
+  - {from: User, to: Campaign, kind: has_many, via: /campaigns}
+  - {from: User, to: Syndicate, kind: has_many, via: /syndicates}
+  - {from: User, to: ConnectedApp, kind: has_many, via: /connected-apps}
+  - {from: User, to: AuditEvent, kind: has_many, via: /activity}
+  - {from: User, to: Intent, kind: has_many, via: /intents}
+  - {from: Offering, to: Company, kind: belongs_to, via: company}
+  - {from: Offering, to: Exemption, kind: has_one, via: attributes.exemption}
+  - {from: Spv, to: SpvCloseStatus, kind: has_one, via: spv_id}

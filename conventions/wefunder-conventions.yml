@@ -1,0 +1,50 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/Wefunder/wefunder-node (README) + openapi/wefunder-openapi-original.yml
+authentication:
+  style: OAuth 2.0 bearer tokens
+  grants:
+    - client_credentials (server-to-server; read:public only, acts as the app with no user)
+    - authorization_code + PKCE (user-delegated; user-context scopes)
+  refresh: Refresh tokens rotate — every refresh returns a new refresh token and
+    invalidates the old one; persist each rotation.
+  see: authentication/wefunder-authentication.yml, scopes/wefunder-scopes.yml
+idempotency:
+  supported: true
+  header: Idempotency-Key
+  scope: Write requests (optional header parameter component in the OpenAPI); a unique
+    client-generated key makes a write request safe to retry.
+  intents: Intent creation accepts an idempotency_key body field — if a pending or
+    executed intent exists with the same key, the existing intent is returned (409
+    documented as "Duplicate idempotency key (returns existing intent)").
+  webhook_deliveries: Each webhook delivery carries a UUID delivery_id documented
+    "use for idempotency" on the consumer side.
+pagination:
+  style: cursor
+  cursor: Opaque — never constructed by the client.
+  response_fields: [meta.next_cursor]
+  sdk: List endpoints auto-paginate (.all() async iterator, .collect(), or page-wise
+    .list() exposing meta); query params are preserved across pages.
+versioning:
+  scheme: dated-version-header
+  header: Wefunder-Version
+  current: '2025-01-15'
+  path_alias: /api/v2 (back-compat)
+  see: lifecycle/wefunder-lifecycle.yml
+request_tracing:
+  field: error.request_id
+  note: Every error envelope carries a request_id (example req_abc123) — quote it in
+    support tickets.
+error_envelope:
+  shape: "error.{type,message,details,request_id,remediation}"
+  content_type: application/json
+  see: errors/wefunder-problem-types.yml
+rate_limits:
+  standard: 1,000 requests/hour per token
+  admin: 10,000 requests/hour per token
+  headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset]
+  retry: SDK auto-retries idempotent GETs on transient 5xx/network errors and on 429
+    honoring X-RateLimit-Reset; writes are never auto-retried.
+field_expansion: null
+metadata: null
+csv_export: Syndicate member export ships text/csv (exportSyndicateMembersCsv).

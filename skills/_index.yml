@@ -1,0 +1,19 @@
+generated: '2026-07-21'
+method: generated
+skills:
+  - file: wefunder-browse-offerings.md
+    name: Browse public offerings on Wefunder
+    api: openapi/wefunder-openapi-original.yml
+    operations: [listOfferings, getOffering]
+  - file: wefunder-manage-syndicate.md
+    name: Manage a Wefunder syndicate
+    api: openapi/wefunder-openapi-original.yml
+    operations: [listSyndicates, getSyndicate, listSyndicateMembers, inviteSyndicateMember,
+      approveSyndicateMember, listSyndicateDeals, getSyndicateDeal, listSyndicateDealInvestors,
+      getSyndicateStatistics]
+  - file: wefunder-attribution-webhooks.md
+    name: Track campaign attribution with webhooks
+    api: openapi/wefunder-openapi-original.yml
+    operations: [getAttributionStats, listAttributedInvestments, listWebhookSubscriptions,
+      createWebhookSubscription, testWebhookSubscription, regenerateWebhookSecret,
+      reactivateWebhookSubscription]

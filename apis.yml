@@ -1,24 +1,270 @@
 aid: wefunder
 name: Wefunder
-description: Wefunder is a company surfaced as a portfolio company of a16z, y-combinator and added to
-  the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: >-
+  Wefunder is the largest SEC-registered funding portal, the home of the Community
+  Round — a Public Benefit Corporation (YC W13) that has helped 4,400+ founders raise
+  over $1B from more than one million everyday investors since 2012, with notable
+  raises from Mercury, Substack, and Replit. Its OAuth 2.0 Wefunder API v2
+  (api.wefunder.com) exposes public offerings, investments, campaigns, syndicates,
+  write intents, and campaign attribution with signed webhooks, backed by an official
+  TypeScript SDK (@wefunder/sdk) and PKCE-first authorization.
 url: https://raw.githubusercontent.com/api-evangelist/wefunder/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://wefunder.com/favicon.ico
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - a16z
 - y-combinator
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: full
+x-tier-reason: official public API with OpenAPI, SDK, and OAuth surface
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
-apis: []
+- Crowdfunding
+- Equity Crowdfunding
+- Investing
+- Fintech
+- Startups
+- Fundraising
+- Syndicates
+- Regulation Crowdfunding
+apis:
+- aid: wefunder:wefunder-activity-api
+  name: Wefunder Activity API
+  description: The Activity API from Wefunder — 3 operation(s) for activity.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Activity
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-activity-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-attribution-api
+  name: Wefunder Attribution API
+  description: The Attribution API from Wefunder — 2 operation(s) for attribution.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Attribution
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-attribution-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-attribution-partners-api
+  name: Wefunder Attribution Partners API
+  description: The Attribution Partners API from Wefunder — 5 operation(s) for attribution partners.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Attribution Partners
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-attribution-partners-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-attribution-webhooks-api
+  name: Wefunder Attribution Webhooks API
+  description: The Attribution Webhooks API from Wefunder — 5 operation(s) for attribution webhooks.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Attribution Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-attribution-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-campaigns-api
+  name: Wefunder Campaigns API
+  description: The Campaigns API from Wefunder — 1 operation(s) for campaigns.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-campaigns-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-explore-api
+  name: Wefunder Explore API
+  description: The Explore API from Wefunder — 2 operation(s) for explore.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Explore
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-explore-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-intents-api
+  name: Wefunder Intents API
+  description: The Intents API from Wefunder — 2 operation(s) for intents.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Intents
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-intents-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-investments-api
+  name: Wefunder Investments API
+  description: The Investments API from Wefunder — 1 operation(s) for investments.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Investments
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-investments-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-syndicate-deals-api
+  name: Wefunder Syndicate Deals API
+  description: The Syndicate Deals API from Wefunder — 5 operation(s) for syndicate deals.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Syndicate Deals
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-syndicate-deals-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-syndicate-members-api
+  name: Wefunder Syndicate Members API
+  description: The Syndicate Members API from Wefunder — 12 operation(s) for syndicate members.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Syndicate Members
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-syndicate-members-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-syndicate-statistics-api
+  name: Wefunder Syndicate Statistics API
+  description: The Syndicate Statistics API from Wefunder — 1 operation(s) for syndicate statistics.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Syndicate Statistics
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-syndicate-statistics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-syndicates-api
+  name: Wefunder Syndicates API
+  description: The Syndicates API from Wefunder — 2 operation(s) for syndicates.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Syndicates
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-syndicates-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
+- aid: wefunder:wefunder-users-api
+  name: Wefunder Users API
+  description: The Users API from Wefunder — 1 operation(s) for users.
+  humanURL: https://docs.wefunder.com/api-reference
+  baseURL: https://api.wefunder.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/wefunder-users-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wefunder.com/api-reference
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: DomainSecurity
+  url: security/wefunder-domain-security.yml
+- type: Website
+  url: https://wefunder.com
+- type: Documentation
+  url: https://docs.wefunder.com
+- type: APIReference
+  url: https://docs.wefunder.com/api-reference
+- type: GettingStarted
+  url: https://github.com/Wefunder/wefunder-node#quickstart-server-to-server
+- type: Support
+  url: https://help.wefunder.com
+- type: Blog
+  url: https://wefunder.com/blog
+- type: GitHubOrganization
+  url: https://github.com/Wefunder
+- type: Pricing
+  url: https://wefunder.com/pricing
+- type: TermsOfService
+  url: https://wefunder.com/terms
+- type: PrivacyPolicy
+  url: https://wefunder.com/terms#privacy
+- type: SignUp
+  url: https://wefunder.com/signup
+- type: Packages
+  url: packages/wefunder-packages.yml
+- type: SDKs
+  url: packages/wefunder-packages.yml
+- type: WellKnown
+  url: well-known/wefunder-well-known.yml
+- type: MCPServer
+  url: mcp/wefunder-mcp.yml
+- type: LLMsTxt
+  url: llms/wefunder-llms.txt
+- type: Conformance
+  url: conformance/wefunder-conformance.yml
+- type: ErrorCatalog
+  url: errors/wefunder-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/wefunder-lifecycle.yml
+- type: Sandbox
+  url: sandbox/wefunder-sandbox.yml
+- type: Conventions
+  url: conventions/wefunder-conventions.yml
+- type: Idempotency
+  url: conventions/wefunder-conventions.yml
+- type: Webhooks
+  url: asyncapi/wefunder-webhooks.yml
+- type: DataModel
+  url: data-model/wefunder-data-model.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/wefunder-agentic-access.yml
+- type: Authentication
+  url: authentication/wefunder-authentication.yml
+- type: OAuthScopes
+  url: scopes/wefunder-scopes.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 22
+  pass: local-v1

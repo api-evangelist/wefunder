@@ -1,0 +1,38 @@
+{
+  "provider": "wefunder",
+  "sources": [
+    "wefunder-activity-api-openapi.yml",
+    "wefunder-attribution-api-openapi.yml",
+    "wefunder-attribution-partners-api-openapi.yml",
+    "wefunder-attribution-webhooks-api-openapi.yml",
+    "wefunder-campaigns-api-openapi.yml",
+    "wefunder-explore-api-openapi.yml",
+    "wefunder-intents-api-openapi.yml",
+    "wefunder-investments-api-openapi.yml",
+    "wefunder-syndicate-deals-api-openapi.yml",
+    "wefunder-syndicate-members-api-openapi.yml",
+    "wefunder-syndicate-statistics-api-openapi.yml",
+    "wefunder-syndicates-api-openapi.yml",
+    "wefunder-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "wefunder-activity-api-openapi.yml",
+    "wefunder-attribution-api-openapi.yml",
+    "wefunder-attribution-partners-api-openapi.yml",
+    "wefunder-attribution-webhooks-api-openapi.yml",
+    "wefunder-campaigns-api-openapi.yml",
+    "wefunder-explore-api-openapi.yml",
+    "wefunder-intents-api-openapi.yml",
+    "wefunder-investments-api-openapi.yml",
+    "wefunder-syndicate-deals-api-openapi.yml",
+    "wefunder-syndicate-members-api-openapi.yml",
+    "wefunder-syndicate-statistics-api-openapi.yml",
+    "wefunder-syndicates-api-openapi.yml",
+    "wefunder-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

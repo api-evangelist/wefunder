@@ -1,0 +1,56 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wefunder-openapi-original.yml + well-known/wefunder-oauth-authorization-server.json + https://github.com/Wefunder/wefunder-node
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: OpenAPI securitySchemes type oauth2 (authorizationCode + clientCredentials
+      flows); live token/authorize endpoints at wefunder.com/oauth.
+  - id: oauth2-pkce
+    conforms: true
+    evidence: code_challenge_methods_supported [S256] in RFC 8414 metadata; SDK ships
+      generatePkce()/createAuthorizationUrl() for authorization_code + PKCE.
+  - id: rfc8414-authorization-server-metadata
+    conforms: true
+    evidence: /.well-known/oauth-authorization-server returns 200 with issuer, endpoints,
+      grants, scopes (saved at well-known/wefunder-oauth-authorization-server.json).
+  - id: rfc7591-dynamic-client-registration
+    conforms: true
+    evidence: registration_endpoint https://wefunder.com/oauth/register advertised in
+      RFC 8414 metadata.
+  - id: refresh-token-rotation
+    conforms: true
+    evidence: SDK README — "Wefunder rotates refresh tokens - each refresh returns a
+      new refresh token and invalidates the old one."
+  - id: oidc
+    conforms: false
+    evidence: /.well-known/openid-configuration returns 404; no openIdConnect scheme in spec.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: Errors use a vendor envelope error.{type,message,details,request_id,remediation}
+      as application/json, not application/problem+json.
+  - id: cursor-pagination
+    conforms: true
+    evidence: List endpoints paginate with an opaque cursor (meta.next_cursor); cursor
+      appears 20 times in the spec.
+  - id: idempotency
+    conforms: true
+    evidence: Idempotency-Key header parameter component on writes; intents accept
+      idempotency_key with documented 409 duplicate semantics returning the existing intent.
+  - id: rate-limit-headers
+    conforms: true
+    evidence: X-RateLimit-Limit / X-RateLimit-Remaining / X-RateLimit-Reset documented
+      on 429 responses.
+  - id: fapi-2
+    conforms: false
+    evidence: No FAPI claims found; token_endpoint_auth_methods include none/client_secret_post.
+  - id: scim-2
+    conforms: false
+    evidence: No SCIM paths in spec.
+  - id: json-api
+    conforms: false
+    evidence: Responses use vendor envelopes (data + meta), not JSON:API media type.
+regulatory:
+  - id: sec-funding-portal
+    note: Wefunder Portal LLC is an SEC-registered funding portal and FINRA member
+      (Regulation Crowdfunding); platform-level regulatory status, not an API conformance claim.

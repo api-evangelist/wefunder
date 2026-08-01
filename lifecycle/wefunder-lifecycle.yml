@@ -1,0 +1,28 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/Wefunder/wefunder-node (README) + openapi/wefunder-openapi-original.yml
+versioning:
+  scheme: dated-version-header
+  header: Wefunder-Version
+  current: '2025-01-15'
+  note: SDK sends Wefunder-Version 2025-01-15 on every request, forward-compatible
+    with Wefunder's dated-version model; the API does not resolve the header yet, so
+    version pinning is not enforced server-side until that ships. The API base is
+    version-free (https://api.wefunder.com); /api/v2 remains a working back-compat alias.
+  docs: https://docs.wefunder.com/api-reference
+maturity:
+  api_version: '2.0'
+  tiers: [stable, beta, preview]
+  note: Public tier = stable + beta (offerings, investments, campaigns, syndicates,
+    intents, attribution). Preview-only endpoints (partner SPV / sandbox-simulation
+    surface) are excluded from the public SDK by design.
+  sdk_status: beta (0.x, breaking changes possible)
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No published deprecation policy or RFC 8594 Sunset-header support found.
+sla:
+  url: null
+status_page: null
+status_page_probe: status.wefunder.com does not resolve (probed 2026-07-21).
+deprecated_operations: []

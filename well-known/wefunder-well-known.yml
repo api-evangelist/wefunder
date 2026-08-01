@@ -1,0 +1,40 @@
+generated: '2026-07-21'
+method: searched
+hosts:
+  - host: https://wefunder.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: wefunder-oauth-authorization-server.json
+        notes: RFC 8414 OAuth 2.0 Authorization Server Metadata — issuer https://wefunder.com,
+          authorization_code + refresh_token grants, PKCE S256, dynamic client registration
+          endpoint, scopes_supported read:syndicates + read:profile.
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /llms.txt
+        status: 200
+        file: ../llms/wefunder-llms.txt
+  - host: https://api.wefunder.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 400
+      - path: /.well-known/oauth-authorization-server
+        status: 400
+    notes: api.wefunder.com edge gateway returns 400 to unauthenticated non-API requests.
+  - host: https://help.wefunder.com
+    documents:
+      - path: /llms.txt
+        status: 200
+        notes: Knowledge-base documentation index (llms.txt format) listing every help article.
+  - host: https://docs.wefunder.com
+    documents:
+      - path: /llms.txt
+        status: 200
+        notes: Marketing/AI-guidance llms.txt (v1.0, 2025-06-06); the canonical copy saved
+          in llms/ is from wefunder.com.

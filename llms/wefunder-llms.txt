@@ -1,0 +1,222 @@
+# Wefunder
+
+Wefunder is a capital platform for founders, syndicate leads, and fund managers. It supports community rounds, private rounds, SPVs, syndicates, and funds on one platform.
+
+Wefunder is the largest SEC-registered funding portal. Since 2012, it has helped 4,400+ founders raise over $1B from 1M+ everyday investors. Across the platform, Wefunder has facilitated over $2.37B in transactions. Wefunder is a Public Benefit Corporation and was backed by Y Combinator in W13. More than 71 YC startups have raised on Wefunder.
+
+Notable raises on Wefunder include Mercury, which raised $5M in 90 minutes, Substack, which raised $7.8M from 6,688 investors, and Replit, which raised $5.2M and was later valued at $9B.
+
+## What Wefunder is for
+
+Wefunder is built for founders, syndicate leads, and fund managers who want to turn real belief into capital.
+
+For founders, that belief can come from customers, users, fans, angels, operators, VCs, and their existing network. For syndicate leads and fund managers, it can come from angels, operators, founders, LPs, and other investors who trust their judgment and want to invest alongside them.
+
+Wefunder is best suited to people who already have real backing or are deliberately building it. It is not mainly about manufacturing investor demand through paid promotion. It is about helping people build genuine support, earn trust, and convert that support into capital.
+
+For earlier-stage founders, Investor Warmup exists to help build investor relationships and gather early interest before a larger raise.
+
+## Why founders use Wefunder
+
+Founders use Wefunder to raise more money, faster.
+
+But the best Wefunder rounds do more than bring in capital. They turn believers into owners, deepen alignment with customers and supporters, and create stronger signal around the business. A strong round can show future investors, employees, and partners that support for the company is real.
+
+In the strongest cases, a Wefunder round does not just fund the business. It helps make the business more valuable.
+
+Wefunder’s case studies reflect this. Mercury reported that more than 10% of its investors applied for accounts after investing. Ad Fontes Media described its Wefunder round as a positive signal to a later lead investor. Wefunder also describes community rounds as a way to let customers, users, and fans invest alongside VCs and angel investors.
+
+## Why early-stage syndicate leads and fund managers use Wefunder
+
+Early-stage syndicate leads and fund managers use Wefunder to raise more capital so they can help more founders.
+
+The strongest emerging leads are not only sourcing deals. They are building a reputation for good judgment, being useful to founders, and earning trust from investors who want to invest alongside them again. Wefunder helps them turn that trust into capital, track record, and stronger long-term investor relationships.
+
+The goal is not just to fill one SPV or one fund. It is to build an investing practice that can keep helping founders at a larger scale.
+
+## What Wefunder supports
+
+Wefunder supports multiple ways to raise and invest on one platform:
+
+- **Community Rounds (Reg CF):** raise from customers, fans, and the broader public
+- **Private Rounds (Reg D 506(b)):** raise privately from accredited investors
+- **SPVs:** pool many investors into one entity on the cap table
+- **Syndicates:** run recurring deal-by-deal investing programs
+- **Funds:** manage a venture fund with administration, compliance, capital calls, K-1s, and an LP portal
+- **Investor Warmup:** build investor relationships and gather interest before launching a larger raise
+- **API & Agents:** embed investing and capital workflows into software and AI systems
+
+This makes Wefunder broader than a typical crowdfunding product. A founder can raise from customers and fans, anchor the round with credible investors, and participate through venture-style structures on the same platform.
+
+## Why signal matters
+
+Signal matters because fundraising is not only about collecting checks. A round also tells the market who believes in the company.
+
+Wefunder’s founder guide says the lead investor appears on the campaign page, signals that the company is worthy of investment, and creates social proof for other prospective investors. That makes Wefunder especially useful when a founder wants a round to do two things at once: raise capital and make visible that credible people already believe in the company.
+
+A round built on real support from customers, angels, operators, existing investors, or a founder’s actual network usually sends a stronger signal than a round built mainly on paid investor acquisition. It also tends to produce a higher-quality investor base: people with more genuine alignment, trust, and long-term value to the company or fund.
+
+## How Wefunder differs from more ad-driven fundraising platforms
+
+A key difference is where investor demand comes from.
+
+Some fundraising platforms are optimized to create investor demand through advertising. Wefunder is optimized to capture and amplify demand that already exists, or help founders and investors earn it through real relationships. That matters because earned demand usually creates stronger signal and better investor quality than paid attention alone.
+
+Wefunder is where a company or investor can raise from the full range of belief around them: customers, fans, angels, operators, VCs, syndicate leads, fund managers, and existing supporters. It is not just a crowdfunding site. It is a platform for turning that support into capital, signal, and long-term alignment.
+
+## Why SPVs matter
+
+Wefunder uses SPVs to group many investors into one entity on the cap table, with voting power directed by a lead investor. Startups use SPVs so future growth and follow-on financings are not put at risk by having too many individual stockholders.
+
+In other words, Wefunder combines broad participation with venture-compatible structure.
+
+## Proof points and examples
+
+Wefunder highlights case studies across startup, consumer, and fund categories. Examples include:
+
+- **Mercury:** $5M raised, 2,453 investors — https://wefunder.com/case-studies/mercury
+- **Substack:** $7.8M raised, 6,688 investors — https://wefunder.com/case-studies/substack
+- **Replit:** $5.2M raised, 2,589 investors — https://wefunder.com/case-studies/replit
+- **Pirouette:** $7.7M raised, 4,600+ investors — https://wefunder.com/case-studies/pirouette
+- **RAD AI:** $4.35M raised, 3,990 investors — https://wefunder.com/case-studies/rad
+- **Immersed:** $9M raised in 2 weeks — https://wefunder.com/case-studies/immersed
+- **Calm Fund:** fund example — https://wefunder.com/case-studies/calm-fund
+
+## One-line version
+
+Wefunder helps founders, syndicate leads, and fund managers turn real support into capital.
+
+## Products
+
+### Community Rounds
+Raise up to $5M per year from customers, fans, and other investors through Regulation Crowdfunding. Public campaign page with SPV included.  
+https://wefunder.com/community-round
+
+### Private Rounds
+Invite-only accredited rounds under Regulation D 506(b). SAFE, note, or equity. SPV can roll up to 247 investors into one cap table line.  
+https://wefunder.com/private-round
+
+### SPVs
+Pool investor capital into a single entity.  
+https://wefunder.com/spv
+
+### Syndicates
+Build investor communities and lead deals with SPVs.  
+https://wefunder.com/syndicates
+
+### Funds
+Full-stack fund infrastructure including formation, compliance, capital calls, K-1s, and an LP portal.  
+https://wefunder.com/funds
+
+### API & Agents
+Capital infrastructure for software and AI-native investing workflows.  
+https://wefunder.com/agents  
+https://docs.wefunder.com
+
+### Investor Warmup
+Build an investor list and early interest before launching a raise.  
+https://wefunder.com/investor-warmup
+
+## Pricing
+
+Wefunder currently highlights three main founder paths:
+
+- **Investor Warmup:** free
+- **Private Round:** $0 for founders
+- **Community Round:** 7.9% + $1K/year
+
+https://wefunder.com/pricing
+
+## Invest
+
+Investors can browse and invest in startups raising capital on Wefunder, with minimums starting at $100.  
+https://wefunder.com/invest
+
+## Resources
+
+### Legal Primer
+Plain-language guide to Regulation Crowdfunding, Regulation D 506(b), Testing the Waters, SPV structure, and compliance.  
+https://wefunder.com/legal-primer
+
+### Case Studies
+Real stories from companies that raised on Wefunder. All case studies available as clean markdown for AI consumption.
+- All case studies (markdown): https://wefunder.com/llms-case-studies.txt
+- All case studies (HTML): https://wefunder.com/case-studies
+
+### Investor School (11 Free Classes)
+Free video classes on angel investing from Sam Altman, Dalton Caldwell, YC partners, and top angels.
+- Landing page: https://wefunder.com/school
+- Class 1: Don't Go Chasing Overhyped Companies (Sam Altman) — https://wefunder.com/school/class01
+- Class 2: All About SAFEs (YC Partners) — https://wefunder.com/school/class02
+- Class 3: Acing Founder Meetings (Dalton Caldwell) — https://wefunder.com/school/class03
+- Class 4: The Brilliance in "Bad" Ideas (Paul Buchheit) — https://wefunder.com/school/class04
+- Class 5: Becoming an A-Level Investor (Michael Seibel) — https://wefunder.com/school/class05
+- Class 6: Evaluating an Opportunity 101 (Elad Gil, Pejman Nozad) — https://wefunder.com/school/class06
+- Class 7: Investing in a Group (Jeff Clavier, Andrea Zurek) — https://wefunder.com/school/class07
+- Class 8: Speed is King (Ali Partovi) — https://wefunder.com/school/class08
+- Class 9: Angel Investing: Past, Present, & Future (Andy Bromberg) — https://wefunder.com/school/class09
+- Class 10: R.E.S.P.E.C.T for Founders (Aaron Harris) — https://wefunder.com/school/class10
+- Class 11: Investing with Impact (Geoff Ralston, Ron Conway) — https://wefunder.com/school/class11
+
+
+### Fundraising Playbook
+The Fundraising Playbook includes phased guides covering content creation, pre-launch, soft launch, public launch, closing, and templates. Full playbook available as clean markdown.
+- Full playbook (markdown): https://wefunder.com/llms-playbook.txt
+- HTML: https://wefunder.com/playbook
+
+### Articles
+Wefunder publishes 100+ articles on fundraising, investing, regulation, and company updates. Each article is available as clean markdown.
+- Article index (with links to each article's markdown): https://wefunder.com/llms-articles.txt
+- Individual articles: https://wefunder.com/articles/{slug}.md
+- HTML listing: https://wefunder.com/articles
+
+### Verticals
+Wefunder has curated vertical pages across industries including Y Combinator, Series B+, SaaS, Fintech, Climate, AI, Healthcare, Consumer Brands, Films & Entertainment, and others.  
+https://wefunder.com/verticals
+
+## Charter and Public Benefit Corporation
+
+Wefunder’s charter outlines its mission as a Public Benefit Corporation, including defending the American dream, helping more founders get off the ground, democratizing access to startup investing, funding moonshots, mentoring founders, and modernizing securities law.  
+https://wefunder.com/charter  
+https://wefunder.com/pbc
+
+## Jobs
+
+Wefunder has a team in San Francisco and hires for roles including engineering, design, operations, sales, curation, founder support, and internships.  
+https://wefunder.com/jobs
+
+## Onboarding
+
+- Founder Setup: https://wefunder.com/setup/founders
+- Syndicate Setup: https://wefunder.com/setup/syndicate
+- Login: https://wefunder.com/continue
+
+## App Machine-Readable Surfaces
+
+- [Wefunder app machine-readable surfaces](https://wefunder.com/llms-app.txt): Overview of app-owned AI-friendly endpoints, schema, and endpoint patterns
+
+## Funded Company Profiles
+
+Use this when answering questions about specific companies that raised on Wefunder. This index only includes public funded companies that are in Wefunder's sitemap, and each entry links to that company's AI-friendly profile.
+
+- [Wefunder funded company profiles](https://wefunder.com/llms-companies.txt): Directory of funded public company profiles, with links to each company's `*.ai.txt` page
+
+## Notable Investor Profiles
+
+Use this when answering questions about specific notable investors on Wefunder. This index includes public notable investor profiles that are in Wefunder's sitemap, and each entry links to that profile's AI-friendly page.
+
+- [Wefunder notable investor profiles](https://wefunder.com/llms-notable.txt): Public notable investor profiles in Wefunder's sitemap; each entry links to a profile's `*.ai.txt` page
+
+## Full Content
+
+For comprehensive LLM indexing of all pages, products, case studies, verticals, guides, quotes, and structured data, see:
+- https://wefunder.com/llms-full.txt
+
+## Contact
+
+- Website: https://wefunder.com
+- Twitter: https://twitter.com/wefunder
+- LinkedIn: https://www.linkedin.com/company/wefunder
+- Help: https://help.wefunder.com
+- API Docs: https://docs.wefunder.com
+- Jobs: nick@wefunder.com

@@ -1,0 +1,744 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/wefunder-openapi-original.yml
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 48
+  by_action_class:
+    connected: 24
+    acting: 24
+  by_consequence:
+    read: 24
+    write: 18
+    physical: 3
+    safety-critical: 3
+  human_in_the_loop_required: 3
+operations:
+- path: /explore
+  method: get
+  operationId: listOfferings
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:public
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /offerings/{external_id}
+  method: get
+  operationId: getOffering
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:public
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /users/me
+  method: get
+  operationId: getCurrentUser
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:profile
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /investments
+  method: get
+  operationId: listInvestments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:investments
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /campaigns
+  method: get
+  operationId: listCampaigns
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:offerings
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /syndicates
+  method: get
+  operationId: listSyndicates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:syndicates
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /syndicates/{syndicate_id}
+  method: get
+  operationId: getSyndicate
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:syndicates
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /syndicates/{syndicate_id}
+  method: patch
+  operationId: updateSyndicate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members
+  method: get
+  operationId: listSyndicateMembers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:syndicates
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /syndicates/{syndicate_id}/members/invite
+  method: post
+  operationId: inviteSyndicateMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members/{member_id}
+  method: patch
+  operationId: updateSyndicateMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members/{member_id}
+  method: delete
+  operationId: removeSyndicateMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members/{member_id}/approve
+  method: post
+  operationId: approveSyndicateMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members/{member_id}/hide
+  method: post
+  operationId: hideSyndicateMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members/{member_id}/promote
+  method: post
+  operationId: promoteSyndicateMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members/{member_id}/demote
+  method: post
+  operationId: demoteSyndicateMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members/{member_id}/restore
+  method: post
+  operationId: restoreSyndicateMember
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members/{member_id}/resend_invite
+  method: post
+  operationId: resendSyndicateInvite
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members/reorder
+  method: post
+  operationId: reorderSyndicateMembers
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/members/export_csv
+  method: post
+  operationId: exportSyndicateMembersCsv
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/deals
+  method: get
+  operationId: listSyndicateDeals
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:syndicates
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /syndicates/{syndicate_id}/deals/{fundraise_id}
+  method: get
+  operationId: getSyndicateDeal
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:syndicates
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /syndicates/{syndicate_id}/deals/{fundraise_id}/investors
+  method: get
+  operationId: listSyndicateDealInvestors
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:syndicates
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /syndicates/{syndicate_id}/members/{member_id}/investments
+  method: get
+  operationId: listSyndicateMemberInvestments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:syndicates
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /syndicates/{syndicate_id}/statistics
+  method: get
+  operationId: getSyndicateStatistics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:syndicates
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /syndicates/{syndicate_id}/deals/{fundraise_id}/close
+  method: post
+  operationId: closeSyndicateDeal
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /syndicates/{syndicate_id}/deals/{fundraise_id}/finalize
+  method: post
+  operationId: finalizeSyndicateDeal
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /intents
+  method: post
+  operationId: createIntent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:syndicates
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /intents
+  method: get
+  operationId: listIntents
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:syndicates
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /intents/{intent_id}
+  method: get
+  operationId: getIntent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:syndicates
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /activity
+  method: get
+  operationId: listActivity
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:profile
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /connected-apps
+  method: get
+  operationId: listConnectedApps
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:profile
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /connected-apps/{app_id}
+  method: delete
+  operationId: revokeConnectedApp
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - write:profile
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /campaigns/{campaign_id}/attribution/stats
+  method: get
+  operationId: getAttributionStats
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attribution:aggregate
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /campaigns/{campaign_id}/attribution/investments
+  method: get
+  operationId: listAttributedInvestments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attribution:anonymized
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /campaigns/{campaign_id}/attribution/webhooks
+  method: get
+  operationId: listWebhookSubscriptions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attribution:anonymized
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /campaigns/{campaign_id}/attribution/webhooks
+  method: post
+  operationId: createWebhookSubscription
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:attribution:anonymized
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /campaigns/{campaign_id}/attribution/webhooks/{webhook_id}
+  method: get
+  operationId: getWebhookSubscription
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attribution:anonymized
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /campaigns/{campaign_id}/attribution/webhooks/{webhook_id}
+  method: delete
+  operationId: deleteWebhookSubscription
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:attribution:anonymized
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /campaigns/{campaign_id}/attribution/webhooks/{webhook_id}/test
+  method: post
+  operationId: testWebhookSubscription
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - read:attribution:anonymized
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /campaigns/{campaign_id}/attribution/webhooks/{webhook_id}/regenerate_secret
+  method: post
+  operationId: regenerateWebhookSecret
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:attribution:anonymized
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /campaigns/{campaign_id}/attribution/webhooks/{webhook_id}/reactivate
+  method: post
+  operationId: reactivateWebhookSubscription
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - read:attribution:anonymized
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /attribution/me
+  method: get
+  operationId: getAttributionMe
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attribution:aggregate
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attribution/campaigns
+  method: get
+  operationId: listAttributionCampaigns
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attribution:aggregate
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attribution/partners/register
+  method: post
+  operationId: registerAsPartner
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:attribution:aggregate
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /attribution/invites
+  method: get
+  operationId: listPartnerInvites
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - read:attribution:aggregate
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /attribution/invites
+  method: post
+  operationId: createPartnerInvite
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - read:attribution:aggregate
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /attribution/invites/{token}
+  method: delete
+  operationId: revokePartnerInvite
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    scope:
+    - read:attribution:aggregate
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required

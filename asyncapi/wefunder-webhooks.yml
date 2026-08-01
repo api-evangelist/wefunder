@@ -1,0 +1,56 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wefunder-openapi-original.yml + https://github.com/Wefunder/wefunder-node
+type: Webhooks
+notes: >-
+  Wefunder publishes no AsyncAPI document; this captures the documented webhook
+  surface. Two families exist — campaign attribution webhooks (subscription CRUD
+  under /campaigns/{campaign_id}/attribution/webhooks) and partner (SPV) webhooks.
+security:
+  signature_header: X-Wefunder-Signature
+  timestamp_header: X-Wefunder-Timestamp
+  scheme: 'sha256= + HMAC-SHA256(secret, timestamp + "." + raw_body)'
+  replay_protection: Reject deliveries whose timestamp is more than 5 minutes old.
+  secret: Signing secret (whsec_ prefix) shown only once at creation; can be rotated
+    via regenerateWebhookSecret.
+  sdk_verification: constructEvent(rawBody, headers, secret) in @wefunder/sdk.
+delivery:
+  payload: "{id: evt_..., event, created_at, data}"
+  idempotency: Each delivery carries a UUID delivery id — use for consumer-side idempotency.
+  retries: Deliveries track attempts and consecutive_failures; subscriptions deactivate
+    on repeated failure and can be reactivated (reactivateWebhookSubscription).
+events:
+  attribution:
+    - investment.applied
+    - investment.confirmed
+    - investment.canceled
+  partner:
+    - spv.created
+    - spv.opened
+    - spv.updated
+    - spv.closing
+    - spv.closed
+    - spv.canceled
+    - invite.created
+    - invite.opened
+    - invite.invested
+    - invite.expired
+    - investment_session.created
+    - investment_session.completed
+    - investment.created
+    - investment.confirmed
+    - investment.canceled
+    - investment.accreditation_verified
+    - investment.accreditation_failed
+    - disbursement.initiated
+    - disbursement.completed
+    - disbursement.failed
+    - webhook.test
+management_operations:
+  - listWebhookSubscriptions
+  - createWebhookSubscription
+  - getWebhookSubscription
+  - deleteWebhookSubscription
+  - testWebhookSubscription
+  - regenerateWebhookSecret
+  - reactivateWebhookSubscription

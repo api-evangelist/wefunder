@@ -1,0 +1,34 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/wefunder-openapi-original.yml + https://wefunder.com/.well-known/oauth-authorization-server + https://github.com/Wefunder/wefunder-node
+docs: https://docs.wefunder.com/api-reference
+notes: >-
+  OAuth 2.0 bearer tokens. Live RFC 8414 metadata at
+  /.well-known/oauth-authorization-server (issuer https://wefunder.com) advertises
+  authorization_code + refresh_token grants, PKCE S256, token_endpoint_auth_methods
+  [none, client_secret_post], and dynamic client registration at
+  https://wefunder.com/oauth/register. The SDK's token host is
+  https://api.wefunder.com/oauth (routes sandbox vs live by pk_test_/pk_live_
+  credential mode); sandbox consent at https://oauth.wefunder-sandbox.com/oauth.
+  Refresh tokens rotate on every refresh. client_credentials tokens hold read:public
+  only; user-context scopes require authorization_code + PKCE.
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - authorizationCode
+  - clientCredentials
+schemes:
+- name: bearerAuth
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://wefunder.com/oauth/authorize
+    tokenUrl: https://wefunder.com/oauth/token
+    scopes: 14
+  - flow: clientCredentials
+    tokenUrl: https://wefunder.com/oauth/token
+    scopes: 1
+  description: OAuth 2.0 authorization with access tokens
+  sources:
+  - openapi/wefunder-openapi-original.yml

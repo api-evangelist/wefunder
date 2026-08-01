@@ -1,0 +1,30 @@
+generated: '2026-07-21'
+method: searched
+source: https://registry.npmjs.org/@wefunder/sdk
+packages:
+  - language: typescript
+    registry: npm
+    name: "@wefunder/sdk"
+    url: https://www.npmjs.com/package/@wefunder/sdk
+    install: npm install @wefunder/sdk@beta
+    official: true
+    status: beta
+    version: 0.1.0-beta.7
+    dist_tag: beta
+    first_published: '2026-06-26'
+    repository: https://github.com/Wefunder/wefunder-node
+    notes: >-
+      Official TypeScript SDK for the Wefunder API. Node 20+, ESM and CommonJS.
+      Publishes to the @beta dist-tag while 0.x; npm Trusted Publishing (OIDC)
+      with provenance. Generated from the vendored public-tier OpenAPI
+      (spec/openapi.yaml) via @hey-api/openapi-ts.
+registries_probed:
+  - registry: npm
+    query: wefunder
+    result: "@wefunder/sdk (official)"
+  - registry: pypi
+    query: wefunder
+    result: 404 not found
+  - registry: rubygems
+    query: wefunder
+    result: 404 not found

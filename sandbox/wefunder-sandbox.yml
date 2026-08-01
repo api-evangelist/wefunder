@@ -1,0 +1,36 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/Wefunder/wefunder-node (README) + openapi/wefunder-openapi-original.yml
+modes:
+  test_vs_live:
+    key_prefixes:
+      test: pk_test_
+      live: pk_live_
+    token_prefixes:
+      test: at_test_
+      live: at_live_
+    note: The edge gateway routes by the credential's mode — a pk_test_ grant mints
+      tokens in sandbox, pk_live_ in live; one token host serves both. Access tokens
+      carry at_test_/at_live_ prefixes; sandbox-only endpoints refuse at_live_ tokens
+      (documented SandboxOnly response) because they mint fake investors and money.
+hosts:
+  token_host: https://api.wefunder.com/oauth
+  sandbox_consent_host: https://oauth.wefunder-sandbox.com/oauth
+  live_consent_host: https://wefunder.com/oauth
+  note: The authorize (consent) host is picked from the client_id prefix — pk_test_
+    redirects to the sandbox consent host.
+server_environments:
+  - environment: api
+    url: https://api.wefunder.com/api/v2
+    default: true
+  - environment: staging
+    url: https://staging.wefunder.com/api/v2
+    note: Declared as a server variable in the OpenAPI.
+fixtures:
+  simulation_surface: A preview-only partner SPV / sandbox-simulation endpoint surface
+    exists but is not yet in the public (stable + beta) tier.
+  e2e: The official SDK's live E2E suite runs against api.wefunder.com with a sandbox
+    app's client_credentials (WEFUNDER_CLIENT_ID / WEFUNDER_CLIENT_SECRET env vars).
+test_values: []
+notes: No published magic test values (cards, bank accounts) found; sandbox separation
+  is credential-mode based.
