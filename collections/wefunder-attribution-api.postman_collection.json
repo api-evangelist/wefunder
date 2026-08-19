@@ -1,0 +1,931 @@
+{
+  "item": [
+    {
+      "id": "3eb3c61c-7590-4bdb-81fe-b149fd303438",
+      "name": "Attribution",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6fa06138-3032-4a07-b75f-95de73230869",
+          "name": "Get aggregate attribution statistics",
+          "request": {
+            "name": "Get aggregate attribution statistics",
+            "description": {
+              "content": "Returns aggregate attribution statistics for a campaign. This is a **Tier 0** endpoint\navailable to all OAuth applications with the `read:attribution:aggregate` scope.\n\nUse this endpoint to:\n- Track overall marketing campaign performance\n- Measure conversion rates by UTM source/campaign\n- Monitor investment quality metrics\n- Build performance dashboards\n\nThe response includes totals and breakdowns by UTM parameters. All counts exclude\ndisputed attributions.\n\n**Privacy**: This endpoint returns aggregate data only. No individual investor\ninformation is exposed.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "campaigns",
+                ":campaign_id",
+                "attribution",
+                "stats"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Filter results to attributions on or after this date. Format: YYYY-MM-DD.\nDefaults to 90 days ago if not specified.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "Filter results to attributions on or before this date. Format: YYYY-MM-DD.\nDefaults to today if not specified.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "utm_source",
+                  "value": "<string>",
+                  "description": "Filter by UTM source (e.g., \"GoogleAds\", \"facebook\", \"Klaviyo\")"
+                },
+                {
+                  "disabled": false,
+                  "key": "utm_campaign",
+                  "value": "<string>",
+                  "description": "Filter by UTM campaign name"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "campaign_id",
+                  "description": "(Required) The fundraise/campaign ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a0ca59dd-8bc2-494f-b850-bb35937294f0",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    ":campaign_id",
+                    "attribution",
+                    "stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2025-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2025-03-31"
+                    },
+                    {
+                      "key": "utm_source",
+                      "value": "GoogleAds"
+                    },
+                    {
+                      "key": "utm_campaign",
+                      "value": "winter_2025"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) The fundraise/campaign ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"campaign_id\": 789,\n    \"period\": {\n      \"start_date\": \"2025-01-01\",\n      \"end_date\": \"2025-03-31\"\n    },\n    \"totals\": {\n      \"investment_count\": 142,\n      \"total_amount\": 425000,\n      \"unique_investors\": 138,\n      \"conversion_rate\": 3.08\n    },\n    \"quality_breakdown\": {\n      \"direct\": 98,\n      \"assisted\": 35,\n      \"delayed\": 9\n    },\n    \"by_source\": [\n      {\n        \"utm_source\": \"GoogleAds\",\n        \"investment_count\": 47,\n        \"total_amount\": 142500\n      },\n      {\n        \"utm_source\": \"GoogleAds\",\n        \"investment_count\": 47,\n        \"total_amount\": 142500\n      }\n    ],\n    \"by_campaign\": [\n      {\n        \"utm_campaign\": \"winter_2025\",\n        \"investment_count\": 47,\n        \"total_amount\": 142500\n      },\n      {\n        \"utm_campaign\": \"winter_2025\",\n        \"investment_count\": 47,\n        \"total_amount\": 142500\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "87fd2851-31f1-4144-a7a5-79e353c66201",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    ":campaign_id",
+                    "attribution",
+                    "stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2025-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2025-03-31"
+                    },
+                    {
+                      "key": "utm_source",
+                      "value": "GoogleAds"
+                    },
+                    {
+                      "key": "utm_campaign",
+                      "value": "winter_2025"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) The fundraise/campaign ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": \"string\",\n      \"key_1\": 6904.264266157602,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e82f32ac-258e-46c0-8e86-333901c2ef9e",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    ":campaign_id",
+                    "attribution",
+                    "stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2025-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2025-03-31"
+                    },
+                    {
+                      "key": "utm_source",
+                      "value": "GoogleAds"
+                    },
+                    {
+                      "key": "utm_campaign",
+                      "value": "winter_2025"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) The fundraise/campaign ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": \"string\",\n      \"key_1\": 6904.264266157602,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d9d5064-177c-43f1-b922-98f1bf712719",
+              "name": "Too many requests in a short time period. The API enforces rate limits to ensure\nfair usage and system stability. When you exceed the limit, you'll receive this\nerror along with headers indicating when you can retry.\n\nCheck the `X-RateLimit-Reset` header to know when your limit will reset.\nConsider implementing exponential backoff in your application.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    ":campaign_id",
+                    "attribution",
+                    "stats"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2025-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2025-03-31"
+                    },
+                    {
+                      "key": "utm_source",
+                      "value": "GoogleAds"
+                    },
+                    {
+                      "key": "utm_campaign",
+                      "value": "winter_2025"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) The fundraise/campaign ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Request limit per hour",
+                  "key": "X-RateLimit-Limit",
+                  "value": "6487"
+                },
+                {
+                  "disabled": false,
+                  "description": "Remaining requests",
+                  "key": "X-RateLimit-Remaining",
+                  "value": "6487"
+                },
+                {
+                  "disabled": false,
+                  "description": "UTC timestamp when the limit resets",
+                  "key": "X-RateLimit-Reset",
+                  "value": "6487"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": \"string\",\n      \"key_1\": 6904.264266157602,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7e3dcfea-b60f-4142-8db7-301e368698dc",
+          "name": "List attributed investments",
+          "request": {
+            "name": "List attributed investments",
+            "description": {
+              "content": "Returns a list of attributed investments. The detail level depends on your access:\n\n**Tier 1 (Marketing Partners)** - Anonymized data:\n- Investor identity represented by opaque tokens (not real IDs)\n- Tokens are campaign-scoped (different token per campaign for same investor)\n- Investment amounts shown as tiers (small/medium/large), not exact values\n- No PII (email, name, address) is returned\n\n**Tier 2 (Founders/Employees)** - Full data with `detail_level=full`:\n- Real investment IDs (linkable to Wefunder admin)\n- Investor name, email, and username\n- Exact dollar amounts\n\n**Access**: Requires Tier 1+ access approval from Wefunder admin.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "campaigns",
+                ":campaign_id",
+                "attribution",
+                "investments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<integer>",
+                  "description": "Cursor-based pagination token. Use the `next_cursor` value from the previous response's\n`meta` object to retrieve the next page of results. Omit this parameter to retrieve the\nfirst page.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Filter results to attributions on or after this date. Format: YYYY-MM-DD.\nDefaults to 90 days ago if not specified.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "Filter results to attributions on or before this date. Format: YYYY-MM-DD.\nDefaults to today if not specified.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "utm_source",
+                  "value": "<string>",
+                  "description": "Filter by UTM source (e.g., \"GoogleAds\", \"facebook\", \"Klaviyo\")"
+                },
+                {
+                  "disabled": false,
+                  "key": "utm_campaign",
+                  "value": "<string>",
+                  "description": "Filter by UTM campaign name"
+                },
+                {
+                  "disabled": false,
+                  "key": "detail_level",
+                  "value": "anonymized",
+                  "description": "Level of detail to return:\n- `anonymized` (default): Opaque tokens, amount tiers\n- `full`: Real IDs, exact amounts, investor PII (founders only)\n\nMarketing partners always receive anonymized data regardless of this parameter.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "campaign_id",
+                  "description": "(Required) The fundraise/campaign ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "26039f3c-2f79-4311-9bec-f622913fbac5",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    ":campaign_id",
+                    "attribution",
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "12345"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2025-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2025-03-31"
+                    },
+                    {
+                      "key": "utm_source",
+                      "value": "GoogleAds"
+                    },
+                    {
+                      "key": "utm_campaign",
+                      "value": "winter_2025"
+                    },
+                    {
+                      "key": "detail_level",
+                      "value": "anonymized"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) The fundraise/campaign ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"investment_token\": \"inv_abc123xyz789def456uvw012ghi345\",\n      \"investor_token\": \"usr_def456uvw789abc123xyz012ghi345\",\n      \"amount_tier\": \"medium\",\n      \"invested_at\": \"2025-02-15T14:30:00Z\",\n      \"status\": {\n        \"bucket\": \"confirmed\",\n        \"progress_bar\": true\n      },\n      \"attribution\": {\n        \"utm_source\": \"GoogleAds\",\n        \"utm_campaign\": \"winter_2025\",\n        \"utm_medium\": \"cpc\",\n        \"utm_content\": \"video_ad_v2\",\n        \"clicked_at\": \"2025-02-15T14:15:00Z\",\n        \"time_to_invest_bucket\": \"direct\",\n        \"quality_score\": \"high\",\n        \"competing_sources\": 0\n      }\n    },\n    {\n      \"investment_token\": \"inv_abc123xyz789def456uvw012ghi345\",\n      \"investor_token\": \"usr_def456uvw789abc123xyz012ghi345\",\n      \"amount_tier\": \"medium\",\n      \"invested_at\": \"2025-02-15T14:30:00Z\",\n      \"status\": {\n        \"bucket\": \"confirmed\",\n        \"progress_bar\": true\n      },\n      \"attribution\": {\n        \"utm_source\": \"GoogleAds\",\n        \"utm_campaign\": \"winter_2025\",\n        \"utm_medium\": \"cpc\",\n        \"utm_content\": \"video_ad_v2\",\n        \"clicked_at\": \"2025-02-15T14:15:00Z\",\n        \"time_to_invest_bucket\": \"direct\",\n        \"quality_score\": \"high\",\n        \"competing_sources\": 0\n      }\n    }\n  ],\n  \"meta\": {\n    \"count\": 25,\n    \"has_more\": true,\n    \"next_cursor\": 12345,\n    \"detail_level\": \"anonymized\",\n    \"can_view_full\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c8c02d4b-677e-435c-90b7-7843138e58ae",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    ":campaign_id",
+                    "attribution",
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "12345"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2025-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2025-03-31"
+                    },
+                    {
+                      "key": "utm_source",
+                      "value": "GoogleAds"
+                    },
+                    {
+                      "key": "utm_campaign",
+                      "value": "winter_2025"
+                    },
+                    {
+                      "key": "detail_level",
+                      "value": "anonymized"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) The fundraise/campaign ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": \"string\",\n      \"key_1\": 6904.264266157602,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ac90bbc-97d6-435e-b270-58ca1e331cfa",
+              "name": "Access denied. This typically means:\n- Your OAuth application hasn't been approved for Tier 1 access\n- Your token doesn't include the `read:attribution:anonymized` scope\n\nTo request Tier 1 access, visit https://wefunder.com/api/request-access\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    ":campaign_id",
+                    "attribution",
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "12345"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2025-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2025-03-31"
+                    },
+                    {
+                      "key": "utm_source",
+                      "value": "GoogleAds"
+                    },
+                    {
+                      "key": "utm_campaign",
+                      "value": "winter_2025"
+                    },
+                    {
+                      "key": "detail_level",
+                      "value": "anonymized"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) The fundraise/campaign ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": \"string\",\n      \"key_1\": 6904.264266157602,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6eea5cd3-9151-474b-9434-5f668454ce25",
+              "name": "Too many requests in a short time period. The API enforces rate limits to ensure\nfair usage and system stability. When you exceed the limit, you'll receive this\nerror along with headers indicating when you can retry.\n\nCheck the `X-RateLimit-Reset` header to know when your limit will reset.\nConsider implementing exponential backoff in your application.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "campaigns",
+                    ":campaign_id",
+                    "attribution",
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "12345"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2025-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2025-03-31"
+                    },
+                    {
+                      "key": "utm_source",
+                      "value": "GoogleAds"
+                    },
+                    {
+                      "key": "utm_campaign",
+                      "value": "winter_2025"
+                    },
+                    {
+                      "key": "detail_level",
+                      "value": "anonymized"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "campaign_id",
+                      "description": "(Required) The fundraise/campaign ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Request limit per hour",
+                  "key": "X-RateLimit-Limit",
+                  "value": "6487"
+                },
+                {
+                  "disabled": false,
+                  "description": "Remaining requests",
+                  "key": "X-RateLimit-Remaining",
+                  "value": "6487"
+                },
+                {
+                  "disabled": false,
+                  "description": "UTC timestamp when the limit resets",
+                  "key": "X-RateLimit-Reset",
+                  "value": "6487"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": \"string\",\n      \"key_1\": 6904.264266157602,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": " (This can only be one of api,staging)",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "api",
+      "key": "environment"
+    },
+    {
+      "type": "string",
+      "value": "https://{{environment}}.wefunder.com/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "18d5d102-d76a-46ee-8315-0344628b52d8",
+    "name": "Wefunder API v2 Activity Attribution API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OAuth 2.0 API for accessing Wefunder data programmatically.\n\n## Authentication\n\nThis API uses OAuth 2.0 for authentication. To get started:\n\n1. Create an OAuth application at `/oauth/applications`\n2. Get your Client ID and Client Secret\n3. Implement the OAuth 2.0 Authorization Code flow\n4. Use the access token to make API requests\n\n## Rate Limits\n\n- Standard API: 1,000 requests/hour per token\n- Admin API: 10,000 requests/hour per token\n\n## Base URL\n\nAll API requests should be made to: `https://api.wefunder.com/api/v2`\n\n\nContact Support:\n Name: Wefunder API Support\n Email: api@wefunder.com",
+      "type": "text/plain"
+    }
+  }
+}

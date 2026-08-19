@@ -1,0 +1,80 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wefunder API v2 Activity Explore API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Explore",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List public offerings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/explore",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "12345",
+                "type": "query",
+                "description": "Cursor-based pagination token. Use the `next_cursor` value from the previous response's\n`meta` object to retrieve the next page of results. Omit this parameter to retrieve the\nfirst page.\n"
+              },
+              {
+                "name": "sort",
+                "value": "most_raised",
+                "type": "query",
+                "description": "Result ordering:\n- `most_raised` (default) — highest amount raised first\n- `closing_soon` — soonest funding close first\n- `newest` — most recently launched first\n- `most_investors` — highest investor count first\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns the offerings shown on wefunder.com/explore — the curated set of companies that\nmeet Wefunder's discoverability bar (a soft-confirmed traction threshold plus approval),\n**one offering per company**. An \"offering\" is a fundraise, addressed by its `ofr_`\nexternal id.\n\nThis is a public, read-only endpoint backed by the `read:public` scope. It is reachable\nwith either a server-side (client_credentials) token or a user access token carrying\n`read:public`. Private rounds (e.g. Reg D 506(b)) ar"
+        },
+        {
+          "info": {
+            "name": "Get a public offering",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/offerings/:external_id",
+            "params": [
+              {
+                "name": "external_id",
+                "value": "ofr_yw3OhusvpfJP4Pk3wRYV1F2R",
+                "type": "path",
+                "description": "The offering's `ofr_` external id."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves a single public offering by its `ofr_` external id.\n\nA valid id for a non-public offering (e.g. a private Reg D 506(b) round) returns `404` —\nhaving an id does not make an offering publicly resolvable.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

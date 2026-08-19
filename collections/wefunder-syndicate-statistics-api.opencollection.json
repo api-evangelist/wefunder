@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wefunder API v2 Activity Syndicate Statistics API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Syndicate Statistics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get syndicate statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/statistics",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns aggregate metrics for a syndicate including member counts, deal counts,\ntotal raised, and recent activity.\n\n`total_raised` and `total_investors` are computed from directory-selected deals\n(one per company). `total_deals` and `live_deals` use all linked deals.\n\nAll monetary values are strings representing cents to avoid floating-point precision issues.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

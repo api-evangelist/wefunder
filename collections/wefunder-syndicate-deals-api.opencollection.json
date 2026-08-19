@@ -1,0 +1,194 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wefunder API v2 Activity Syndicate Deals API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Syndicate Deals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List deals",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/deals",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns all deals (fundraises) within a syndicate with status, terms, and metrics."
+        },
+        {
+          "info": {
+            "name": "Get deal details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/deals/:fundraise_id",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "fundraise_id",
+                "value": "99",
+                "type": "path",
+                "description": "The deal (fundraise) ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns full details for a specific deal including investor breakdown."
+        },
+        {
+          "info": {
+            "name": "List deal investors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/deals/:fundraise_id/investors",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "fundraise_id",
+                "value": "99",
+                "type": "path",
+                "description": "The deal (fundraise) ID"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from previous response"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Results per page"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns syndicate members who invested in this deal. Results are scoped to\nsyndicate member user IDs only and sorted by amount descending.\n\nThe `user_email` field is **moderator-only** — it returns null for non-moderator\ncallers (i.e., users who are not a manager/operator of the syndicate).\n\nAll monetary values are strings representing cents to avoid floating-point precision issues.\n"
+        },
+        {
+          "info": {
+            "name": "Close deal (requires intent)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/deals/:fundraise_id/close",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "fundraise_id",
+                "value": "99",
+                "type": "path",
+                "description": "The deal (fundraise) ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Closing a deal is irreversible and requires human approval through the Intent system.\nThis endpoint always returns 422 with a `use_intents` error directing you to\n`POST /v2/intents` with action `syndicates.close_deal`.\n"
+        },
+        {
+          "info": {
+            "name": "Finalize deal (requires intent)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/deals/:fundraise_id/finalize",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "fundraise_id",
+                "value": "99",
+                "type": "path",
+                "description": "The deal (fundraise) ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Finalizing a deal triggers disbursement and is irreversible. It requires human approval\nthrough the Intent system. This endpoint always returns 422 with a `use_intents` error\ndirecting you to `POST /v2/intents` with action `syndicates.finalize_deal`.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

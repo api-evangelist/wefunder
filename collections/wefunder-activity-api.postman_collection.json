@@ -1,0 +1,733 @@
+{
+  "item": [
+    {
+      "id": "be7b0ba6-2f4a-4613-bb2f-4095d9eeaf66",
+      "name": "Activity",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fabffd05-2f5b-4d08-b25e-687d1a381abe",
+          "name": "List activity events",
+          "request": {
+            "name": "List activity events",
+            "description": {
+              "content": "Returns actions taken by OAuth apps authorized by the current user.\nThis is the API backing the user-facing activity feed at Settings > Activity.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "activity"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "app_id",
+                  "value": "<integer>",
+                  "description": "Filter by connected app"
+                },
+                {
+                  "disabled": false,
+                  "key": "action_pattern",
+                  "value": "<string>",
+                  "description": "Filter by action pattern (e.g. syndicates.* or syndicates.member.*)"
+                },
+                {
+                  "disabled": false,
+                  "key": "resource_type",
+                  "value": "<string>",
+                  "description": "Filter by resource type (e.g. Club). Must be used with resource_id."
+                },
+                {
+                  "disabled": false,
+                  "key": "resource_id",
+                  "value": "<integer>",
+                  "description": "Filter by specific resource ID. Must be used with resource_type."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "since",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "until",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                }
+              ],
+              "variable": [
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f6d19dc5-8714-43af-8336-58c4bc51682f",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "activity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "app_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "action_pattern",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "resource_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "resource_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 123,\n      \"type\": \"audit_event\",\n      \"attributes\": {\n        \"occurred_at\": \"2025-03-01T12:00:00Z\",\n        \"actor_type\": \"example\",\n        \"actor_name\": \"ChatGPT via Wefunder MCP\",\n        \"action\": \"syndicates.member.invited\",\n        \"resource_type\": \"Club\",\n        \"resource_id\": 123,\n        \"resource_label\": \"Acme Syndicate\",\n        \"old_values\": {},\n        \"new_values\": {},\n        \"changed_fields\": [\n          \"string\",\n          \"string\"\n        ],\n        \"status\": \"failure\",\n        \"error_message\": \"Example text\",\n        \"intent_id\": \"example\",\n        \"created_at\": \"2025-03-01T12:00:00Z\"\n      }\n    },\n    {\n      \"id\": 123,\n      \"type\": \"audit_event\",\n      \"attributes\": {\n        \"occurred_at\": \"2025-03-01T12:00:00Z\",\n        \"actor_type\": \"example\",\n        \"actor_name\": \"ChatGPT via Wefunder MCP\",\n        \"action\": \"syndicates.member.invited\",\n        \"resource_type\": \"Club\",\n        \"resource_id\": 123,\n        \"resource_label\": \"Acme Syndicate\",\n        \"old_values\": {},\n        \"new_values\": {},\n        \"changed_fields\": [\n          \"string\",\n          \"string\"\n        ],\n        \"status\": \"success\",\n        \"error_message\": \"Example text\",\n        \"intent_id\": \"example\",\n        \"created_at\": \"2025-03-01T12:00:00Z\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"count\": 25,\n    \"has_more\": true,\n    \"next_cursor\": 12345\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "323957a5-a362-435d-ac18-65d790d80d3d",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "activity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "app_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "action_pattern",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "resource_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "resource_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "since",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "until",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 1954.4417850010132\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1fe1cbe3-2b26-4d52-8d74-a000423ff90d",
+          "name": "List connected apps",
+          "request": {
+            "name": "List connected apps",
+            "description": {
+              "content": "Returns all OAuth apps the user has authorized, with summary stats.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "connected-apps"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ab2a98af-e158-470e-a7ee-98a5ef984cf2",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "connected-apps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 123,\n      \"type\": \"connected_app\",\n      \"attributes\": {\n        \"name\": \"ChatGPT via Wefunder MCP\",\n        \"scopes\": [\n          \"read:syndicates\",\n          \"write:syndicates\"\n        ],\n        \"last_active_at\": \"2025-03-01T12:00:00Z\",\n        \"action_count\": 34,\n        \"created_at\": \"2025-03-01T12:00:00Z\"\n      }\n    },\n    {\n      \"id\": 123,\n      \"type\": \"connected_app\",\n      \"attributes\": {\n        \"name\": \"ChatGPT via Wefunder MCP\",\n        \"scopes\": [\n          \"read:syndicates\",\n          \"write:syndicates\"\n        ],\n        \"last_active_at\": \"2025-03-01T12:00:00Z\",\n        \"action_count\": 34,\n        \"created_at\": \"2025-03-01T12:00:00Z\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6866660a-119d-48bb-b39d-b52f0606f4fc",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "connected-apps"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 1954.4417850010132\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "52d4df74-18c6-4e36-9b5e-15dc86a70b16",
+          "name": "Revoke connected app",
+          "request": {
+            "name": "Revoke connected app",
+            "description": {
+              "content": "Revoke all tokens for this app. Any pending intents from this app are automatically expired.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "connected-apps",
+                ":app_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "app_id",
+                  "description": "(Required) "
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "21fcc3ae-08ce-4b06-a1df-5016618fbc24",
+              "name": "App revoked, all tokens and pending intents expired",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "connected-apps",
+                    ":app_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"revoked\": true,\n    \"tokens_revoked\": 2\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30b0e094-8811-4438-b34c-890f5a8dad1d",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "connected-apps",
+                    ":app_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 1954.4417850010132\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b2bdb3c-a640-458a-af6a-2b0317ce697d",
+              "name": "App not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "connected-apps",
+                    ":app_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "app_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 1954.4417850010132\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": " (This can only be one of api,staging)",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "api",
+      "key": "environment"
+    },
+    {
+      "type": "string",
+      "value": "https://{{environment}}.wefunder.com/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f7448f86-1662-4bfa-8c09-f1d0fa4ccc00",
+    "name": "Wefunder API v2 Activity API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OAuth 2.0 API for accessing Wefunder data programmatically.\n\n## Authentication\n\nThis API uses OAuth 2.0 for authentication. To get started:\n\n1. Create an OAuth application at `/oauth/applications`\n2. Get your Client ID and Client Secret\n3. Implement the OAuth 2.0 Authorization Code flow\n4. Use the access token to make API requests\n\n## Rate Limits\n\n- Standard API: 1,000 requests/hour per token\n- Admin API: 10,000 requests/hour per token\n\n## Base URL\n\nAll API requests should be made to: `https://api.wefunder.com/api/v2`\n\n\nContact Support:\n Name: Wefunder API Support\n Email: api@wefunder.com",
+      "type": "text/plain"
+    }
+  }
+}

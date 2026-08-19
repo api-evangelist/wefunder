@@ -1,0 +1,46 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wefunder API v2 Activity Campaigns API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Campaigns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List founder campaigns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/campaigns",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "12345",
+                "type": "query",
+                "description": "Cursor-based pagination token. Use the `next_cursor` value from the previous response's\n`meta` object to retrieve the next page of results. Omit this parameter to retrieve the\nfirst page.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieves all fundraising campaigns for companies where the authenticated user is a founder.\nThis endpoint returns comprehensive campaign data including funding progress, investor counts,\nand campaign status.\n\nUse this endpoint to:\n- Build custom founder dashboards\n- Monitor fundraising progress across multiple campaigns\n- Generate reports on campaign performance\n- Integrate campaign data into your own tools\n\nOnly founders with the appropriate permissions can access this endpoint. The response i"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

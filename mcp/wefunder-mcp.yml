@@ -2,102 +2,106 @@ generated: '2026-07-21'
 method: derived
 status: candidate
 source: openapi/wefunder-openapi-original.yml
-notes: >-
-  No official hosted Wefunder MCP server was found (npm, GitHub org, docs).
-  This is a candidate tool list derived one-tool-per-operation from the public
-  tier (stable + beta) of the Wefunder API v2 OpenAPI, as vendored in the
-  official @wefunder/sdk repository.
+notes: No official hosted Wefunder MCP server was found (npm, GitHub org, docs). This is a candidate tool
+  list derived one-tool-per-operation from the public tier (stable + beta) of the Wefunder API v2 OpenAPI,
+  as vendored in the official @wefunder/sdk repository.
 server:
   name: wefunder
   transport: http
 tools:
-  - name: list_offerings
-    description: Browse public offerings on the explore surface
-    source_operation: openapi/wefunder-openapi-original.yml#listOfferings
-  - name: get_offering
-    description: Get one public offering by external id
-    source_operation: openapi/wefunder-openapi-original.yml#getOffering
-  - name: get_current_user
-    description: Get the authenticated user profile
-    source_operation: openapi/wefunder-openapi-original.yml#getCurrentUser
-  - name: list_investments
-    description: List the authenticated user's investments
-    source_operation: openapi/wefunder-openapi-original.yml#listInvestments
-  - name: list_campaigns
-    description: List campaigns for companies the user founded
-    source_operation: openapi/wefunder-openapi-original.yml#listCampaigns
-  - name: list_syndicates
-    description: List syndicates the user leads or belongs to
-    source_operation: openapi/wefunder-openapi-original.yml#listSyndicates
-  - name: get_syndicate
-    description: Get a syndicate
-    source_operation: openapi/wefunder-openapi-original.yml#getSyndicate
-  - name: update_syndicate
-    description: Update syndicate settings
-    source_operation: openapi/wefunder-openapi-original.yml#updateSyndicate
-  - name: list_syndicate_members
-    description: List members of a syndicate
-    source_operation: openapi/wefunder-openapi-original.yml#listSyndicateMembers
-  - name: invite_syndicate_member
-    description: Invite a member to a syndicate
-    source_operation: openapi/wefunder-openapi-original.yml#inviteSyndicateMember
-  - name: update_syndicate_member
-    description: Update a syndicate member
-    source_operation: openapi/wefunder-openapi-original.yml#updateSyndicateMember
-  - name: remove_syndicate_member
-    description: Remove a syndicate member
-    source_operation: openapi/wefunder-openapi-original.yml#removeSyndicateMember
-  - name: approve_syndicate_member
-    description: Approve a pending syndicate member
-    source_operation: openapi/wefunder-openapi-original.yml#approveSyndicateMember
-  - name: list_syndicate_deals
-    description: List a syndicate's deals
-    source_operation: openapi/wefunder-openapi-original.yml#listSyndicateDeals
-  - name: get_syndicate_deal
-    description: Get one syndicate deal
-    source_operation: openapi/wefunder-openapi-original.yml#getSyndicateDeal
-  - name: list_syndicate_deal_investors
-    description: List investors in a syndicate deal
-    source_operation: openapi/wefunder-openapi-original.yml#listSyndicateDealInvestors
-  - name: get_syndicate_statistics
-    description: Get syndicate portfolio statistics
-    source_operation: openapi/wefunder-openapi-original.yml#getSyndicateStatistics
-  - name: close_syndicate_deal
-    description: Close a syndicate deal (write intent, idempotency-key aware)
-    source_operation: openapi/wefunder-openapi-original.yml#closeSyndicateDeal
-  - name: finalize_syndicate_deal
-    description: Finalize a syndicate deal
-    source_operation: openapi/wefunder-openapi-original.yml#finalizeSyndicateDeal
-  - name: list_intents
-    description: List write intents
-    source_operation: openapi/wefunder-openapi-original.yml#listIntents
-  - name: create_intent
-    description: Create a write intent (client-provided idempotency_key deduplication)
-    source_operation: openapi/wefunder-openapi-original.yml#createIntent
-  - name: get_intent
-    description: Get a write intent
-    source_operation: openapi/wefunder-openapi-original.yml#getIntent
-  - name: list_activity
-    description: List account activity / audit events
-    source_operation: openapi/wefunder-openapi-original.yml#listActivity
-  - name: list_connected_apps
-    description: List OAuth connected apps
-    source_operation: openapi/wefunder-openapi-original.yml#listConnectedApps
-  - name: revoke_connected_app
-    description: Revoke an OAuth connected app
-    source_operation: openapi/wefunder-openapi-original.yml#revokeConnectedApp
-  - name: get_attribution_stats
-    description: Get aggregate attribution statistics for a campaign
-    source_operation: openapi/wefunder-openapi-original.yml#getAttributionStats
-  - name: list_attributed_investments
-    description: List attributed investments for a campaign
-    source_operation: openapi/wefunder-openapi-original.yml#listAttributedInvestments
-  - name: list_webhook_subscriptions
-    description: List attribution webhook subscriptions
-    source_operation: openapi/wefunder-openapi-original.yml#listWebhookSubscriptions
-  - name: create_webhook_subscription
-    description: Create an attribution webhook subscription
-    source_operation: openapi/wefunder-openapi-original.yml#createWebhookSubscription
-  - name: test_webhook_subscription
-    description: Send a test delivery to a webhook subscription
-    source_operation: openapi/wefunder-openapi-original.yml#testWebhookSubscription
+- name: list_offerings
+  description: Browse public offerings on the explore surface
+  source_operation: openapi/wefunder-openapi-original.yml#listOfferings
+- name: get_offering
+  description: Get one public offering by external id
+  source_operation: openapi/wefunder-openapi-original.yml#getOffering
+- name: get_current_user
+  description: Get the authenticated user profile
+  source_operation: openapi/wefunder-openapi-original.yml#getCurrentUser
+- name: list_investments
+  description: List the authenticated user's investments
+  source_operation: openapi/wefunder-openapi-original.yml#listInvestments
+- name: list_campaigns
+  description: List campaigns for companies the user founded
+  source_operation: openapi/wefunder-openapi-original.yml#listCampaigns
+- name: list_syndicates
+  description: List syndicates the user leads or belongs to
+  source_operation: openapi/wefunder-openapi-original.yml#listSyndicates
+- name: get_syndicate
+  description: Get a syndicate
+  source_operation: openapi/wefunder-openapi-original.yml#getSyndicate
+- name: update_syndicate
+  description: Update syndicate settings
+  source_operation: openapi/wefunder-openapi-original.yml#updateSyndicate
+- name: list_syndicate_members
+  description: List members of a syndicate
+  source_operation: openapi/wefunder-openapi-original.yml#listSyndicateMembers
+- name: invite_syndicate_member
+  description: Invite a member to a syndicate
+  source_operation: openapi/wefunder-openapi-original.yml#inviteSyndicateMember
+- name: update_syndicate_member
+  description: Update a syndicate member
+  source_operation: openapi/wefunder-openapi-original.yml#updateSyndicateMember
+- name: remove_syndicate_member
+  description: Remove a syndicate member
+  source_operation: openapi/wefunder-openapi-original.yml#removeSyndicateMember
+- name: approve_syndicate_member
+  description: Approve a pending syndicate member
+  source_operation: openapi/wefunder-openapi-original.yml#approveSyndicateMember
+- name: list_syndicate_deals
+  description: List a syndicate's deals
+  source_operation: openapi/wefunder-openapi-original.yml#listSyndicateDeals
+- name: get_syndicate_deal
+  description: Get one syndicate deal
+  source_operation: openapi/wefunder-openapi-original.yml#getSyndicateDeal
+- name: list_syndicate_deal_investors
+  description: List investors in a syndicate deal
+  source_operation: openapi/wefunder-openapi-original.yml#listSyndicateDealInvestors
+- name: get_syndicate_statistics
+  description: Get syndicate portfolio statistics
+  source_operation: openapi/wefunder-openapi-original.yml#getSyndicateStatistics
+- name: close_syndicate_deal
+  description: Close a syndicate deal (write intent, idempotency-key aware)
+  source_operation: openapi/wefunder-openapi-original.yml#closeSyndicateDeal
+- name: finalize_syndicate_deal
+  description: Finalize a syndicate deal
+  source_operation: openapi/wefunder-openapi-original.yml#finalizeSyndicateDeal
+- name: list_intents
+  description: List write intents
+  source_operation: openapi/wefunder-openapi-original.yml#listIntents
+- name: create_intent
+  description: Create a write intent (client-provided idempotency_key deduplication)
+  source_operation: openapi/wefunder-openapi-original.yml#createIntent
+- name: get_intent
+  description: Get a write intent
+  source_operation: openapi/wefunder-openapi-original.yml#getIntent
+- name: list_activity
+  description: List account activity / audit events
+  source_operation: openapi/wefunder-openapi-original.yml#listActivity
+- name: list_connected_apps
+  description: List OAuth connected apps
+  source_operation: openapi/wefunder-openapi-original.yml#listConnectedApps
+- name: revoke_connected_app
+  description: Revoke an OAuth connected app
+  source_operation: openapi/wefunder-openapi-original.yml#revokeConnectedApp
+- name: get_attribution_stats
+  description: Get aggregate attribution statistics for a campaign
+  source_operation: openapi/wefunder-openapi-original.yml#getAttributionStats
+- name: list_attributed_investments
+  description: List attributed investments for a campaign
+  source_operation: openapi/wefunder-openapi-original.yml#listAttributedInvestments
+- name: list_webhook_subscriptions
+  description: List attribution webhook subscriptions
+  source_operation: openapi/wefunder-openapi-original.yml#listWebhookSubscriptions
+- name: create_webhook_subscription
+  description: Create an attribution webhook subscription
+  source_operation: openapi/wefunder-openapi-original.yml#createWebhookSubscription
+- name: test_webhook_subscription
+  description: Send a test delivery to a webhook subscription
+  source_operation: openapi/wefunder-openapi-original.yml#testWebhookSubscription
+deployment:
+  mode: none
+  verified: derived
+  tools: 30
+  checked: '2026-08-12'
+  source: catalog MCP census

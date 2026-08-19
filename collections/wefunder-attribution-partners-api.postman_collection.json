@@ -1,0 +1,1408 @@
+{
+  "item": [
+    {
+      "id": "3427cdaa-93e3-4681-81eb-5ecd6adccfd2",
+      "name": "Attribution Partners",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f7e2a306-90d8-460e-b0d1-88f488319976",
+          "name": "Get current user's attribution profile",
+          "request": {
+            "name": "Get current user's attribution profile",
+            "description": {
+              "content": "Returns the authenticated user's marketing partner profile and connected campaigns.\nIf the user is not registered as a marketing partner, returns partner info as null.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attribution",
+                "me"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9a687ec9-77ca-44d9-b5b0-0867689587e5",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "me"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"user\": {\n      \"id\": 123,\n      \"email\": \"user@example.com\",\n      \"name\": \"Example Name\"\n    },\n    \"partner\": {\n      \"id\": 123,\n      \"company_name\": \"Example Name\",\n      \"website\": \"https://example.com\",\n      \"status\": \"pending\"\n    },\n    \"campaigns\": [\n      {\n        \"id\": 123,\n        \"company_name\": \"Example Name\",\n        \"company_id\": 123,\n        \"access_level\": 1\n      },\n      {\n        \"id\": 123,\n        \"company_name\": \"Example Name\",\n        \"company_id\": 123,\n        \"access_level\": 1\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f009e8b-fa4a-40de-bdaa-87cf4052e19f",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "me"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dc72bf71-38b5-4b81-8e86-fe2f31aa101a",
+          "name": "List campaigns accessible to the current user",
+          "request": {
+            "name": "List campaigns accessible to the current user",
+            "description": {
+              "content": "Returns all campaigns the authenticated user can access for attribution data.\nFor founders, this includes their own campaigns.\nFor marketing partners, this includes campaigns they've been granted access to.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attribution",
+                "campaigns"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "986e8c12-9199-4c73-89b3-f7cece5b8c27",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 123,\n      \"company_name\": \"Example Name\",\n      \"company_id\": 123,\n      \"state\": \"active\",\n      \"access_level\": 1\n    },\n    {\n      \"id\": 123,\n      \"company_name\": \"Example Name\",\n      \"company_id\": 123,\n      \"state\": \"active\",\n      \"access_level\": 1\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49f2d373-a2d4-49b9-bd2e-4bd0134f5e97",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ee72678d-2e19-41a3-8ae2-22dbf742a591",
+          "name": "Register as a marketing partner",
+          "request": {
+            "name": "Register as a marketing partner",
+            "description": {
+              "content": "Registers the authenticated user as a marketing partner.\nAfter registration, the partner can create invites to request access to campaigns.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attribution",
+                "partners",
+                "register"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"company_name\": \"<string>\",\n  \"website\": \"<uri>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "66c132b3-2fe7-4b1b-ba12-2ddf1865f638",
+              "name": "Partner registered",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "partners",
+                    "register"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_name\": \"Acme Marketing Agency\",\n  \"website\": \"https://acme-marketing.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 123,\n    \"user_id\": 456,\n    \"company_name\": \"Acme Marketing Agency\",\n    \"website\": \"https://acme-marketing.com\",\n    \"status\": \"approved\",\n    \"created_at\": \"2025-03-15T10:30:00Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e8581ba-71fe-4188-a1af-031ee93791e1",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "partners",
+                    "register"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_name\": \"Acme Marketing Agency\",\n  \"website\": \"https://acme-marketing.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c8e3b27-ea8d-42de-a60d-07d380cde75f",
+              "name": "Already registered or validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "partners",
+                    "register"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"company_name\": \"Acme Marketing Agency\",\n  \"website\": \"https://acme-marketing.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c644693-a316-4a4c-ae5e-bb554d9b1b2d",
+          "name": "List partner invites",
+          "request": {
+            "name": "List partner invites",
+            "description": {
+              "content": "Returns all invites created by or sent to the authenticated user.\nIncludes both pending and accepted invites.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attribution",
+                "invites"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9508e761-33b7-49f3-9434-ebaaac463146",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "invites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 123,\n      \"token\": \"abc123xyz789\",\n      \"direction\": \"partner_to_founder\",\n      \"status\": \"pending\",\n      \"access_level\": 1,\n      \"company_id\": 789,\n      \"company_name\": \"My Startup Inc.\",\n      \"partner_email\": \"partner@agency.com\",\n      \"expires_at\": \"2025-04-15T10:30:00Z\",\n      \"created_at\": \"2025-03-15T10:30:00Z\",\n      \"accept_url\": \"https://wefunder.com/attribution/invites/abc123xyz789\"\n    },\n    {\n      \"id\": 123,\n      \"token\": \"abc123xyz789\",\n      \"direction\": \"partner_to_founder\",\n      \"status\": \"pending\",\n      \"access_level\": 1,\n      \"company_id\": 789,\n      \"company_name\": \"My Startup Inc.\",\n      \"partner_email\": \"partner@agency.com\",\n      \"expires_at\": \"2025-04-15T10:30:00Z\",\n      \"created_at\": \"2025-03-15T10:30:00Z\",\n      \"accept_url\": \"https://wefunder.com/attribution/invites/abc123xyz789\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a9f25051-f649-4ae0-8b79-d889d85e4547",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "invites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d4a82e7b-2038-432c-b9ba-0f52125f8690",
+          "name": "Create a partner invite",
+          "request": {
+            "name": "Create a partner invite",
+            "description": {
+              "content": "Creates an invite to establish a partner-company connection.\n\n**Directions**:\n- `partner_to_founder`: Marketing partner invites a founder to grant access\n- `founder_to_partner`: Founder invites a marketing partner to access their campaign\n\nFor `partner_to_founder`: Creates a shareable invite link.\nFor `founder_to_partner`: Sends an email to the partner.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attribution",
+                "invites"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"direction\": \"<string>\",\n  \"company_id\": \"<integer>\",\n  \"partner_email\": \"<email>\",\n  \"access_level\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1cffcbf3-1b85-45c5-a6ae-2d8b28928f28",
+              "name": "Invite created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "invites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"direction\": \"<string>\",\n  \"company_id\": \"<integer>\",\n  \"partner_email\": \"<email>\",\n  \"access_level\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 123,\n    \"token\": \"abc123xyz789\",\n    \"direction\": \"partner_to_founder\",\n    \"status\": \"pending\",\n    \"access_level\": 1,\n    \"company_id\": 789,\n    \"company_name\": \"My Startup Inc.\",\n    \"partner_email\": \"partner@agency.com\",\n    \"expires_at\": \"2025-04-15T10:30:00Z\",\n    \"created_at\": \"2025-03-15T10:30:00Z\",\n    \"accept_url\": \"https://wefunder.com/attribution/invites/abc123xyz789\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "efdea9b0-854b-4b90-95c7-6547cbebf171",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "invites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"direction\": \"<string>\",\n  \"company_id\": \"<integer>\",\n  \"partner_email\": \"<email>\",\n  \"access_level\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "efca25c6-5ff3-4fc4-9aa7-d9ae06a64abc",
+              "name": "Not authorized to create this invite",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "invites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"direction\": \"<string>\",\n  \"company_id\": \"<integer>\",\n  \"partner_email\": \"<email>\",\n  \"access_level\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d09df3f6-5fe9-4fe2-a0e3-85e644e27df7",
+              "name": "Validation error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "invites"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"direction\": \"<string>\",\n  \"company_id\": \"<integer>\",\n  \"partner_email\": \"<email>\",\n  \"access_level\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "da3c8acf-86fb-492b-bc68-b24eb36d3a1b",
+          "name": "Revoke a partner invite",
+          "request": {
+            "name": "Revoke a partner invite",
+            "description": {
+              "content": "Revokes a pending invite. Only the creator can revoke an invite.\nAccepted invites cannot be revoked (delete the connection instead).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "attribution",
+                "invites",
+                ":token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "token",
+                  "description": "(Required) The invite token"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4e5de018-b84c-4d32-a65c-9e90dd3bdfb2",
+              "name": "Invite revoked",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "invites",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) The invite token"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "daeca33d-2fcf-4374-b8ea-c7be68280d4b",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "invites",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) The invite token"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b35bf4a7-e5ad-4f90-8863-fdc1103285f8",
+              "name": "Not authorized to revoke this invite",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "invites",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) The invite token"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29a50d9a-5cc0-4bec-b936-e18bfd64f4e7",
+              "name": "Invite not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "attribution",
+                    "invites",
+                    ":token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "token",
+                      "description": "(Required) The invite token"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 4183,\n      \"key_1\": 2639.9895002057274,\n      \"key_2\": true\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": " (This can only be one of api,staging)",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "api",
+      "key": "environment"
+    },
+    {
+      "type": "string",
+      "value": "https://{{environment}}.wefunder.com/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8e87b957-28e3-4f7b-b7a1-cf9ee842d4ba",
+    "name": "Wefunder API v2 Activity Attribution Partners API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OAuth 2.0 API for accessing Wefunder data programmatically.\n\n## Authentication\n\nThis API uses OAuth 2.0 for authentication. To get started:\n\n1. Create an OAuth application at `/oauth/applications`\n2. Get your Client ID and Client Secret\n3. Implement the OAuth 2.0 Authorization Code flow\n4. Use the access token to make API requests\n\n## Rate Limits\n\n- Standard API: 1,000 requests/hour per token\n- Admin API: 10,000 requests/hour per token\n\n## Base URL\n\nAll API requests should be made to: `https://api.wefunder.com/api/v2`\n\n\nContact Support:\n Name: Wefunder API Support\n Email: api@wefunder.com",
+      "type": "text/plain"
+    }
+  }
+}

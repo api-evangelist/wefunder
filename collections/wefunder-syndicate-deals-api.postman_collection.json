@@ -1,0 +1,1333 @@
+{
+  "item": [
+    {
+      "id": "771a4374-3c4c-4726-98c3-3216b775b781",
+      "name": "Syndicate Deals",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0e6781f1-c33e-4a58-b043-c94e299ba721",
+          "name": "List deals",
+          "request": {
+            "name": "List deals",
+            "description": {
+              "content": "Returns all deals (fundraises) within a syndicate with status, terms, and metrics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "deals"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "215914ae-2c5a-4b2b-a3e4-3e04e9df847f",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 99,\n      \"type\": \"syndicate_deal\",\n      \"attributes\": {\n        \"name\": \"Acme Corp Series A\",\n        \"state\": \"open\",\n        \"company_name\": \"Acme Corp\",\n        \"company_id\": 1234,\n        \"company_url\": \"acme-corp\",\n        \"company_logo_url\": \"https://uploads.wefunder.com/uploads/company/logo/1234/large_logo.png\",\n        \"amount_raised\": \"23000000\",\n        \"investor_count\": 47,\n        \"funding_target\": \"50000000\",\n        \"offering_type\": \"506(c)\",\n        \"structure\": \"safe\",\n        \"min_investment\": \"10000\",\n        \"max_investment\": \"5000000\",\n        \"description\": \"Example text\",\n        \"created_at\": \"2025-03-01T12:00:00Z\",\n        \"updated_at\": \"2025-03-01T12:00:00Z\",\n        \"closed_at\": \"2025-03-01T12:00:00Z\",\n        \"funding_started_at\": \"2025-03-01T12:00:00Z\"\n      }\n    },\n    {\n      \"id\": 99,\n      \"type\": \"syndicate_deal\",\n      \"attributes\": {\n        \"name\": \"Acme Corp Series A\",\n        \"state\": \"open\",\n        \"company_name\": \"Acme Corp\",\n        \"company_id\": 1234,\n        \"company_url\": \"acme-corp\",\n        \"company_logo_url\": \"https://uploads.wefunder.com/uploads/company/logo/1234/large_logo.png\",\n        \"amount_raised\": \"23000000\",\n        \"investor_count\": 47,\n        \"funding_target\": \"50000000\",\n        \"offering_type\": \"506(c)\",\n        \"structure\": \"safe\",\n        \"min_investment\": \"10000\",\n        \"max_investment\": \"5000000\",\n        \"description\": \"Example text\",\n        \"created_at\": \"2025-03-01T12:00:00Z\",\n        \"updated_at\": \"2025-03-01T12:00:00Z\",\n        \"closed_at\": \"2025-03-01T12:00:00Z\",\n        \"funding_started_at\": \"2025-03-01T12:00:00Z\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"count\": 5991\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "35da9820-bd35-4260-b890-45a63b104f47",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 665,\n      \"key_1\": 1805.4403373670048\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4579ca32-7b60-48fb-b675-2d07f1e1261a",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 665,\n      \"key_1\": 1805.4403373670048\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8183109c-49be-42b6-9789-b5132ec55ef6",
+          "name": "Get deal details",
+          "request": {
+            "name": "Get deal details",
+            "description": {
+              "content": "Returns full details for a specific deal including investor breakdown.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "deals",
+                ":fundraise_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "fundraise_id",
+                  "description": "(Required) The deal (fundraise) ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e08892a1-61fa-4d8e-bff7-ee23d18d7cc4",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals",
+                    ":fundraise_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "fundraise_id",
+                      "description": "(Required) The deal (fundraise) ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 99,\n    \"type\": \"syndicate_deal\",\n    \"attributes\": {\n      \"name\": \"Acme Corp Series A\",\n      \"state\": \"open\",\n      \"company_name\": \"Acme Corp\",\n      \"company_id\": 1234,\n      \"company_url\": \"acme-corp\",\n      \"company_logo_url\": \"https://uploads.wefunder.com/uploads/company/logo/1234/large_logo.png\",\n      \"amount_raised\": \"23000000\",\n      \"investor_count\": 47,\n      \"funding_target\": \"50000000\",\n      \"offering_type\": \"506(c)\",\n      \"structure\": \"safe\",\n      \"min_investment\": \"10000\",\n      \"max_investment\": \"5000000\",\n      \"description\": \"Example text\",\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\",\n      \"closed_at\": \"2025-03-01T12:00:00Z\",\n      \"funding_started_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "de90d06d-598b-422f-b071-983f3373f945",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals",
+                    ":fundraise_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "fundraise_id",
+                      "description": "(Required) The deal (fundraise) ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 665,\n      \"key_1\": 1805.4403373670048\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1bd5868-0690-494e-b49c-6d3c7be1ae63",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals",
+                    ":fundraise_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "fundraise_id",
+                      "description": "(Required) The deal (fundraise) ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 665,\n      \"key_1\": 1805.4403373670048\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "18bc2b3d-6735-4f7e-9e1e-41cdacbc6f10",
+              "name": "Deal not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals",
+                    ":fundraise_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "fundraise_id",
+                      "description": "(Required) The deal (fundraise) ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 665,\n      \"key_1\": 1805.4403373670048\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8fee97bf-a1d9-4c39-956b-07ea5b37712f",
+          "name": "List deal investors",
+          "request": {
+            "name": "List deal investors",
+            "description": {
+              "content": "Returns syndicate members who invested in this deal. Results are scoped to\nsyndicate member user IDs only and sorted by amount descending.\n\nThe `user_email` field is **moderator-only** — it returns null for non-moderator\ncallers (i.e., users who are not a manager/operator of the syndicate).\n\nAll monetary values are strings representing cents to avoid floating-point precision issues.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "deals",
+                ":fundraise_id",
+                "investors"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Pagination cursor from previous response"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25",
+                  "description": "Results per page"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "fundraise_id",
+                  "description": "(Required) The deal (fundraise) ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f6bf5645-e0e0-4be9-9f84-c3d54f18961d",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals",
+                    ":fundraise_id",
+                    "investors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "fundraise_id",
+                      "description": "(Required) The deal (fundraise) ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 12345,\n      \"type\": \"deal_investor\",\n      \"attributes\": {\n        \"user_id\": 456,\n        \"user_name\": \"Jane Smith\",\n        \"user_email\": \"user@example.com\",\n        \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n        \"amount\": \"500000\",\n        \"state\": \"confirmed\",\n        \"invested_at\": \"2025-03-01T12:00:00Z\"\n      }\n    },\n    {\n      \"id\": 12345,\n      \"type\": \"deal_investor\",\n      \"attributes\": {\n        \"user_id\": 456,\n        \"user_name\": \"Jane Smith\",\n        \"user_email\": \"user@example.com\",\n        \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n        \"amount\": \"500000\",\n        \"state\": \"confirmed\",\n        \"invested_at\": \"2025-03-01T12:00:00Z\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"has_more\": false,\n    \"count\": 8004\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f68f5c05-795b-4ca8-8945-bc9d8df56b5e",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals",
+                    ":fundraise_id",
+                    "investors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "fundraise_id",
+                      "description": "(Required) The deal (fundraise) ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 665,\n      \"key_1\": 1805.4403373670048\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb8e482e-735b-4e4b-96dd-edbbcc023c24",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals",
+                    ":fundraise_id",
+                    "investors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "fundraise_id",
+                      "description": "(Required) The deal (fundraise) ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 665,\n      \"key_1\": 1805.4403373670048\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30482814-d9eb-45dd-81ed-4eb18cb8915c",
+              "name": "Deal not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals",
+                    ":fundraise_id",
+                    "investors"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "fundraise_id",
+                      "description": "(Required) The deal (fundraise) ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 665,\n      \"key_1\": 1805.4403373670048\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b870f118-0879-4ac4-a56e-bc38323f2a26",
+          "name": "Close deal (requires intent)",
+          "request": {
+            "name": "Close deal (requires intent)",
+            "description": {
+              "content": "Closing a deal is irreversible and requires human approval through the Intent system.\nThis endpoint always returns 422 with a `use_intents` error directing you to\n`POST /v2/intents` with action `syndicates.close_deal`.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "deals",
+                ":fundraise_id",
+                "close"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "fundraise_id",
+                  "description": "(Required) The deal (fundraise) ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c4dcb442-2c4f-40c4-b824-4890214bf4e6",
+              "name": "Use intents for this action",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals",
+                    ":fundraise_id",
+                    "close"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "fundraise_id",
+                      "description": "(Required) The deal (fundraise) ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 665,\n      \"key_1\": 1805.4403373670048\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "81573748-4e4c-4ed1-8b76-d4de08c1ec23",
+          "name": "Finalize deal (requires intent)",
+          "request": {
+            "name": "Finalize deal (requires intent)",
+            "description": {
+              "content": "Finalizing a deal triggers disbursement and is irreversible. It requires human approval\nthrough the Intent system. This endpoint always returns 422 with a `use_intents` error\ndirecting you to `POST /v2/intents` with action `syndicates.finalize_deal`.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "deals",
+                ":fundraise_id",
+                "finalize"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "fundraise_id",
+                  "description": "(Required) The deal (fundraise) ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "39c603f4-79d2-4dcf-9c66-717cd35311c7",
+              "name": "Use intents for this action",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "deals",
+                    ":fundraise_id",
+                    "finalize"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "fundraise_id",
+                      "description": "(Required) The deal (fundraise) ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 665,\n      \"key_1\": 1805.4403373670048\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": " (This can only be one of api,staging)",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "api",
+      "key": "environment"
+    },
+    {
+      "type": "string",
+      "value": "https://{{environment}}.wefunder.com/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "cb771a22-c8a0-47bb-b968-99ee78f401d3",
+    "name": "Wefunder API v2 Activity Syndicate Deals API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OAuth 2.0 API for accessing Wefunder data programmatically.\n\n## Authentication\n\nThis API uses OAuth 2.0 for authentication. To get started:\n\n1. Create an OAuth application at `/oauth/applications`\n2. Get your Client ID and Client Secret\n3. Implement the OAuth 2.0 Authorization Code flow\n4. Use the access token to make API requests\n\n## Rate Limits\n\n- Standard API: 1,000 requests/hour per token\n- Admin API: 10,000 requests/hour per token\n\n## Base URL\n\nAll API requests should be made to: `https://api.wefunder.com/api/v2`\n\n\nContact Support:\n Name: Wefunder API Support\n Email: api@wefunder.com",
+      "type": "text/plain"
+    }
+  }
+}

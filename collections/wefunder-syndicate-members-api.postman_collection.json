@@ -1,0 +1,3825 @@
+{
+  "item": [
+    {
+      "id": "4106b753-c5aa-405b-97ac-b9e2dd4c9cc1",
+      "name": "Syndicate Members",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "035f632f-4f5b-40ac-bced-472314124020",
+          "name": "List members",
+          "request": {
+            "name": "List members",
+            "description": {
+              "content": "Returns the member directory for a syndicate with role, status, tags, sidebar notes,\nand investment history summaries. Supports filtering, sorting, search, and pagination.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "role",
+                  "value": "<string>",
+                  "description": "Filter by role (e.g. creator, manager, member, invitee, applicant)"
+                },
+                {
+                  "disabled": false,
+                  "key": "permission",
+                  "value": "<string>",
+                  "description": "Filter by syndicate permission level"
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Search by name or email"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Sort order for results"
+                },
+                {
+                  "disabled": false,
+                  "key": "has_invested",
+                  "value": "<string>",
+                  "description": "Filter by whether the member has invested in any syndicate deal"
+                },
+                {
+                  "disabled": false,
+                  "key": "accredited",
+                  "value": "<string>",
+                  "description": "Filter to accredited members only"
+                },
+                {
+                  "disabled": false,
+                  "key": "tag",
+                  "value": "<string>",
+                  "description": "Filter by 'can help with' tag (ILIKE match)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "597bed5f-d604-49b2-8dc4-604b4c3bc5a9",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "role",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "permission",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "has_invested",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "accredited",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tag",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 123,\n      \"type\": \"syndicate_member\",\n      \"attributes\": {\n        \"user_id\": 123,\n        \"user_name\": \"Jane Smith\",\n        \"user_email\": \"user@example.com\",\n        \"role\": \"member\",\n        \"invite_role\": \"admin\",\n        \"syndicate_permission\": \"full_access\",\n        \"title\": \"Example title\",\n        \"sort_order\": 5,\n        \"carry_percentage_override\": \"20.0\",\n        \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n        \"bio\": \"Example text\",\n        \"city\": \"San Francisco\",\n        \"country\": \"US\",\n        \"last_activity_at\": \"2025-03-01T12:00:00Z\",\n        \"profile_url\": \"/janedoe\",\n        \"tags\": [\n          \"Fundraising\",\n          \"Product Strategy\"\n        ],\n        \"joined_at\": \"2025-03-01T12:00:00Z\",\n        \"investment_total\": \"500000\",\n        \"deal_count\": 2,\n        \"accredited\": true,\n        \"legal_name\": \"Example Name\",\n        \"starred\": true,\n        \"private_tags\": [\n          \"VIP\",\n          \"Follow up\"\n        ],\n        \"created_at\": \"2025-03-01T12:00:00Z\",\n        \"updated_at\": \"2025-03-01T12:00:00Z\"\n      }\n    },\n    {\n      \"id\": 123,\n      \"type\": \"syndicate_member\",\n      \"attributes\": {\n        \"user_id\": 123,\n        \"user_name\": \"Jane Smith\",\n        \"user_email\": \"user@example.com\",\n        \"role\": \"member\",\n        \"invite_role\": \"admin\",\n        \"syndicate_permission\": \"operator\",\n        \"title\": \"Example title\",\n        \"sort_order\": 5,\n        \"carry_percentage_override\": \"20.0\",\n        \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n        \"bio\": \"Example text\",\n        \"city\": \"San Francisco\",\n        \"country\": \"US\",\n        \"last_activity_at\": \"2025-03-01T12:00:00Z\",\n        \"profile_url\": \"/janedoe\",\n        \"tags\": [\n          \"Fundraising\",\n          \"Product Strategy\"\n        ],\n        \"joined_at\": \"2025-03-01T12:00:00Z\",\n        \"investment_total\": \"500000\",\n        \"deal_count\": 2,\n        \"accredited\": true,\n        \"legal_name\": \"Example Name\",\n        \"starred\": true,\n        \"private_tags\": [\n          \"VIP\",\n          \"Follow up\"\n        ],\n        \"created_at\": \"2025-03-01T12:00:00Z\",\n        \"updated_at\": \"2025-03-01T12:00:00Z\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"count\": 25,\n    \"has_more\": true,\n    \"next_cursor\": 12345\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14e4f777-928b-41f0-a1f0-d8d8ddfa3918",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "role",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "permission",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "has_invested",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "accredited",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tag",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2f92b4b8-48af-4a78-b16f-dfc46d571cdb",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "role",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "permission",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "has_invested",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "accredited",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "tag",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "978cf30b-1a06-4a99-b212-1a532a7979ac",
+          "name": "Invite member",
+          "request": {
+            "name": "Invite member",
+            "description": {
+              "content": "Send an invitation to join the syndicate by email.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                "invite"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"<email>\",\n  \"name\": \"<string>\",\n  \"syndicate_permission\": \"operator\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0460cadc-d002-40f3-b732-0589a31b0caa",
+              "name": "Invitation sent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    "invite"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"jane@example.com\",\n  \"name\": \"<string>\",\n  \"syndicate_permission\": \"operator\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 123,\n    \"type\": \"syndicate_member\",\n    \"attributes\": {\n      \"user_id\": 123,\n      \"user_name\": \"Jane Smith\",\n      \"user_email\": \"user@example.com\",\n      \"role\": \"member\",\n      \"invite_role\": \"admin\",\n      \"syndicate_permission\": \"full_access\",\n      \"title\": \"Example title\",\n      \"sort_order\": 5,\n      \"carry_percentage_override\": \"20.0\",\n      \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n      \"bio\": \"Example text\",\n      \"city\": \"San Francisco\",\n      \"country\": \"US\",\n      \"last_activity_at\": \"2025-03-01T12:00:00Z\",\n      \"profile_url\": \"/janedoe\",\n      \"tags\": [\n        \"Fundraising\",\n        \"Product Strategy\"\n      ],\n      \"joined_at\": \"2025-03-01T12:00:00Z\",\n      \"investment_total\": \"500000\",\n      \"deal_count\": 2,\n      \"accredited\": true,\n      \"legal_name\": \"Example Name\",\n      \"starred\": true,\n      \"private_tags\": [\n        \"VIP\",\n        \"Follow up\"\n      ],\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "19fe8c70-c819-4596-a89b-541d00d35321",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    "invite"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"jane@example.com\",\n  \"name\": \"<string>\",\n  \"syndicate_permission\": \"operator\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1005fb6-16ec-4703-a8ba-51c8de2a7e75",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    "invite"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"jane@example.com\",\n  \"name\": \"<string>\",\n  \"syndicate_permission\": \"operator\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "708bd6b4-3bbd-4a81-98d0-13d83b079066",
+              "name": "Validation error (e.g. already a member)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    "invite"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"jane@example.com\",\n  \"name\": \"<string>\",\n  \"syndicate_permission\": \"operator\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8309b4fb-1ece-445f-9313-f8e529447ca4",
+          "name": "Update member",
+          "request": {
+            "name": "Update member",
+            "description": {
+              "content": "Update title and carry override for a member. Requires operator permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                ":member_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "member_id",
+                  "description": "(Required) The member ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"member\": {\n    \"title\": \"<string>\",\n    \"carry_percentage_override\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "23142adb-6ec8-4691-964b-f5acb0400c7f",
+              "name": "Member updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"member\": {\n    \"title\": \"Lead Investor\",\n    \"carry_percentage_override\": \"20.0\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 123,\n    \"type\": \"syndicate_member\",\n    \"attributes\": {\n      \"user_id\": 123,\n      \"user_name\": \"Jane Smith\",\n      \"user_email\": \"user@example.com\",\n      \"role\": \"member\",\n      \"invite_role\": \"admin\",\n      \"syndicate_permission\": \"full_access\",\n      \"title\": \"Example title\",\n      \"sort_order\": 5,\n      \"carry_percentage_override\": \"20.0\",\n      \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n      \"bio\": \"Example text\",\n      \"city\": \"San Francisco\",\n      \"country\": \"US\",\n      \"last_activity_at\": \"2025-03-01T12:00:00Z\",\n      \"profile_url\": \"/janedoe\",\n      \"tags\": [\n        \"Fundraising\",\n        \"Product Strategy\"\n      ],\n      \"joined_at\": \"2025-03-01T12:00:00Z\",\n      \"investment_total\": \"500000\",\n      \"deal_count\": 2,\n      \"accredited\": true,\n      \"legal_name\": \"Example Name\",\n      \"starred\": true,\n      \"private_tags\": [\n        \"VIP\",\n        \"Follow up\"\n      ],\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e6b9a225-f3f9-46d7-8016-9ba7d6c80361",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"member\": {\n    \"title\": \"Lead Investor\",\n    \"carry_percentage_override\": \"20.0\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5e6fdb61-287e-4d47-87be-4d3b6bb11a2b",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"member\": {\n    \"title\": \"Lead Investor\",\n    \"carry_percentage_override\": \"20.0\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a1cea967-f212-44a6-8149-4e6fb4a739ae",
+          "name": "Remove member (requires intent)",
+          "request": {
+            "name": "Remove member (requires intent)",
+            "description": {
+              "content": "Removing a member is irreversible and requires human approval through the Intent system.\nThis endpoint always returns 422 with a `use_intents` error directing you to\n`POST /v2/intents` with action `syndicates.remove_member`.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                ":member_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "member_id",
+                  "description": "(Required) The member ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ce50ac46-f139-42a5-ac76-94c0c1c8a00a",
+              "name": "Use intents for this action",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d202c5ae-a766-4c89-93c8-296820557f95",
+          "name": "Approve applicant",
+          "request": {
+            "name": "Approve applicant",
+            "description": {
+              "content": "Approve a pending applicant. Only applicants can be approved via API; invitees must accept their invite link.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                ":member_id",
+                "approve"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "member_id",
+                  "description": "(Required) The member ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8372cb01-9337-4033-b059-adcecea4eaca",
+              "name": "Member approved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 123,\n    \"type\": \"syndicate_member\",\n    \"attributes\": {\n      \"user_id\": 123,\n      \"user_name\": \"Jane Smith\",\n      \"user_email\": \"user@example.com\",\n      \"role\": \"member\",\n      \"invite_role\": \"admin\",\n      \"syndicate_permission\": \"full_access\",\n      \"title\": \"Example title\",\n      \"sort_order\": 5,\n      \"carry_percentage_override\": \"20.0\",\n      \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n      \"bio\": \"Example text\",\n      \"city\": \"San Francisco\",\n      \"country\": \"US\",\n      \"last_activity_at\": \"2025-03-01T12:00:00Z\",\n      \"profile_url\": \"/janedoe\",\n      \"tags\": [\n        \"Fundraising\",\n        \"Product Strategy\"\n      ],\n      \"joined_at\": \"2025-03-01T12:00:00Z\",\n      \"investment_total\": \"500000\",\n      \"deal_count\": 2,\n      \"accredited\": true,\n      \"legal_name\": \"Example Name\",\n      \"starred\": true,\n      \"private_tags\": [\n        \"VIP\",\n        \"Follow up\"\n      ],\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6bfda19a-14d4-4f3b-aeb1-b9276b1abfaa",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b3648e8-0605-44d6-a87a-543f535b0f3b",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "approve"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fed0fc50-3dc8-4995-bf98-674f7f3d5d57",
+          "name": "Exile member",
+          "request": {
+            "name": "Exile member",
+            "description": {
+              "content": "Exile (hide) a member from the syndicate. Sets their role to exiled.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                ":member_id",
+                "hide"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "member_id",
+                  "description": "(Required) The member ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "687d137c-3157-44ed-837b-6b2c945423dd",
+              "name": "Member hidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "hide"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 123,\n    \"type\": \"syndicate_member\",\n    \"attributes\": {\n      \"user_id\": 123,\n      \"user_name\": \"Jane Smith\",\n      \"user_email\": \"user@example.com\",\n      \"role\": \"member\",\n      \"invite_role\": \"admin\",\n      \"syndicate_permission\": \"full_access\",\n      \"title\": \"Example title\",\n      \"sort_order\": 5,\n      \"carry_percentage_override\": \"20.0\",\n      \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n      \"bio\": \"Example text\",\n      \"city\": \"San Francisco\",\n      \"country\": \"US\",\n      \"last_activity_at\": \"2025-03-01T12:00:00Z\",\n      \"profile_url\": \"/janedoe\",\n      \"tags\": [\n        \"Fundraising\",\n        \"Product Strategy\"\n      ],\n      \"joined_at\": \"2025-03-01T12:00:00Z\",\n      \"investment_total\": \"500000\",\n      \"deal_count\": 2,\n      \"accredited\": true,\n      \"legal_name\": \"Example Name\",\n      \"starred\": true,\n      \"private_tags\": [\n        \"VIP\",\n        \"Follow up\"\n      ],\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6988268e-0b57-420b-8e72-f47b80532637",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "hide"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1c68ee7-b16c-4684-a9a2-324bf3903920",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "hide"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c851948d-e8a0-496f-b843-523ea30b3338",
+          "name": "Promote member to admin",
+          "request": {
+            "name": "Promote member to admin",
+            "description": {
+              "content": "Promote a member to full_access (admin) role. Only the syndicate creator can promote members.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                ":member_id",
+                "promote"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "member_id",
+                  "description": "(Required) The member ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "007efada-c2a3-4553-98f7-4d4c2dbee469",
+              "name": "Member promoted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "promote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 123,\n    \"type\": \"syndicate_member\",\n    \"attributes\": {\n      \"user_id\": 123,\n      \"user_name\": \"Jane Smith\",\n      \"user_email\": \"user@example.com\",\n      \"role\": \"member\",\n      \"invite_role\": \"admin\",\n      \"syndicate_permission\": \"full_access\",\n      \"title\": \"Example title\",\n      \"sort_order\": 5,\n      \"carry_percentage_override\": \"20.0\",\n      \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n      \"bio\": \"Example text\",\n      \"city\": \"San Francisco\",\n      \"country\": \"US\",\n      \"last_activity_at\": \"2025-03-01T12:00:00Z\",\n      \"profile_url\": \"/janedoe\",\n      \"tags\": [\n        \"Fundraising\",\n        \"Product Strategy\"\n      ],\n      \"joined_at\": \"2025-03-01T12:00:00Z\",\n      \"investment_total\": \"500000\",\n      \"deal_count\": 2,\n      \"accredited\": true,\n      \"legal_name\": \"Example Name\",\n      \"starred\": true,\n      \"private_tags\": [\n        \"VIP\",\n        \"Follow up\"\n      ],\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eba2329a-df38-4295-a533-98e728978099",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "promote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "339af24e-49d0-47a8-a10f-7532b85f59f2",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "promote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "23da812f-be06-424c-931c-ae373501fd85",
+          "name": "Demote member to operator",
+          "request": {
+            "name": "Demote member to operator",
+            "description": {
+              "content": "Demote a member from full_access (admin) to operator permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                ":member_id",
+                "demote"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "member_id",
+                  "description": "(Required) The member ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e7f2e7fc-aeb9-40ea-82a2-68cb60ec584e",
+              "name": "Member demoted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "demote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 123,\n    \"type\": \"syndicate_member\",\n    \"attributes\": {\n      \"user_id\": 123,\n      \"user_name\": \"Jane Smith\",\n      \"user_email\": \"user@example.com\",\n      \"role\": \"member\",\n      \"invite_role\": \"admin\",\n      \"syndicate_permission\": \"full_access\",\n      \"title\": \"Example title\",\n      \"sort_order\": 5,\n      \"carry_percentage_override\": \"20.0\",\n      \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n      \"bio\": \"Example text\",\n      \"city\": \"San Francisco\",\n      \"country\": \"US\",\n      \"last_activity_at\": \"2025-03-01T12:00:00Z\",\n      \"profile_url\": \"/janedoe\",\n      \"tags\": [\n        \"Fundraising\",\n        \"Product Strategy\"\n      ],\n      \"joined_at\": \"2025-03-01T12:00:00Z\",\n      \"investment_total\": \"500000\",\n      \"deal_count\": 2,\n      \"accredited\": true,\n      \"legal_name\": \"Example Name\",\n      \"starred\": true,\n      \"private_tags\": [\n        \"VIP\",\n        \"Follow up\"\n      ],\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa9c941d-6a82-49d3-bb9f-8fce396660ed",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "demote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "37f4bd58-f175-4b45-b9af-de130bd8b6d7",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "demote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9ac2a831-5e79-41eb-a756-0a149efb739f",
+          "name": "Restore exiled or resigned member",
+          "request": {
+            "name": "Restore exiled or resigned member",
+            "description": {
+              "content": "Restore a member who was previously exiled or resigned. Sets their role back to member.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                ":member_id",
+                "restore"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "member_id",
+                  "description": "(Required) The member ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8f62269e-7a24-48b7-9d5d-2ed4eee5a0fa",
+              "name": "Member restored",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "restore"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": 123,\n    \"type\": \"syndicate_member\",\n    \"attributes\": {\n      \"user_id\": 123,\n      \"user_name\": \"Jane Smith\",\n      \"user_email\": \"user@example.com\",\n      \"role\": \"member\",\n      \"invite_role\": \"admin\",\n      \"syndicate_permission\": \"full_access\",\n      \"title\": \"Example title\",\n      \"sort_order\": 5,\n      \"carry_percentage_override\": \"20.0\",\n      \"avatar_url\": \"https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg\",\n      \"bio\": \"Example text\",\n      \"city\": \"San Francisco\",\n      \"country\": \"US\",\n      \"last_activity_at\": \"2025-03-01T12:00:00Z\",\n      \"profile_url\": \"/janedoe\",\n      \"tags\": [\n        \"Fundraising\",\n        \"Product Strategy\"\n      ],\n      \"joined_at\": \"2025-03-01T12:00:00Z\",\n      \"investment_total\": \"500000\",\n      \"deal_count\": 2,\n      \"accredited\": true,\n      \"legal_name\": \"Example Name\",\n      \"starred\": true,\n      \"private_tags\": [\n        \"VIP\",\n        \"Follow up\"\n      ],\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8150e1da-0123-423d-8160-38b9e5cfffe6",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "restore"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "96b1183a-5fa3-407b-905a-36076351988e",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "restore"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a0b5b2f-8482-44ff-8b72-51cc87839b60",
+          "name": "Resend invitation",
+          "request": {
+            "name": "Resend invitation",
+            "description": {},
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                ":member_id",
+                "resend_invite"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "member_id",
+                  "description": "(Required) The member ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5b29a734-8883-40ff-90f5-8b28cb6efc7d",
+              "name": "Invitation resent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "resend_invite"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "798d8592-8f69-4afe-a6cf-f52f8d9de4ee",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "resend_invite"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd4a05a4-ec91-4170-b26c-fc8cebf1dcc7",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "resend_invite"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "76f14aa4-f6c2-437d-af2a-118c667f64d0",
+          "name": "Reorder members",
+          "request": {
+            "name": "Reorder members",
+            "description": {
+              "content": "Set the display order for the member directory.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                "reorder"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"member_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cd744af3-b016-4140-abe9-aab79a65ea72",
+              "name": "Order updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    "reorder"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"member_ids\": [\n    \"cr_123\",\n    \"cr_456\",\n    \"cr_789\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9dd8ebe3-e41c-41e3-96b9-90479206bbd9",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    "reorder"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"member_ids\": [\n    \"cr_123\",\n    \"cr_456\",\n    \"cr_789\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8b7ec87-47fe-43ae-895a-51461aa8e081",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    "reorder"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"member_ids\": [\n    \"cr_123\",\n    \"cr_456\",\n    \"cr_789\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "10309cc2-dc49-4319-b0f1-7977d1cbafe4",
+          "name": "Export members CSV",
+          "request": {
+            "name": "Export members CSV",
+            "description": {
+              "content": "Generate a CSV export of the member directory. Returns the CSV data directly\nwith Content-Type text/csv. Requires operator permission.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                "export_csv"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/csv"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "71bf9ebe-4d40-4763-9804-8500c145f25b",
+              "name": "CSV data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    "export_csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/csv"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/csv"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "44d9c5b7-cd27-45fd-8803-d058bc8059af",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    "export_csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2dee174c-f162-4ca8-805d-c79868598d6d",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    "export_csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "75e23d51-5aca-45b7-9801-471f97bc2366",
+          "name": "List member investments",
+          "request": {
+            "name": "List member investments",
+            "description": {
+              "content": "Returns this member's investments in syndicate deals. Scoped to the syndicate's\nselected deals (one per company, matching directory semantics).\n\nAll monetary values are strings representing cents to avoid floating-point precision issues.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "syndicates",
+                ":syndicate_id",
+                "members",
+                ":member_id",
+                "investments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "syndicate_id",
+                  "description": "(Required) The syndicate ID"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "member_id",
+                  "description": "(Required) The member ID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3e3429e9-3b40-444c-a0e8-454c833c5d40",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 789,\n      \"type\": \"member_investment\",\n      \"attributes\": {\n        \"fundraise_id\": 75496,\n        \"company_name\": \"Substack\",\n        \"amount\": \"500000\",\n        \"state\": \"confirmed\",\n        \"created_at\": \"2025-03-01T12:00:00Z\"\n      }\n    },\n    {\n      \"id\": 789,\n      \"type\": \"member_investment\",\n      \"attributes\": {\n        \"fundraise_id\": 75496,\n        \"company_name\": \"Substack\",\n        \"amount\": \"500000\",\n        \"state\": \"confirmed\",\n        \"created_at\": \"2025-03-01T12:00:00Z\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"count\": 2927,\n    \"total_amount\": \"800000\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cf9a17fa-3e3c-420a-950e-0d15643fbfb4",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "920421ce-7002-4fec-ab55-ab91d558a9cc",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "968988ad-2b1b-4e2b-900c-463b9d629f1d",
+              "name": "Member not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "syndicates",
+                    ":syndicate_id",
+                    "members",
+                    ":member_id",
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "syndicate_id",
+                      "description": "(Required) The syndicate ID"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "member_id",
+                      "description": "(Required) The member ID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 440,\n      \"key_1\": 4299,\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": " (This can only be one of api,staging)",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "api",
+      "key": "environment"
+    },
+    {
+      "type": "string",
+      "value": "https://{{environment}}.wefunder.com/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "03ecfc47-1e82-4546-82ec-963b62cced44",
+    "name": "Wefunder API v2 Activity Syndicate Members API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OAuth 2.0 API for accessing Wefunder data programmatically.\n\n## Authentication\n\nThis API uses OAuth 2.0 for authentication. To get started:\n\n1. Create an OAuth application at `/oauth/applications`\n2. Get your Client ID and Client Secret\n3. Implement the OAuth 2.0 Authorization Code flow\n4. Use the access token to make API requests\n\n## Rate Limits\n\n- Standard API: 1,000 requests/hour per token\n- Admin API: 10,000 requests/hour per token\n\n## Base URL\n\nAll API requests should be made to: `https://api.wefunder.com/api/v2`\n\n\nContact Support:\n Name: Wefunder API Support\n Email: api@wefunder.com",
+      "type": "text/plain"
+    }
+  }
+}

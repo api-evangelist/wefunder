@@ -1,0 +1,248 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wefunder API v2 Activity Attribution Webhooks API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Attribution Webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List attribution webhook subscriptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/campaigns/:campaign_id/attribution/webhooks",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "789",
+                "type": "path",
+                "description": "The fundraise/campaign ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns all active webhook subscriptions for this campaign belonging to\nyour OAuth application.\n\n**Tier 1** endpoint requiring admin-approved access with the\n`read:attribution:anonymized` scope.\n"
+        },
+        {
+          "info": {
+            "name": "Create webhook subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/campaigns/:campaign_id/attribution/webhooks",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "789",
+                "type": "path",
+                "description": "The fundraise/campaign ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Creates a new webhook subscription for this campaign. When attributed\ninvestments change state, we'll POST a JSON payload to your target URL.\n\n**Tier 1** endpoint requiring admin-approved access.\n\n## Webhook Payload\n\nPayloads include anonymized data (tokens, amount tiers) matching the\n`/attribution/investments` endpoint.\n\n## Security\n\n- `target_url` must use HTTPS\n- `target_url` cannot resolve to private/internal IPs (SSRF protection)\n- Payloads are signed with HMAC-SHA256 using the returned `se"
+        },
+        {
+          "info": {
+            "name": "Get webhook subscription details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/campaigns/:campaign_id/attribution/webhooks/:webhook_id",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "789",
+                "type": "path",
+                "description": "The fundraise/campaign ID"
+              },
+              {
+                "name": "webhook_id",
+                "value": "123",
+                "type": "path",
+                "description": "The webhook subscription ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns details for a specific webhook subscription including recent\ndelivery history.\n"
+        },
+        {
+          "info": {
+            "name": "Delete webhook subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{environment}.wefunder.com/api/v2/campaigns/:campaign_id/attribution/webhooks/:webhook_id",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "789",
+                "type": "path",
+                "description": "The fundraise/campaign ID"
+              },
+              {
+                "name": "webhook_id",
+                "value": "123",
+                "type": "path",
+                "description": "The webhook subscription ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Deactivates a webhook subscription. The subscription will stop receiving\nevents but historical delivery data is retained for 7 days.\n"
+        },
+        {
+          "info": {
+            "name": "Send test webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/campaigns/:campaign_id/attribution/webhooks/:webhook_id/test",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "789",
+                "type": "path",
+                "description": "The fundraise/campaign ID"
+              },
+              {
+                "name": "webhook_id",
+                "value": "123",
+                "type": "path",
+                "description": "The webhook subscription ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Sends a test webhook to verify your endpoint is working correctly.\nThe test payload includes a `\"event\": \"test\"` field to distinguish\nit from real events.\n"
+        },
+        {
+          "info": {
+            "name": "Regenerate webhook signing secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/campaigns/:campaign_id/attribution/webhooks/:webhook_id/regenerate_secret",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "789",
+                "type": "path",
+                "description": "The fundraise/campaign ID"
+              },
+              {
+                "name": "webhook_id",
+                "value": "123",
+                "type": "path",
+                "description": "The webhook subscription ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Generates a new HMAC signing secret for the webhook subscription.\nThe old secret is immediately invalidated.\n\n**Important**: Store the new secret securely - it cannot be retrieved later.\n"
+        },
+        {
+          "info": {
+            "name": "Reactivate disabled webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/campaigns/:campaign_id/attribution/webhooks/:webhook_id/reactivate",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "789",
+                "type": "path",
+                "description": "The fundraise/campaign ID"
+              },
+              {
+                "name": "webhook_id",
+                "value": "123",
+                "type": "path",
+                "description": "The webhook subscription ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Reactivates a webhook subscription that was auto-disabled after\nconsecutive failures. Resets the failure counter to 0.\n\nUse this after fixing issues with your webhook endpoint.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,117 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wefunder API v2 Activity Intents API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Intents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List intents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/intents",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "resource_type",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List intents created by the current token, optionally filtered by status or resource."
+        },
+        {
+          "info": {
+            "name": "Propose an intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/intents",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Propose a dangerous or irreversible action for human approval. Returns a `review_url`\nwhere a human must review the impact and approve before the action executes.\n\nThe entity that proposes an intent can never approve it. Approval always happens\non Wefunder's UI by a user with permission on the resource.\n\nSee [Intents documentation](/concepts/intents) for the full pattern.\n"
+        },
+        {
+          "info": {
+            "name": "Get intent status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/intents/:intent_id",
+            "params": [
+              {
+                "name": "intent_id",
+                "value": "intent_abc123",
+                "type": "path",
+                "description": "Intent UUID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Check the current status of an intent. Use this to poll for approval\nafter proposing an intent, or subscribe to `intent.*` webhook events instead.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wefunder API v2 Activity Syndicates API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Syndicates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List syndicates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Pagination cursor from previous response"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Results per page"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns syndicates the authenticated user can manage, based on their roles.\nResults can be filtered by status and sorted by name or creation date.\n"
+        },
+        {
+          "info": {
+            "name": "Get syndicate details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns full details for a specific syndicate including settings, team configuration, and summary metrics."
+        },
+        {
+          "info": {
+            "name": "Update syndicate settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update syndicate configuration. Currently supports name, description, and tagline.\nRequires `write:syndicates` scope and at least operator permission.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

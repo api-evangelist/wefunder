@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wefunder API v2 Activity API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Activity",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List activity events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/activity",
+            "params": [
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by connected app"
+              },
+              {
+                "name": "action_pattern",
+                "value": "",
+                "type": "query",
+                "description": "Filter by action pattern (e.g. syndicates.* or syndicates.member.*)"
+              },
+              {
+                "name": "resource_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by resource type (e.g. Club). Must be used with resource_id."
+              },
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by specific resource ID. Must be used with resource_type."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "until",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns actions taken by OAuth apps authorized by the current user.\nThis is the API backing the user-facing activity feed at Settings > Activity.\n"
+        },
+        {
+          "info": {
+            "name": "List connected apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/connected-apps",
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns all OAuth apps the user has authorized, with summary stats."
+        },
+        {
+          "info": {
+            "name": "Revoke connected app",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{environment}.wefunder.com/api/v2/connected-apps/:app_id",
+            "params": [
+              {
+                "name": "app_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Revoke all tokens for this app. Any pending intents from this app are automatically expired.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

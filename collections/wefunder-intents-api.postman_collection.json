@@ -1,0 +1,880 @@
+{
+  "item": [
+    {
+      "id": "dd245c9f-c500-438f-94de-f387210afa11",
+      "name": "Intents",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "895afe5a-33c9-4ef5-a530-34b5cbcbb79c",
+          "name": "Propose an intent",
+          "request": {
+            "name": "Propose an intent",
+            "description": {
+              "content": "Propose a dangerous or irreversible action for human approval. Returns a `review_url`\nwhere a human must review the impact and approve before the action executes.\n\nThe entity that proposes an intent can never approve it. Approval always happens\non Wefunder's UI by a user with permission on the resource.\n\nSee [Intents documentation](/concepts/intents) for the full pattern.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "intents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action_name\": \"<string>\",\n  \"resource_type\": \"<string>\",\n  \"resource_id\": \"<integer>\",\n  \"params\": \"<object>\",\n  \"idempotency_key\": \"<string>\",\n  \"requested_by_agent\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "115aee00-62c0-4eac-b809-b7ecdb57785e",
+              "name": "Intent created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action_name\": \"syndicates.close_deal\",\n  \"resource_type\": \"Club\",\n  \"resource_id\": 42,\n  \"params\": {\n    \"fundraise_id\": 99\n  },\n  \"idempotency_key\": \"close-acme-series-a\",\n  \"requested_by_agent\": \"Claude via MCP\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n    \"type\": \"intent\",\n    \"attributes\": {\n      \"action\": \"syndicates.close_deal\",\n      \"status\": \"pending\",\n      \"resource_type\": \"Club\",\n      \"resource_id\": 42,\n      \"impact_summary\": \"Close the Acme Corp Series A deal. 47 investors have committed $2.3M.\",\n      \"review_url\": \"https://wefunder.com/intents/a1b2c3d4-e5f6-7890-abcd-ef1234567890/review\",\n      \"requested_by_agent\": \"Claude via MCP\",\n      \"expires_at\": \"2025-03-01T12:00:00Z\",\n      \"approved_at\": \"2025-03-01T12:00:00Z\",\n      \"executed_at\": \"2025-03-01T12:00:00Z\",\n      \"rejection_reason\": \"Example text\",\n      \"execution_result\": {},\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "011387ab-a5cc-458b-8d37-2d8fc936f6f7",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action_name\": \"syndicates.close_deal\",\n  \"resource_type\": \"Club\",\n  \"resource_id\": 42,\n  \"params\": {\n    \"fundraise_id\": 99\n  },\n  \"idempotency_key\": \"close-acme-series-a\",\n  \"requested_by_agent\": \"Claude via MCP\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": false,\n      \"key_1\": false,\n      \"key_2\": 3286\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30a4fd66-9c59-4d22-9976-5bcb802cfb3e",
+              "name": "The authenticated user does not have permission to access this resource.\nThis typically means:\n- The user is authenticated but lacks the required OAuth scope\n- The resource belongs to a different user\n- The user's role doesn't allow this operation\n\nCheck that your OAuth token includes the necessary scopes for this endpoint.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action_name\": \"syndicates.close_deal\",\n  \"resource_type\": \"Club\",\n  \"resource_id\": 42,\n  \"params\": {\n    \"fundraise_id\": 99\n  },\n  \"idempotency_key\": \"close-acme-series-a\",\n  \"requested_by_agent\": \"Claude via MCP\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": false,\n      \"key_1\": false,\n      \"key_2\": 3286\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1c08316-0754-46ca-bde6-74f34b3a9443",
+              "name": "Duplicate idempotency key (returns existing intent)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action_name\": \"syndicates.close_deal\",\n  \"resource_type\": \"Club\",\n  \"resource_id\": 42,\n  \"params\": {\n    \"fundraise_id\": 99\n  },\n  \"idempotency_key\": \"close-acme-series-a\",\n  \"requested_by_agent\": \"Claude via MCP\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n    \"type\": \"intent\",\n    \"attributes\": {\n      \"action\": \"syndicates.close_deal\",\n      \"status\": \"pending\",\n      \"resource_type\": \"Club\",\n      \"resource_id\": 42,\n      \"impact_summary\": \"Close the Acme Corp Series A deal. 47 investors have committed $2.3M.\",\n      \"review_url\": \"https://wefunder.com/intents/a1b2c3d4-e5f6-7890-abcd-ef1234567890/review\",\n      \"requested_by_agent\": \"Claude via MCP\",\n      \"expires_at\": \"2025-03-01T12:00:00Z\",\n      \"approved_at\": \"2025-03-01T12:00:00Z\",\n      \"executed_at\": \"2025-03-01T12:00:00Z\",\n      \"rejection_reason\": \"Example text\",\n      \"execution_result\": {},\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54a692ca-ab58-4428-824d-6376cf1cf60d",
+              "name": "Invalid action or parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"action_name\": \"syndicates.close_deal\",\n  \"resource_type\": \"Club\",\n  \"resource_id\": 42,\n  \"params\": {\n    \"fundraise_id\": 99\n  },\n  \"idempotency_key\": \"close-acme-series-a\",\n  \"requested_by_agent\": \"Claude via MCP\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": false,\n      \"key_1\": false,\n      \"key_2\": 3286\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1166b93d-04de-4e9e-b62a-bbf55aa66673",
+          "name": "List intents",
+          "request": {
+            "name": "List intents",
+            "description": {
+              "content": "List intents created by the current token, optionally filtered by status or resource.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "intents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "resource_type",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "resource_id",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                }
+              ],
+              "variable": [
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "12cd895a-fb43-4c96-a710-ec82538e83ad",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "resource_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "resource_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"type\": \"intent\",\n      \"attributes\": {\n        \"action\": \"syndicates.close_deal\",\n        \"status\": \"pending\",\n        \"resource_type\": \"Club\",\n        \"resource_id\": 42,\n        \"impact_summary\": \"Close the Acme Corp Series A deal. 47 investors have committed $2.3M.\",\n        \"review_url\": \"https://wefunder.com/intents/a1b2c3d4-e5f6-7890-abcd-ef1234567890/review\",\n        \"requested_by_agent\": \"Claude via MCP\",\n        \"expires_at\": \"2025-03-01T12:00:00Z\",\n        \"approved_at\": \"2025-03-01T12:00:00Z\",\n        \"executed_at\": \"2025-03-01T12:00:00Z\",\n        \"rejection_reason\": \"Example text\",\n        \"execution_result\": {},\n        \"created_at\": \"2025-03-01T12:00:00Z\",\n        \"updated_at\": \"2025-03-01T12:00:00Z\"\n      }\n    },\n    {\n      \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n      \"type\": \"intent\",\n      \"attributes\": {\n        \"action\": \"syndicates.close_deal\",\n        \"status\": \"pending\",\n        \"resource_type\": \"Club\",\n        \"resource_id\": 42,\n        \"impact_summary\": \"Close the Acme Corp Series A deal. 47 investors have committed $2.3M.\",\n        \"review_url\": \"https://wefunder.com/intents/a1b2c3d4-e5f6-7890-abcd-ef1234567890/review\",\n        \"requested_by_agent\": \"Claude via MCP\",\n        \"expires_at\": \"2025-03-01T12:00:00Z\",\n        \"approved_at\": \"2025-03-01T12:00:00Z\",\n        \"executed_at\": \"2025-03-01T12:00:00Z\",\n        \"rejection_reason\": \"Example text\",\n        \"execution_result\": {},\n        \"created_at\": \"2025-03-01T12:00:00Z\",\n        \"updated_at\": \"2025-03-01T12:00:00Z\"\n      }\n    }\n  ],\n  \"meta\": {\n    \"count\": 25,\n    \"has_more\": true,\n    \"next_cursor\": 12345\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd660fee-aeab-4bde-9693-3c4e7936ae34",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "resource_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "resource_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": false,\n      \"key_1\": false,\n      \"key_2\": 3286\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "16984db1-3a2b-48bc-9006-30c42f9d8fc8",
+          "name": "Get intent status",
+          "request": {
+            "name": "Get intent status",
+            "description": {
+              "content": "Check the current status of an intent. Use this to poll for approval\nafter proposing an intent, or subscribe to `intent.*` webhook events instead.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "intents",
+                ":intent_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "intent_id",
+                  "description": "(Required) Intent UUID"
+                },
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "42571b5e-4073-4368-8af2-4f2a87de43b2",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "intents",
+                    ":intent_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "intent_id",
+                      "description": "(Required) Intent UUID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890\",\n    \"type\": \"intent\",\n    \"attributes\": {\n      \"action\": \"syndicates.close_deal\",\n      \"status\": \"pending\",\n      \"resource_type\": \"Club\",\n      \"resource_id\": 42,\n      \"impact_summary\": \"Close the Acme Corp Series A deal. 47 investors have committed $2.3M.\",\n      \"review_url\": \"https://wefunder.com/intents/a1b2c3d4-e5f6-7890-abcd-ef1234567890/review\",\n      \"requested_by_agent\": \"Claude via MCP\",\n      \"expires_at\": \"2025-03-01T12:00:00Z\",\n      \"approved_at\": \"2025-03-01T12:00:00Z\",\n      \"executed_at\": \"2025-03-01T12:00:00Z\",\n      \"rejection_reason\": \"Example text\",\n      \"execution_result\": {},\n      \"created_at\": \"2025-03-01T12:00:00Z\",\n      \"updated_at\": \"2025-03-01T12:00:00Z\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "52dc7a49-c65c-4fd7-b92d-c1c490ef0277",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "intents",
+                    ":intent_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "intent_id",
+                      "description": "(Required) Intent UUID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": false,\n      \"key_1\": false,\n      \"key_2\": 3286\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cde7c700-f16b-407d-8f40-f913b650f46b",
+              "name": "Intent not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "intents",
+                    ":intent_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "intent_id",
+                      "description": "(Required) Intent UUID"
+                    },
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": false,\n      \"key_1\": false,\n      \"key_2\": 3286\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": " (This can only be one of api,staging)",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "api",
+      "key": "environment"
+    },
+    {
+      "type": "string",
+      "value": "https://{{environment}}.wefunder.com/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8326d97a-4a11-40f3-936f-134d78f993fe",
+    "name": "Wefunder API v2 Activity Intents API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OAuth 2.0 API for accessing Wefunder data programmatically.\n\n## Authentication\n\nThis API uses OAuth 2.0 for authentication. To get started:\n\n1. Create an OAuth application at `/oauth/applications`\n2. Get your Client ID and Client Secret\n3. Implement the OAuth 2.0 Authorization Code flow\n4. Use the access token to make API requests\n\n## Rate Limits\n\n- Standard API: 1,000 requests/hour per token\n- Admin API: 10,000 requests/hour per token\n\n## Base URL\n\nAll API requests should be made to: `https://api.wefunder.com/api/v2`\n\n\nContact Support:\n Name: Wefunder API Support\n Email: api@wefunder.com",
+      "type": "text/plain"
+    }
+  }
+}

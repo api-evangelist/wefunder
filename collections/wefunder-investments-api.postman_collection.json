@@ -1,0 +1,293 @@
+{
+  "item": [
+    {
+      "id": "ed73e3e5-58ab-4105-9ac0-72679faa7f07",
+      "name": "Investments",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7eea04a5-db8b-49ab-8098-074e611fa07c",
+          "name": "List user investments",
+          "request": {
+            "name": "List user investments",
+            "description": {
+              "content": "Retrieves a paginated list of all investments made by the authenticated user. Each investment\nincludes details about the amount invested, the company, investment date, and current status.\n\nUse this endpoint to:\n- Display a user's investment portfolio\n- Track investment history and performance\n- Build custom reporting and analytics\n\nThe list is ordered by investment date (newest first) and supports cursor-based pagination\nfor efficient iteration through large portfolios. Each investment object includes the\ncampaign details and current valuation information.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "investments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<integer>",
+                  "description": "Cursor-based pagination token. Use the `next_cursor` value from the previous response's\n`meta` object to retrieve the next page of results. Omit this parameter to retrieve the\nfirst page.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "description": " (This can only be one of api,staging)",
+                  "type": "any",
+                  "value": "{{environment}}",
+                  "key": "environment"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "read:public read:profile read:investments read:campaigns read:attribution:aggregate read:attribution:anonymized read:attribution:full admin:attribution read:syndicates write:syndicates read:spvs write:spvs read:webhooks write:webhooks"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://wefunder.com/oauth/token"
+                },
+                {
+                  "key": "authUrl",
+                  "value": "https://wefunder.com/oauth/authorize"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "authorization_code"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a25e7fc6-d750-41c8-9c8b-6fdc4e000f04",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "12345"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 456,\n      \"type\": \"investment\",\n      \"attributes\": {\n        \"amount\": 1000,\n        \"state\": \"confirmed\",\n        \"confirmed_at\": \"2023-03-15T12:00:00Z\",\n        \"created_at\": \"2023-03-10T10:30:00Z\",\n        \"updated_at\": \"2023-03-15T12:00:00Z\",\n        \"fundraise_id\": 789,\n        \"campaign\": {\n          \"id\": 789,\n          \"company_name\": \"My Startup Inc.\",\n          \"company_id\": 101\n        }\n      }\n    },\n    {\n      \"id\": 456,\n      \"type\": \"investment\",\n      \"attributes\": {\n        \"amount\": 1000,\n        \"state\": \"confirmed\",\n        \"confirmed_at\": \"2023-03-15T12:00:00Z\",\n        \"created_at\": \"2023-03-10T10:30:00Z\",\n        \"updated_at\": \"2023-03-15T12:00:00Z\",\n        \"fundraise_id\": 789,\n        \"campaign\": {\n          \"id\": 789,\n          \"company_name\": \"My Startup Inc.\",\n          \"company_id\": 101\n        }\n      }\n    }\n  ],\n  \"meta\": {\n    \"count\": 25,\n    \"has_more\": true,\n    \"next_cursor\": 12345\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab5306d6-dd8b-4c52-87b9-0f0dbc26ab1b",
+              "name": "Authentication required or token is invalid/expired. This error occurs when:\n- No Authorization header is provided\n- The access token is invalid or malformed\n- The access token has expired\n- The access token has been revoked\n\nTo resolve: Obtain a new access token using the OAuth 2.0 flow.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "12345"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 1081,\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a965a3fd-6553-4581-8f6b-aed5bb53b66d",
+              "name": "Too many requests in a short time period. The API enforces rate limits to ensure\nfair usage and system stability. When you exceed the limit, you'll receive this\nerror along with headers indicating when you can retry.\n\nCheck the `X-RateLimit-Reset` header to know when your limit will reset.\nConsider implementing exponential backoff in your application.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "12345"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": " (This can only be one of api,staging)",
+                      "type": "any",
+                      "value": "{{environment}}",
+                      "key": "environment"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "Request limit per hour",
+                  "key": "X-RateLimit-Limit",
+                  "value": "3512"
+                },
+                {
+                  "disabled": false,
+                  "description": "Remaining requests",
+                  "key": "X-RateLimit-Remaining",
+                  "value": "3512"
+                },
+                {
+                  "disabled": false,
+                  "description": "UTC timestamp when the limit resets",
+                  "key": "X-RateLimit-Reset",
+                  "value": "3512"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"unauthorized\",\n    \"message\": \"Invalid or expired token\",\n    \"details\": {\n      \"key_0\": 1081,\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    },\n    \"request_id\": \"req_abc123\",\n    \"remediation\": \"Obtain a new access token using the OAuth 2.0 flow.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": " (This can only be one of api,staging)",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "api",
+      "key": "environment"
+    },
+    {
+      "type": "string",
+      "value": "https://{{environment}}.wefunder.com/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "973bd0f7-97d3-46d4-aec6-33fb6f7651f7",
+    "name": "Wefunder API v2 Activity Investments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OAuth 2.0 API for accessing Wefunder data programmatically.\n\n## Authentication\n\nThis API uses OAuth 2.0 for authentication. To get started:\n\n1. Create an OAuth application at `/oauth/applications`\n2. Get your Client ID and Client Secret\n3. Implement the OAuth 2.0 Authorization Code flow\n4. Use the access token to make API requests\n\n## Rate Limits\n\n- Standard API: 1,000 requests/hour per token\n- Admin API: 10,000 requests/hour per token\n\n## Base URL\n\nAll API requests should be made to: `https://api.wefunder.com/api/v2`\n\n\nContact Support:\n Name: Wefunder API Support\n Email: api@wefunder.com",
+      "type": "text/plain"
+    }
+  }
+}

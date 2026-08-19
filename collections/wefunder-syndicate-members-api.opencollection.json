@@ -1,0 +1,490 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wefunder API v2 Activity Syndicate Members API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Syndicate Members",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "role",
+                "value": "",
+                "type": "query",
+                "description": "Filter by role (e.g. creator, manager, member, invitee, applicant)"
+              },
+              {
+                "name": "permission",
+                "value": "",
+                "type": "query",
+                "description": "Filter by syndicate permission level"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Search by name or email"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for results"
+              },
+              {
+                "name": "has_invested",
+                "value": "",
+                "type": "query",
+                "description": "Filter by whether the member has invested in any syndicate deal"
+              },
+              {
+                "name": "accredited",
+                "value": "",
+                "type": "query",
+                "description": "Filter to accredited members only"
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Filter by 'can help with' tag (ILIKE match)"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns the member directory for a syndicate with role, status, tags, sidebar notes,\nand investment history summaries. Supports filtering, sorting, search, and pagination.\n"
+        },
+        {
+          "info": {
+            "name": "Invite member",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/invite",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Send an invitation to join the syndicate by email."
+        },
+        {
+          "info": {
+            "name": "Update member",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/:member_id",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "member_id",
+                "value": "cr_123",
+                "type": "path",
+                "description": "The member ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update title and carry override for a member. Requires operator permission."
+        },
+        {
+          "info": {
+            "name": "Remove member (requires intent)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/:member_id",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "member_id",
+                "value": "cr_123",
+                "type": "path",
+                "description": "The member ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Removing a member is irreversible and requires human approval through the Intent system.\nThis endpoint always returns 422 with a `use_intents` error directing you to\n`POST /v2/intents` with action `syndicates.remove_member`.\n"
+        },
+        {
+          "info": {
+            "name": "Approve applicant",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/:member_id/approve",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "member_id",
+                "value": "cr_123",
+                "type": "path",
+                "description": "The member ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Approve a pending applicant. Only applicants can be approved via API; invitees must accept their invite link."
+        },
+        {
+          "info": {
+            "name": "Exile member",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/:member_id/hide",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "member_id",
+                "value": "cr_123",
+                "type": "path",
+                "description": "The member ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Exile (hide) a member from the syndicate. Sets their role to exiled."
+        },
+        {
+          "info": {
+            "name": "Promote member to admin",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/:member_id/promote",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "member_id",
+                "value": "cr_123",
+                "type": "path",
+                "description": "The member ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Promote a member to full_access (admin) role. Only the syndicate creator can promote members."
+        },
+        {
+          "info": {
+            "name": "Demote member to operator",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/:member_id/demote",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "member_id",
+                "value": "cr_123",
+                "type": "path",
+                "description": "The member ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Demote a member from full_access (admin) to operator permission."
+        },
+        {
+          "info": {
+            "name": "Restore exiled or resigned member",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/:member_id/restore",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "member_id",
+                "value": "cr_123",
+                "type": "path",
+                "description": "The member ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Restore a member who was previously exiled or resigned. Sets their role back to member."
+        },
+        {
+          "info": {
+            "name": "Resend invitation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/:member_id/resend_invite",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "member_id",
+                "value": "cr_123",
+                "type": "path",
+                "description": "The member ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Resend invitation"
+        },
+        {
+          "info": {
+            "name": "Reorder members",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/reorder",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Set the display order for the member directory."
+        },
+        {
+          "info": {
+            "name": "Export members CSV",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/export_csv",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Generate a CSV export of the member directory. Returns the CSV data directly\nwith Content-Type text/csv. Requires operator permission.\n"
+        },
+        {
+          "info": {
+            "name": "List member investments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/syndicates/:syndicate_id/members/:member_id/investments",
+            "params": [
+              {
+                "name": "syndicate_id",
+                "value": "42",
+                "type": "path",
+                "description": "The syndicate ID"
+              },
+              {
+                "name": "member_id",
+                "value": "cr_123",
+                "type": "path",
+                "description": "The member ID"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns this member's investments in syndicate deals. Scoped to the syndicate's\nselected deals (one per company, matching directory semantics).\n\nAll monetary values are strings representing cents to avoid floating-point precision issues.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

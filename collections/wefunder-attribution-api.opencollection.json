@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Wefunder API v2 Activity Attribution API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Attribution",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get aggregate attribution statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/campaigns/:campaign_id/attribution/stats",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "789",
+                "type": "path",
+                "description": "The fundraise/campaign ID"
+              },
+              {
+                "name": "start_date",
+                "value": "2025-01-01",
+                "type": "query",
+                "description": "Filter results to attributions on or after this date. Format: YYYY-MM-DD.\nDefaults to 90 days ago if not specified.\n"
+              },
+              {
+                "name": "end_date",
+                "value": "2025-03-31",
+                "type": "query",
+                "description": "Filter results to attributions on or before this date. Format: YYYY-MM-DD.\nDefaults to today if not specified.\n"
+              },
+              {
+                "name": "utm_source",
+                "value": "GoogleAds",
+                "type": "query",
+                "description": "Filter by UTM source (e.g., \"GoogleAds\", \"facebook\", \"Klaviyo\")"
+              },
+              {
+                "name": "utm_campaign",
+                "value": "winter_2025",
+                "type": "query",
+                "description": "Filter by UTM campaign name"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns aggregate attribution statistics for a campaign. This is a **Tier 0** endpoint\navailable to all OAuth applications with the `read:attribution:aggregate` scope.\n\nUse this endpoint to:\n- Track overall marketing campaign performance\n- Measure conversion rates by UTM source/campaign\n- Monitor investment quality metrics\n- Build performance dashboards\n\nThe response includes totals and breakdowns by UTM parameters. All counts exclude\ndisputed attributions.\n\n**Privacy**: This endpoint returns ag"
+        },
+        {
+          "info": {
+            "name": "List attributed investments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{environment}.wefunder.com/api/v2/campaigns/:campaign_id/attribution/investments",
+            "params": [
+              {
+                "name": "campaign_id",
+                "value": "789",
+                "type": "path",
+                "description": "The fundraise/campaign ID"
+              },
+              {
+                "name": "cursor",
+                "value": "12345",
+                "type": "query",
+                "description": "Cursor-based pagination token. Use the `next_cursor` value from the previous response's\n`meta` object to retrieve the next page of results. Omit this parameter to retrieve the\nfirst page.\n"
+              },
+              {
+                "name": "start_date",
+                "value": "2025-01-01",
+                "type": "query",
+                "description": "Filter results to attributions on or after this date. Format: YYYY-MM-DD.\nDefaults to 90 days ago if not specified.\n"
+              },
+              {
+                "name": "end_date",
+                "value": "2025-03-31",
+                "type": "query",
+                "description": "Filter results to attributions on or before this date. Format: YYYY-MM-DD.\nDefaults to today if not specified.\n"
+              },
+              {
+                "name": "utm_source",
+                "value": "GoogleAds",
+                "type": "query",
+                "description": "Filter by UTM source (e.g., \"GoogleAds\", \"facebook\", \"Klaviyo\")"
+              },
+              {
+                "name": "utm_campaign",
+                "value": "winter_2025",
+                "type": "query",
+                "description": "Filter by UTM campaign name"
+              },
+              {
+                "name": "detail_level",
+                "value": "",
+                "type": "query",
+                "description": "Level of detail to return:\n- `anonymized` (default): Opaque tokens, amount tiers\n- `full`: Real IDs, exact amounts, investor PII (founders only)\n\nMarketing partners always receive anonymized data regardless of this parameter.\n"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://wefunder.com/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Returns a list of attributed investments. The detail level depends on your access:\n\n**Tier 1 (Marketing Partners)** - Anonymized data:\n- Investor identity represented by opaque tokens (not real IDs)\n- Tokens are campaign-scoped (different token per campaign for same investor)\n- Investment amounts shown as tiers (small/medium/large), not exact values\n- No PII (email, name, address) is returned\n\n**Tier 2 (Founders/Employees)** - Full data with `detail_level=full`:\n- Real investment IDs (linkable t"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
