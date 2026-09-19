@@ -145,6 +145,8 @@ apis:
   humanURL: https://docs.wefunder.com/api-reference
   baseURL: https://api.wefunder.com
   tags:
+  - Investment
+  tags_raw:
   - Investments
   properties:
   - type: OpenAPI
