@@ -1,38 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Wefunder API v2 Activity Campaigns API
-  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
-
-
-    ## Authentication
-
-
-    This API uses OAuth 2.0 for authentication. To get started:
-
-
-    1. Create an OAuth application at `/oauth/applications`
-
-    2. Get your Client ID and Client Secret
-
-    3. Implement the OAuth 2.0 Authorization Code flow
-
-    4. Use the access token to make API requests
-
-
-    ## Rate Limits
-
-
-    - Standard API: 1,000 requests/hour per token
-
-    - Admin API: 10,000 requests/hour per token
-
-
-    ## Base URL
-
-
-    All API requests should be made to: `https://api.wefunder.com/api/v2`
-
-    '
+  title: Wefunder API v2 Campaigns API
+  description: OAuth 2.0 API for accessing Wefunder data programmatically.
   version: '2.0'
   contact:
     name: Wefunder API Support
@@ -73,9 +42,7 @@ paths:
 
         Only founders with the appropriate permissions can access this endpoint. The response includes
 
-        both active and closed campaigns, with detailed metrics for each.
-
-        '
+        both active and closed campaigns, with detailed metrics for each.'
       operationId: listCampaigns
       security:
       - bearerAuth:
@@ -96,45 +63,117 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimitExceeded'
 components:
+  schemas:
+    CampaignListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 789
+        type:
+          type: string
+          example: campaign
+        attributes:
+          type: object
+          properties:
+            state:
+              type: string
+              example: active
+            company_id:
+              type: integer
+              example: 101
+            company_name:
+              type: string
+              example: My Startup Inc.
+            company_url:
+              type:
+              - string
+              - 'null'
+              example: my-startup-inc
+            created_at:
+              type: string
+              format: date-time
+              example: '2023-01-10T09:00:00Z'
+            updated_at:
+              type: string
+              format: date-time
+              example: '2023-03-15T14:30:00Z'
+            closed_at:
+              type:
+              - string
+              - 'null'
+              format: date-time
+              example: '2023-06-30T23:59:59Z'
+            amount_raised:
+              type:
+              - number
+              - 'null'
+              format: float
+              example: 25000
+            investor_count:
+              type: integer
+              example: 42
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+
+        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+
+        first page.
+
+        '
+      schema:
+        type: integer
+      example: 12345
   responses:
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
-
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
-
-        - No Authorization header is provided
-
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     RateLimitExceeded:
       description: 'Too many requests in a short time period. The API enforces rate limits to ensure
 
@@ -165,112 +204,44 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    cursor:
-      name: cursor
-      in: query
-      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
 
-        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+        - No Authorization header is provided
 
-        first page.
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
 
         '
-      schema:
-        type: integer
-      example: 12345
-  schemas:
-    Campaign:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 789
-        type:
-          type: string
-          example: campaign
-        attributes:
-          type: object
-          properties:
-            state:
-              type: string
-              example: active
-            company_id:
-              type: integer
-              example: 101
-            company_name:
-              type: string
-              example: My Startup Inc.
-            company_url:
-              type: string
-              nullable: true
-              example: my-startup-inc
-            created_at:
-              type: string
-              format: date-time
-              example: '2023-01-10T09:00:00Z'
-            updated_at:
-              type: string
-              format: date-time
-              example: '2023-03-15T14:30:00Z'
-            closed_at:
-              type: string
-              format: date-time
-              nullable: true
-              example: '2023-06-30T23:59:59Z'
-            amount_raised:
-              type: number
-              format: float
-              nullable: true
-              example: 25000
-            investor_count:
-              type: integer
-              example: 42
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type: integer
-          nullable: true
-          example: 12345
-    CampaignListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Campaign'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: oauth2

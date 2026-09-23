@@ -1,38 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Wefunder API v2 Activity Syndicate Statistics API
-  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
-
-
-    ## Authentication
-
-
-    This API uses OAuth 2.0 for authentication. To get started:
-
-
-    1. Create an OAuth application at `/oauth/applications`
-
-    2. Get your Client ID and Client Secret
-
-    3. Implement the OAuth 2.0 Authorization Code flow
-
-    4. Use the access token to make API requests
-
-
-    ## Rate Limits
-
-
-    - Standard API: 1,000 requests/hour per token
-
-    - Admin API: 10,000 requests/hour per token
-
-
-    ## Base URL
-
-
-    All API requests should be made to: `https://api.wefunder.com/api/v2`
-
-    '
+  title: Wefunder API v2 Syndicate Statistics API
+  description: OAuth 2.0 API for accessing Wefunder data programmatically.
   version: '2.0'
   contact:
     name: Wefunder API Support
@@ -63,9 +32,7 @@ paths:
         (one per company). `total_deals` and `live_deals` use all linked deals.
 
 
-        All monetary values are strings representing cents to avoid floating-point precision issues.
-
-        '
+        All monetary values are strings representing cents to avoid floating-point precision issues.'
       operationId: getSyndicateStatistics
       security:
       - bearerAuth:
@@ -91,25 +58,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   responses:
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
-
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: 'Authentication required or token is invalid/expired. This error occurs when:
 
@@ -129,7 +77,54 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    SyndicateStatisticsEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateStatistics'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
     SyndicateStatistics:
       type: object
       description: Aggregate metrics for a syndicate
@@ -179,34 +174,6 @@ components:
               type: integer
               description: Count of audit events in the last 30 days for this syndicate
               example: 4
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
-    SyndicateStatisticsEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/SyndicateStatistics'
   parameters:
     syndicate_id:
       name: syndicate_id

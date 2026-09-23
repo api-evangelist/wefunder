@@ -1,38 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Wefunder API v2 Activity Explore API
-  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
-
-
-    ## Authentication
-
-
-    This API uses OAuth 2.0 for authentication. To get started:
-
-
-    1. Create an OAuth application at `/oauth/applications`
-
-    2. Get your Client ID and Client Secret
-
-    3. Implement the OAuth 2.0 Authorization Code flow
-
-    4. Use the access token to make API requests
-
-
-    ## Rate Limits
-
-
-    - Standard API: 1,000 requests/hour per token
-
-    - Admin API: 10,000 requests/hour per token
-
-
-    ## Base URL
-
-
-    All API requests should be made to: `https://api.wefunder.com/api/v2`
-
-    '
+  title: Wefunder API v2 Explore API
+  description: OAuth 2.0 API for accessing Wefunder data programmatically.
   version: '2.0'
   contact:
     name: Wefunder API Support
@@ -80,9 +49,7 @@ paths:
 
         - Discover and monitor active deals
 
-        - Build deal aggregators and public listings
-
-        '
+        - Build deal aggregators and public listings'
       operationId: listOfferings
       security:
       - bearerAuth:
@@ -132,9 +99,7 @@ paths:
 
         A valid id for a non-public offering (e.g. a private Reg D 506(b) round) returns `404` —
 
-        having an id does not make an offering publicly resolvable.
-
-        '
+        having an id does not make an offering publicly resolvable.'
       operationId: getOffering
       security:
       - bearerAuth:
@@ -161,119 +126,52 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimitExceeded'
 components:
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+
+        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+
+        first page.
+
+        '
+      schema:
+        type: integer
+      example: 12345
   schemas:
-    OfferingEnvelope:
+    OfferingListEnvelope:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/Offering'
-    Offering:
-      type: object
-      description: 'A public offering (a fundraise), addressed by its `ofr_` external id. Returned by the
-
-        Explore endpoints. Monetary fields are USD decimal strings — parse them as decimals, not
-
-        floats.
-
-        '
-      properties:
-        id:
-          type: string
-          description: The offering's stable external id.
-          example: ofr_yw3OhusvpfJP4Pk3wRYV1F2R
-        type:
-          type: string
-          example: offering
-        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Offering'
+        meta:
           type: object
           properties:
-            company_name:
-              type: string
-              example: ZeroBorder Self-Banking Centers
-            tagline:
-              type: string
-              nullable: true
-              example: Example tagline
-            url:
-              type: string
-              description: The company's Wefunder profile URL.
-              example: https://wefunder.com/zeroborder
-            card_image_url:
-              type: string
-              nullable: true
-              description: Absolute URL of the explore card image, or null if the company has none.
-              example: https://uploads.wefunder.com/uploads/company/custom_card_photo/189517/large_card.jpg
-            logo_url:
-              type: string
-              nullable: true
-              description: Absolute URL of the company logo, or null if the company has none.
-              example: https://uploads.wefunder.com/uploads/company/logo/189517/large_logo.png
-            exemption:
-              $ref: '#/components/schemas/Exemption'
-            security_type:
-              type: string
-              description: The financial instrument (e.g. safe, convertible_note, equity, priced_round, fund).
-              example: safe
-            state:
-              type: string
-              example: open
-            testing_the_waters:
-              type: boolean
-              description: 'True for Testing-the-Waters rounds, which collect non-binding **reservations**, not
-
-                investments. Use "reserve"/"reservation" copy for these, "invest"/"investment" otherwise.
-
-                '
-              example: false
-            funding_target:
-              type: string
-              nullable: true
-              description: Funding target in USD, as a decimal string.
-              example: '1000000'
-            min_investment:
-              type: string
-              nullable: true
-              description: Minimum investment in USD, as a decimal string.
-              example: '100'
-            amount_raised:
-              type: string
-              nullable: true
-              description: Amount raised so far in USD, as a decimal string (hellbanned investors excluded).
-              example: '642300'
-            investor_count:
+            total_count:
               type: integer
-              nullable: true
-              description: Distinct investor count (hellbanned investors excluded).
-              example: 1203
-            started_at:
+              description: Total number of offerings across all pages.
+              example: 119
+            page_count:
+              type: integer
+              description: Number of offerings on this page (at most 25).
+              example: 25
+            has_more:
+              type: boolean
+              example: true
+            sort:
               type: string
-              format: date-time
-              nullable: true
-              example: '2025-03-01T12:00:00Z'
-            closed_at:
-              type: string
-              format: date-time
-              nullable: true
-              example: '2025-03-01T12:00:00Z'
-        company:
-          type: object
-          description: Reference to the parent company.
-          properties:
-            id:
-              type: string
-              description: The company's `co_` external id.
-              example: co_8Kd0aB3xQ9k2vF8mNp1zT5wY
-            type:
-              type: string
-              example: company
-        etag:
-          type: string
-          description: 'Content digest of this offering''s public payload, for client-side change detection
-
-            when polling.
-
-            '
-          example: a1b2c3d4e5f6
+              description: The sort applied to this response.
+              example: most_raised
+            next_cursor:
+              type:
+              - integer
+              - 'null'
+              description: Opaque pagination cursor — pass as `cursor` to fetch the next page. Present only when `has_more` is true.
+              example: 25
     Exemption:
       type: object
       description: The offering's SEC exemption, in market vocabulary.
@@ -288,8 +186,9 @@ components:
           - ecsp
           example: reg_cf
         subtype:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Sub-type/flavor — `506b` or `506c` for the `reg_d` family, otherwise null.
           example: null
         label:
@@ -319,62 +218,128 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
-    OfferingListEnvelope:
+    OfferingEnvelope:
       type: object
       properties:
         data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Offering'
-        meta:
-          type: object
-          properties:
-            total_count:
-              type: integer
-              description: Total number of offerings across all pages.
-              example: 119
-            page_count:
-              type: integer
-              description: Number of offerings on this page (at most 25).
-              example: 25
-            has_more:
-              type: boolean
-              example: true
-            sort:
-              type: string
-              description: The sort applied to this response.
-              example: most_raised
-            next_cursor:
-              type: integer
-              nullable: true
-              description: Opaque pagination cursor — pass as `cursor` to fetch the next page. Present only when `has_more` is true.
-              example: 25
-  responses:
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
+          $ref: '#/components/schemas/Offering'
+    Offering:
+      type: object
+      description: 'A public offering (a fundraise), addressed by its `ofr_` external id. Returned by the
 
-        - No Authorization header is provided
+        Explore endpoints. Monetary fields are USD decimal strings — parse them as decimals, not
 
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+        floats.
 
         '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource does not exist or is not visible to this token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+      properties:
+        id:
+          type: string
+          description: The offering's stable external id.
+          example: ofr_yw3OhusvpfJP4Pk3wRYV1F2R
+        type:
+          type: string
+          example: offering
+        attributes:
+          type: object
+          properties:
+            company_name:
+              type: string
+              example: ZeroBorder Self-Banking Centers
+            tagline:
+              type:
+              - string
+              - 'null'
+              example: Example tagline
+            url:
+              type: string
+              description: The company's Wefunder profile URL.
+              example: https://wefunder.com/zeroborder
+            card_image_url:
+              type:
+              - string
+              - 'null'
+              description: Absolute URL of the explore card image, or null if the company has none.
+              example: https://uploads.wefunder.com/uploads/company/custom_card_photo/189517/large_card.jpg
+            logo_url:
+              type:
+              - string
+              - 'null'
+              description: Absolute URL of the company logo, or null if the company has none.
+              example: https://uploads.wefunder.com/uploads/company/logo/189517/large_logo.png
+            exemption:
+              $ref: '#/components/schemas/Exemption'
+            security_type:
+              type: string
+              description: The financial instrument (e.g. safe, convertible_note, equity, priced_round, fund).
+              example: safe
+            state:
+              type: string
+              example: open
+            testing_the_waters:
+              type: boolean
+              description: 'True for Testing-the-Waters rounds, which collect non-binding **reservations**, not
+
+                investments. Use "reserve"/"reservation" copy for these, "invest"/"investment" otherwise.
+
+                '
+              example: false
+            funding_target:
+              type:
+              - string
+              - 'null'
+              description: Funding target in USD, as a decimal string.
+              example: '1000000'
+            min_investment:
+              type:
+              - string
+              - 'null'
+              description: Minimum investment in USD, as a decimal string.
+              example: '100'
+            amount_raised:
+              type:
+              - string
+              - 'null'
+              description: Amount raised so far in USD, as a decimal string (hellbanned investors excluded).
+              example: '642300'
+            investor_count:
+              type:
+              - integer
+              - 'null'
+              description: Distinct investor count (hellbanned investors excluded).
+              example: 1203
+            started_at:
+              type:
+              - string
+              - 'null'
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+            closed_at:
+              type:
+              - string
+              - 'null'
+              format: date-time
+              example: '2025-03-01T12:00:00Z'
+        company:
+          type: object
+          description: Reference to the parent company.
+          properties:
+            id:
+              type: string
+              description: The company's `co_` external id.
+              example: co_8Kd0aB3xQ9k2vF8mNp1zT5wY
+            type:
+              type: string
+              example: company
+        etag:
+          type: string
+          description: 'Content digest of this offering''s public payload, for client-side change detection
+
+            when polling.
+
+            '
+          example: a1b2c3d4e5f6
+  responses:
     RateLimitExceeded:
       description: 'Too many requests in a short time period. The API enforces rate limits to ensure
 
@@ -405,20 +370,31 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    cursor:
-      name: cursor
-      in: query
-      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
 
-        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+        - No Authorization header is provided
 
-        first page.
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
 
         '
-      schema:
-        type: integer
-      example: 12345
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource does not exist or is not visible to this token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: oauth2

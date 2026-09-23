@@ -1,38 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Wefunder API v2 Activity Attribution Webhooks API
-  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
-
-
-    ## Authentication
-
-
-    This API uses OAuth 2.0 for authentication. To get started:
-
-
-    1. Create an OAuth application at `/oauth/applications`
-
-    2. Get your Client ID and Client Secret
-
-    3. Implement the OAuth 2.0 Authorization Code flow
-
-    4. Use the access token to make API requests
-
-
-    ## Rate Limits
-
-
-    - Standard API: 1,000 requests/hour per token
-
-    - Admin API: 10,000 requests/hour per token
-
-
-    ## Base URL
-
-
-    All API requests should be made to: `https://api.wefunder.com/api/v2`
-
-    '
+  title: Wefunder API v2 Attribution Webhooks API
+  description: OAuth 2.0 API for accessing Wefunder data programmatically.
   version: '2.0'
   contact:
     name: Wefunder API Support
@@ -60,9 +29,7 @@ paths:
 
         **Tier 1** endpoint requiring admin-approved access with the
 
-        `read:attribution:anonymized` scope.
-
-        '
+        `read:attribution:anonymized` scope.'
       operationId: listWebhookSubscriptions
       security:
       - bearerAuth:
@@ -130,9 +97,7 @@ paths:
 
         - Signature doesn''t match
 
-        - Timestamp is more than 5 minutes old (replay protection)
-
-        '
+        - Timestamp is more than 5 minutes old (replay protection)'
       operationId: createWebhookSubscription
       security:
       - bearerAuth:
@@ -190,9 +155,7 @@ paths:
       summary: Get webhook subscription details
       description: 'Returns details for a specific webhook subscription including recent
 
-        delivery history.
-
-        '
+        delivery history.'
       operationId: getWebhookSubscription
       security:
       - bearerAuth:
@@ -223,9 +186,7 @@ paths:
       summary: Delete webhook subscription
       description: 'Deactivates a webhook subscription. The subscription will stop receiving
 
-        events but historical delivery data is retained for 7 days.
-
-        '
+        events but historical delivery data is retained for 7 days.'
       operationId: deleteWebhookSubscription
       security:
       - bearerAuth:
@@ -255,9 +216,7 @@ paths:
 
         The test payload includes a `"event": "test"` field to distinguish
 
-        it from real events.
-
-        '
+        it from real events.'
       operationId: testWebhookSubscription
       security:
       - bearerAuth:
@@ -298,9 +257,7 @@ paths:
         The old secret is immediately invalidated.
 
 
-        **Important**: Store the new secret securely - it cannot be retrieved later.
-
-        '
+        **Important**: Store the new secret securely - it cannot be retrieved later.'
       operationId: regenerateWebhookSecret
       security:
       - bearerAuth:
@@ -335,9 +292,7 @@ paths:
         consecutive failures. Resets the failure counter to 0.
 
 
-        Use this after fixing issues with your webhook endpoint.
-
-        '
+        Use this after fixing issues with your webhook endpoint.'
       operationId: reactivateWebhookSubscription
       security:
       - bearerAuth:
@@ -370,152 +325,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    WebhookDelivery:
-      type: object
-      description: A single webhook delivery attempt
-      properties:
-        id:
-          type: integer
-          example: 456
-        delivery_uuid:
-          type: string
-          format: uuid
-          description: Unique delivery identifier (use for idempotency)
-          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
-        event_type:
-          type: string
-          description: The event that triggered this delivery
-          example: investment.applied
-        status:
-          type: string
-          enum:
-          - pending
-          - delivered
-          - failed
-          example: delivered
-        attempts:
-          type: integer
-          description: Number of delivery attempts
-          example: 1
-        response_code:
-          type: integer
-          nullable: true
-          description: HTTP status code from the last attempt
-          example: 200
-        last_attempt_at:
-          type: string
-          format: date-time
-          nullable: true
-          example: '2025-03-15T10:31:00Z'
-        created_at:
-          type: string
-          format: date-time
-          example: '2025-03-15T10:30:00Z'
-    WebhookSubscriptionWithRecentDeliveriesEnvelope:
-      type: object
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              recent_deliveries:
-                type: array
-                description: Last 10 delivery attempts
-                items:
-                  $ref: '#/components/schemas/WebhookDelivery'
-    WebhookSubscriptionWithSecret2Envelope:
-      type: object
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              secret:
-                type: string
-                description: New HMAC signing secret
-                example: whsec_a1b2c3d4e5f6g7h8i9j0...
-    WebhookTestResultEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/WebhookTestResult'
-    WebhookSubscriptionListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WebhookSubscription'
-        meta:
-          type: object
-          properties:
-            total:
-              type: integer
-              description: Number of active subscriptions
-              example: 2
-            limit:
-              type: integer
-              description: Maximum subscriptions per application
-              example: 10
-    WebhookSubscriptionEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/WebhookSubscription'
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
-    WebhookSubscriptionWithSecretEnvelope:
-      type: object
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              secret:
-                type: string
-                description: 'HMAC signing secret. **Only returned on create.**
-
-                  Store this securely - it cannot be retrieved later.
-
-                  '
-                example: whsec_a1b2c3d4e5f6g7h8i9j0...
-    WebhookTestResult:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Test webhook queued for delivery
-        delivery_id:
-          type: string
-          format: uuid
-          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
-        payload_preview:
-          type: object
-          description: The payload that was sent
     WebhookSubscription:
       type: object
       description: A webhook subscription for attribution events
@@ -557,43 +366,155 @@ components:
           type: string
           format: date-time
           example: '2025-03-15T10:30:00Z'
-  parameters:
-    campaign_id:
-      name: campaign_id
-      in: path
-      required: true
-      description: The fundraise/campaign ID
-      schema:
-        type: integer
-      example: 789
-    webhook_id:
-      name: webhook_id
-      in: path
-      required: true
-      description: The webhook subscription ID
-      schema:
-        type: integer
-      example: 123
+    WebhookDelivery:
+      type: object
+      description: A single webhook delivery attempt
+      properties:
+        id:
+          type: integer
+          example: 456
+        delivery_uuid:
+          type: string
+          format: uuid
+          description: Unique delivery identifier (use for idempotency)
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        event_type:
+          type: string
+          description: The event that triggered this delivery
+          example: investment.applied
+        status:
+          type: string
+          enum:
+          - pending
+          - delivered
+          - failed
+          example: delivered
+        attempts:
+          type: integer
+          description: Number of delivery attempts
+          example: 1
+        response_code:
+          type:
+          - integer
+          - 'null'
+          description: HTTP status code from the last attempt
+          example: 200
+        last_attempt_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2025-03-15T10:31:00Z'
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-03-15T10:30:00Z'
+    WebhookTestResult:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Test webhook queued for delivery
+        delivery_id:
+          type: string
+          format: uuid
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        payload_preview:
+          type: object
+          description: The payload that was sent
+    WebhookSubscriptionWithRecentDeliveriesEnvelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              recent_deliveries:
+                type: array
+                description: Last 10 delivery attempts
+                items:
+                  $ref: '#/components/schemas/WebhookDelivery'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    WebhookSubscriptionEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookSubscription'
+    WebhookSubscriptionWithSecretEnvelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              secret:
+                type: string
+                description: 'HMAC signing secret. **Only returned on create.**
+
+                  Store this securely - it cannot be retrieved later.
+
+                  '
+                example: whsec_a1b2c3d4e5f6g7h8i9j0...
+    WebhookTestResultEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookTestResult'
+    WebhookSubscriptionWithSecret2Envelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              secret:
+                type: string
+                description: New HMAC signing secret
+                example: whsec_a1b2c3d4e5f6g7h8i9j0...
+    WebhookSubscriptionListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookSubscription'
+        meta:
+          type: object
+          properties:
+            total:
+              type: integer
+              description: Number of active subscriptions
+              example: 2
+            limit:
+              type: integer
+              description: Maximum subscriptions per application
+              example: 10
   responses:
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
-
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: 'Authentication required or token is invalid/expired. This error occurs when:
 
@@ -613,6 +534,42 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    webhook_id:
+      name: webhook_id
+      in: path
+      required: true
+      description: The webhook subscription ID
+      schema:
+        type: integer
+      example: 123
+    campaign_id:
+      name: campaign_id
+      in: path
+      required: true
+      description: The fundraise/campaign ID
+      schema:
+        type: integer
+      example: 789
   securitySchemes:
     bearerAuth:
       type: oauth2

@@ -1,19 +1,7 @@
 {
   "provider": "wefunder",
   "sources": [
-    "wefunder-activity-api-openapi.yml",
-    "wefunder-attribution-api-openapi.yml",
-    "wefunder-attribution-partners-api-openapi.yml",
-    "wefunder-attribution-webhooks-api-openapi.yml",
-    "wefunder-campaigns-api-openapi.yml",
-    "wefunder-explore-api-openapi.yml",
-    "wefunder-intents-api-openapi.yml",
-    "wefunder-investments-api-openapi.yml",
-    "wefunder-syndicate-deals-api-openapi.yml",
-    "wefunder-syndicate-members-api-openapi.yml",
-    "wefunder-syndicate-statistics-api-openapi.yml",
-    "wefunder-syndicates-api-openapi.yml",
-    "wefunder-users-api-openapi.yml"
+    "_original/wefunder-openapi-original.yml"
   ],
   "outputs": [
     "wefunder-activity-api-openapi.yml",
@@ -33,6 +21,37 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "wefunder-openapi-original.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "wefunder-openapi-original.yml: declared missing tag: Activity",
+    "wefunder-openapi-original.yml: declared missing tag: Attribution",
+    "wefunder-openapi-original.yml: declared missing tag: Attribution Partners",
+    "wefunder-openapi-original.yml: declared missing tag: Attribution Webhooks",
+    "wefunder-openapi-original.yml: declared missing tag: Campaigns",
+    "wefunder-openapi-original.yml: declared missing tag: Explore",
+    "wefunder-openapi-original.yml: declared missing tag: Intents",
+    "wefunder-openapi-original.yml: declared missing tag: Investments",
+    "wefunder-openapi-original.yml: declared missing tag: Syndicate Deals",
+    "wefunder-openapi-original.yml: declared missing tag: Syndicate Members",
+    "wefunder-openapi-original.yml: declared missing tag: Syndicate Statistics",
+    "wefunder-openapi-original.yml: declared missing tag: Syndicates",
+    "wefunder-openapi-original.yml: declared missing tag: Users",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "wefunder-activity-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-attribution-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-attribution-partners-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-attribution-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-campaigns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-explore-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-intents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-investments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-syndicate-deals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-syndicate-members-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-syndicate-statistics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-syndicates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wefunder-users-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

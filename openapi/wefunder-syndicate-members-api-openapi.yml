@@ -1,38 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Wefunder API v2 Activity Syndicate Members API
-  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
-
-
-    ## Authentication
-
-
-    This API uses OAuth 2.0 for authentication. To get started:
-
-
-    1. Create an OAuth application at `/oauth/applications`
-
-    2. Get your Client ID and Client Secret
-
-    3. Implement the OAuth 2.0 Authorization Code flow
-
-    4. Use the access token to make API requests
-
-
-    ## Rate Limits
-
-
-    - Standard API: 1,000 requests/hour per token
-
-    - Admin API: 10,000 requests/hour per token
-
-
-    ## Base URL
-
-
-    All API requests should be made to: `https://api.wefunder.com/api/v2`
-
-    '
+  title: Wefunder API v2 Syndicate Members API
+  description: OAuth 2.0 API for accessing Wefunder data programmatically.
   version: '2.0'
   contact:
     name: Wefunder API Support
@@ -55,9 +24,7 @@ paths:
       summary: List members
       description: 'Returns the member directory for a syndicate with role, status, tags, sidebar notes,
 
-        and investment history summaries. Supports filtering, sorting, search, and pagination.
-
-        '
+        and investment history summaries. Supports filtering, sorting, search, and pagination.'
       operationId: listSyndicateMembers
       security:
       - bearerAuth:
@@ -226,9 +193,7 @@ paths:
 
         This endpoint always returns 422 with a `use_intents` error directing you to
 
-        `POST /v2/intents` with action `syndicates.remove_member`.
-
-        '
+        `POST /v2/intents` with action `syndicates.remove_member`.'
       operationId: removeSyndicateMember
       security:
       - bearerAuth:
@@ -425,9 +390,7 @@ paths:
       summary: Export members CSV
       description: 'Generate a CSV export of the member directory. Returns the CSV data directly
 
-        with Content-Type text/csv. Requires operator permission.
-
-        '
+        with Content-Type text/csv. Requires operator permission.'
       operationId: exportSyndicateMembersCsv
       security:
       - bearerAuth:
@@ -455,9 +418,7 @@ paths:
         selected deals (one per company, matching directory semantics).
 
 
-        All monetary values are strings representing cents to avoid floating-point precision issues.
-
-        '
+        All monetary values are strings representing cents to avoid floating-point precision issues.'
       operationId: listSyndicateMemberInvestments
       security:
       - bearerAuth:
@@ -484,25 +445,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   responses:
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
-
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: 'Authentication required or token is invalid/expired. This error occurs when:
 
@@ -516,6 +458,25 @@ components:
 
 
         To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
 
         '
       content:
@@ -537,17 +498,20 @@ components:
           type: object
           properties:
             user_id:
-              type: integer
-              nullable: true
+              type:
+              - integer
+              - 'null'
               description: User ID (null for invitees who haven't signed up)
               example: 123
             user_name:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               example: Jane Smith
             user_email:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: '**Moderator-only.** User email (or invite_email for pending invitees).
 
                 Returns null for non-moderator callers. Requires the requesting user
@@ -561,8 +525,9 @@ components:
               example: member
               description: Current role (creator, manager, member, invitee, applicant, exiled, resigned, etc.)
             invite_role:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: The role the member was invited as
               example: admin
             syndicate_permission:
@@ -572,49 +537,58 @@ components:
               - operator
               description: Permission level within the syndicate
             title:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: Custom title for the member
               example: Example title
             sort_order:
-              type: integer
-              nullable: true
+              type:
+              - integer
+              - 'null'
               description: Display order position
               example: 5
             carry_percentage_override:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               example: '20.0'
               description: Override carry percentage for this member
             avatar_url:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: User profile photo URL (null for invitees without a user account)
               example: https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg
             bio:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: User bio with fallback chain (bio -> thesis -> about). Null for invitees without a user account.
               example: Example text
             city:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: User's city
               example: San Francisco
             country:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: User's country
               example: US
             last_activity_at:
-              type: string
+              type:
+              - string
+              - 'null'
               format: date-time
-              nullable: true
               description: ISO 8601 timestamp of user's last login. Null for invitees without a user account.
               example: '2025-03-01T12:00:00Z'
             profile_url:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: Relative path to user's profile (e.g. '/janedoe'). Null for invitees without a user account.
               example: /janedoe
             tags:
@@ -631,13 +605,15 @@ components:
               description: ISO 8601 join date (alias for created_at)
               example: '2025-03-01T12:00:00Z'
             investment_total:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: Total amount invested in syndicate deals, in cents. String to avoid floating-point precision issues.
               example: '500000'
             deal_count:
-              type: integer
-              nullable: true
+              type:
+              - integer
+              - 'null'
               description: Number of syndicate deals the member has invested in
               example: 2
             accredited:
@@ -649,8 +625,9 @@ components:
                 '
               example: true
             legal_name:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: '**Moderator-only.** Full legal name of the user.
 
                 Only included when the requesting user is a manager/operator.
@@ -685,32 +662,6 @@ components:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
-    SyndicateMemberListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SyndicateMember'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    MemberInvestmentListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/MemberInvestment'
-        meta:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of investments
-            total_amount:
-              type: string
-              description: Sum of all investment amounts in cents, as a string
-              example: '800000'
     PaginationMeta:
       type: object
       properties:
@@ -721,14 +672,10 @@ components:
           type: boolean
           example: true
         next_cursor:
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
           example: 12345
-    SyndicateMemberEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/SyndicateMember'
     Error:
       type: object
       properties:
@@ -752,6 +699,32 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
+    MemberInvestmentListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberInvestment'
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of investments
+            total_amount:
+              type: string
+              description: Sum of all investment amounts in cents, as a string
+              example: '800000'
+    SyndicateMemberListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyndicateMember'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     MemberInvestment:
       type: object
       description: 'JSON:API resource representing a member''s investment in a syndicate deal.
@@ -775,8 +748,9 @@ components:
               description: Deal (fundraise) ID
               example: 75496
             company_name:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: Name of the company the deal is for
               example: Substack
             amount:
@@ -792,6 +766,11 @@ components:
               format: date-time
               description: ISO 8601 timestamp when the investment was created
               example: '2025-03-01T12:00:00Z'
+    SyndicateMemberEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateMember'
   parameters:
     syndicate_id:
       name: syndicate_id

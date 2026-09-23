@@ -1,38 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Wefunder API v2 Activity API
-  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
-
-
-    ## Authentication
-
-
-    This API uses OAuth 2.0 for authentication. To get started:
-
-
-    1. Create an OAuth application at `/oauth/applications`
-
-    2. Get your Client ID and Client Secret
-
-    3. Implement the OAuth 2.0 Authorization Code flow
-
-    4. Use the access token to make API requests
-
-
-    ## Rate Limits
-
-
-    - Standard API: 1,000 requests/hour per token
-
-    - Admin API: 10,000 requests/hour per token
-
-
-    ## Base URL
-
-
-    All API requests should be made to: `https://api.wefunder.com/api/v2`
-
-    '
+  description: OAuth 2.0 API for accessing Wefunder data programmatically.
   version: '2.0'
   contact:
     name: Wefunder API Support
@@ -55,9 +24,7 @@ paths:
       summary: List activity events
       description: 'Returns actions taken by OAuth apps authorized by the current user.
 
-        This is the API backing the user-facing activity feed at Settings > Activity.
-
-        '
+        This is the API backing the user-facing activity feed at Settings > Activity.'
       operationId: listActivity
       security:
       - bearerAuth:
@@ -144,9 +111,7 @@ paths:
       tags:
       - Activity
       summary: Revoke connected app
-      description: 'Revoke all tokens for this app. Any pending intents from this app are automatically expired.
-
-        '
+      description: Revoke all tokens for this app. Any pending intents from this app are automatically expired.
       operationId: revokeConnectedApp
       security:
       - bearerAuth:
@@ -174,60 +139,36 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    ConnectedAppRevocationEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/ConnectedAppRevocation'
-    ConnectedApp:
-      type: object
-      description: An OAuth application authorized by the user
-      properties:
-        id:
-          type: integer
-          example: 123
-        type:
-          type: string
-          example: connected_app
-        attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              example: ChatGPT via Wefunder MCP
-            scopes:
-              type: array
-              items:
-                type: string
-              example:
-              - read:syndicates
-              - write:syndicates
-              description: All scopes across active tokens for this app
-            last_active_at:
-              type: string
-              format: date-time
-              nullable: true
-              description: When the most recent token was last used
-              example: '2025-03-01T12:00:00Z'
-            action_count:
-              type: integer
-              description: Total audit events for this app
-              example: 34
-            created_at:
-              type: string
-              format: date-time
-              nullable: true
-              description: When the user first authorized this app
-              example: '2025-03-01T12:00:00Z'
-    AuditEventListEnvelope:
+    ConnectedAppListEnvelope:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/AuditEvent'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
+            $ref: '#/components/schemas/ConnectedApp'
+    ConnectedAppRevocation:
+      type: object
+      properties:
+        revoked:
+          type: boolean
+          example: true
+        tokens_revoked:
+          type: integer
+          example: 2
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
     Error:
       type: object
       properties:
@@ -285,20 +226,24 @@ components:
               type: integer
               example: 123
             resource_label:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               example: Acme Syndicate
             old_values:
-              type: object
-              nullable: true
+              type:
+              - object
+              - 'null'
               description: Previous values of changed fields
             new_values:
-              type: object
-              nullable: true
+              type:
+              - object
+              - 'null'
               description: New values of changed fields
             changed_fields:
-              type: array
-              nullable: true
+              type:
+              - array
+              - 'null'
               items:
                 type: string
               description: List of field names that changed
@@ -309,47 +254,76 @@ components:
               - failure
               - denied
             error_message:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               example: Example text
             intent_id:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: Associated intent ID if this event was triggered by an intent
               example: example
             created_at:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
-    ConnectedAppListEnvelope:
+    ConnectedAppRevocationEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ConnectedAppRevocation'
+    ConnectedApp:
+      type: object
+      description: An OAuth application authorized by the user
+      properties:
+        id:
+          type: integer
+          example: 123
+        type:
+          type: string
+          example: connected_app
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              example: ChatGPT via Wefunder MCP
+            scopes:
+              type: array
+              items:
+                type: string
+              example:
+              - read:syndicates
+              - write:syndicates
+              description: All scopes across active tokens for this app
+            last_active_at:
+              type:
+              - string
+              - 'null'
+              format: date-time
+              description: When the most recent token was last used
+              example: '2025-03-01T12:00:00Z'
+            action_count:
+              type: integer
+              description: Total audit events for this app
+              example: 34
+            created_at:
+              type:
+              - string
+              - 'null'
+              format: date-time
+              description: When the user first authorized this app
+              example: '2025-03-01T12:00:00Z'
+    AuditEventListEnvelope:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/ConnectedApp'
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type: integer
-          nullable: true
-          example: 12345
-    ConnectedAppRevocation:
-      type: object
-      properties:
-        revoked:
-          type: boolean
-          example: true
-        tokens_revoked:
-          type: integer
-          example: 2
+            $ref: '#/components/schemas/AuditEvent'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
   responses:
     Unauthorized:
       description: 'Authentication required or token is invalid/expired. This error occurs when:

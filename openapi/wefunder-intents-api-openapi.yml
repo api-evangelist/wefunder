@@ -1,38 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Wefunder API v2 Activity Intents API
-  description: 'OAuth 2.0 API for accessing Wefunder data programmatically.
-
-
-    ## Authentication
-
-
-    This API uses OAuth 2.0 for authentication. To get started:
-
-
-    1. Create an OAuth application at `/oauth/applications`
-
-    2. Get your Client ID and Client Secret
-
-    3. Implement the OAuth 2.0 Authorization Code flow
-
-    4. Use the access token to make API requests
-
-
-    ## Rate Limits
-
-
-    - Standard API: 1,000 requests/hour per token
-
-    - Admin API: 10,000 requests/hour per token
-
-
-    ## Base URL
-
-
-    All API requests should be made to: `https://api.wefunder.com/api/v2`
-
-    '
+  title: Wefunder API v2 Intents API
+  description: OAuth 2.0 API for accessing Wefunder data programmatically.
   version: '2.0'
   contact:
     name: Wefunder API Support
@@ -63,9 +32,7 @@ paths:
         on Wefunder''s UI by a user with permission on the resource.
 
 
-        See [Intents documentation](/concepts/intents) for the full pattern.
-
-        '
+        See Intents documentation for the full pattern.'
       operationId: createIntent
       security:
       - bearerAuth:
@@ -188,9 +155,7 @@ paths:
       summary: Get intent status
       description: 'Check the current status of an intent. Use this to poll for approval
 
-        after proposing an intent, or subscribe to `intent.*` webhook events instead.
-
-        '
+        after proposing an intent, or subscribe to `intent.*` webhook events instead.'
       operationId: getIntent
       security:
       - bearerAuth:
@@ -229,6 +194,20 @@ components:
             $ref: '#/components/schemas/Intent'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
     Error:
       type: object
       properties:
@@ -252,6 +231,11 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
+    IntentEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Intent'
     Intent:
       type: object
       description: JSON:API resource representing an intent (proposed dangerous action)
@@ -295,32 +279,38 @@ components:
               example: https://wefunder.com/intents/a1b2c3d4-e5f6-7890-abcd-ef1234567890/review
               description: URL where a human can review and approve/reject this intent
             requested_by_agent:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               description: Human-readable name of the agent that proposed this intent
               example: Claude via MCP
             expires_at:
-              type: string
+              type:
+              - string
+              - 'null'
               format: date-time
-              nullable: true
               example: '2025-03-01T12:00:00Z'
             approved_at:
-              type: string
+              type:
+              - string
+              - 'null'
               format: date-time
-              nullable: true
               example: '2025-03-01T12:00:00Z'
             executed_at:
-              type: string
+              type:
+              - string
+              - 'null'
               format: date-time
-              nullable: true
               example: '2025-03-01T12:00:00Z'
             rejection_reason:
-              type: string
-              nullable: true
+              type:
+              - string
+              - 'null'
               example: Example text
             execution_result:
-              type: object
-              nullable: true
+              type:
+              - object
+              - 'null'
               description: Action-specific result data (only present when status is executed)
             created_at:
               type: string
@@ -330,44 +320,7 @@ components:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type: integer
-          nullable: true
-          example: 12345
-    IntentEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Intent'
   responses:
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
-
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: 'Authentication required or token is invalid/expired. This error occurs when:
 
@@ -381,6 +334,25 @@ components:
 
 
         To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
 
         '
       content:
