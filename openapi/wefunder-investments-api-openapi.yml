@@ -59,117 +59,6 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimitExceeded'
 components:
-  schemas:
-    InvestmentListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Investment'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type:
-          - integer
-          - 'null'
-          example: 12345
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
-    Investment:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 456
-        type:
-          type: string
-          example: investment
-        attributes:
-          type: object
-          properties:
-            amount:
-              type: number
-              format: float
-              example: 1000
-            state:
-              type: string
-              example: confirmed
-            confirmed_at:
-              type:
-              - string
-              - 'null'
-              format: date-time
-              example: '2023-03-15T12:00:00Z'
-            created_at:
-              type: string
-              format: date-time
-              example: '2023-03-10T10:30:00Z'
-            updated_at:
-              type: string
-              format: date-time
-              example: '2023-03-15T12:00:00Z'
-            fundraise_id:
-              type: integer
-              example: 789
-            campaign:
-              type:
-              - object
-              - 'null'
-              properties:
-                id:
-                  type: integer
-                  example: 789
-                company_name:
-                  type: string
-                  example: My Startup Inc.
-                company_id:
-                  type: integer
-                  example: 101
-  parameters:
-    cursor:
-      name: cursor
-      in: query
-      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
-
-        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
-
-        first page.
-
-        '
-      schema:
-        type: integer
-      example: 12345
   responses:
     RateLimitExceeded:
       description: 'Too many requests in a short time period. The API enforces rate limits to ensure
@@ -220,6 +109,117 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  schemas:
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
+    Investment:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 456
+        type:
+          type: string
+          example: investment
+        attributes:
+          type: object
+          properties:
+            amount:
+              type: number
+              format: float
+              example: 1000
+            state:
+              type: string
+              example: confirmed
+            confirmed_at:
+              type:
+              - string
+              - 'null'
+              format: date-time
+              example: '2023-03-15T12:00:00Z'
+            created_at:
+              type: string
+              format: date-time
+              example: '2023-03-10T10:30:00Z'
+            updated_at:
+              type: string
+              format: date-time
+              example: '2023-03-15T12:00:00Z'
+            fundraise_id:
+              type: integer
+              example: 789
+            campaign:
+              type:
+              - object
+              - 'null'
+              properties:
+                id:
+                  type: integer
+                  example: 789
+                company_name:
+                  type: string
+                  example: My Startup Inc.
+                company_id:
+                  type: integer
+                  example: 101
+    InvestmentListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Investment'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+
+        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+
+        first page.
+
+        '
+      schema:
+        type: integer
+      example: 12345
   securitySchemes:
     bearerAuth:
       type: oauth2

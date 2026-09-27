@@ -57,74 +57,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
-  responses:
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
-
-        - No Authorization header is provided
-
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
-
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+  parameters:
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
   schemas:
-    SyndicateStatisticsEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/SyndicateStatistics'
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
     SyndicateStatistics:
       type: object
       description: Aggregate metrics for a syndicate
@@ -174,15 +116,73 @@ components:
               type: integer
               description: Count of audit events in the last 30 days for this syndicate
               example: 4
-  parameters:
-    syndicate_id:
-      name: syndicate_id
-      in: path
-      required: true
-      description: The syndicate ID
-      schema:
-        type: integer
-      example: 42
+    SyndicateStatisticsEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateStatistics'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+  responses:
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: oauth2

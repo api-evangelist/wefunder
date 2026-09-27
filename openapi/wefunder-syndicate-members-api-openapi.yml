@@ -444,46 +444,87 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
-  responses:
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
-
-        - No Authorization header is provided
-
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
-
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+  parameters:
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
+    member_id:
+      name: member_id
+      in: path
+      required: true
+      description: The member ID
+      schema:
+        type: string
+      example: cr_123
   schemas:
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    SyndicateMemberListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyndicateMember'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    MemberInvestmentListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberInvestment'
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of investments
+            total_amount:
+              type: string
+              description: Sum of all investment amounts in cents, as a string
+              example: '800000'
     SyndicateMember:
       type: object
       description: JSON:API resource representing a syndicate member (ClubRole)
@@ -662,69 +703,6 @@ components:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type:
-          - integer
-          - 'null'
-          example: 12345
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
-    MemberInvestmentListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/MemberInvestment'
-        meta:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of investments
-            total_amount:
-              type: string
-              description: Sum of all investment amounts in cents, as a string
-              example: '800000'
-    SyndicateMemberListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SyndicateMember'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     MemberInvestment:
       type: object
       description: 'JSON:API resource representing a member''s investment in a syndicate deal.
@@ -771,23 +749,45 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/SyndicateMember'
-  parameters:
-    syndicate_id:
-      name: syndicate_id
-      in: path
-      required: true
-      description: The syndicate ID
-      schema:
-        type: integer
-      example: 42
-    member_id:
-      name: member_id
-      in: path
-      required: true
-      description: The member ID
-      schema:
-        type: string
-      example: cr_123
+  responses:
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: oauth2

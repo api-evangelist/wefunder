@@ -64,15 +64,6 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
-    CampaignListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Campaign'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     PaginationMeta:
       type: object
       properties:
@@ -87,29 +78,15 @@ components:
           - integer
           - 'null'
           example: 12345
-    Error:
+    CampaignListEnvelope:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
     Campaign:
       type: object
       properties:
@@ -159,20 +136,29 @@ components:
             investor_count:
               type: integer
               example: 42
-  parameters:
-    cursor:
-      name: cursor
-      in: query
-      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
-
-        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
-
-        first page.
-
-        '
-      schema:
-        type: integer
-      example: 12345
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
   responses:
     RateLimitExceeded:
       description: 'Too many requests in a short time period. The API enforces rate limits to ensure
@@ -242,6 +228,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+
+        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+
+        first page.
+
+        '
+      schema:
+        type: integer
+      example: 12345
   securitySchemes:
     bearerAuth:
       type: oauth2

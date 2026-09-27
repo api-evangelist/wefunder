@@ -171,69 +171,67 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
-  responses:
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
-
-        - No Authorization header is provided
-
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
-
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
+    DealInvestor:
       type: object
+      description: 'JSON:API resource representing a syndicate member''s investment in a specific deal.
+
+        Only syndicate members'' investments are included (scoped by member user IDs).
+
+        '
       properties:
-        error:
+        id:
+          type: integer
+          description: Investment ID
+          example: 12345
+        type:
+          type: string
+          example: deal_investor
+        attributes:
           type: object
           properties:
-            type:
+            user_id:
+              type: integer
+              description: Investor's user ID
+              example: 456
+            user_name:
+              type:
+              - string
+              - 'null'
+              example: Jane Smith
+            user_email:
+              type:
+              - string
+              - 'null'
+              description: '**Moderator-only.** Investor''s email address.
+
+                Returns null for non-moderator callers (users who are not a manager/operator).
+
+                '
+              example: user@example.com
+            avatar_url:
+              type:
+              - string
+              - 'null'
+              description: Investor's profile photo URL
+              example: https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg
+            amount:
               type: string
-              example: unauthorized
-            message:
+              description: Investment amount in cents, as a string to avoid floating-point precision issues
+              example: '500000'
+            state:
               type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
+              description: Investment state
+              example: confirmed
+            invested_at:
               type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
+              format: date-time
+              description: ISO 8601 timestamp when the investment was created
+              example: '2025-03-01T12:00:00Z'
+    SyndicateDealDetail:
+      description: Same as SyndicateDeal (show and index use the same serializer)
+      allOf:
+      - $ref: '#/components/schemas/SyndicateDeal'
     SyndicateDeal:
       type: object
       description: JSON:API resource representing a syndicate deal (Fundraise)
@@ -340,27 +338,6 @@ components:
               format: date-time
               description: ISO 8601 timestamp when funding opened
               example: '2025-03-01T12:00:00Z'
-    SyndicateDealDetail:
-      description: Same as SyndicateDeal (show and index use the same serializer)
-      allOf:
-      - $ref: '#/components/schemas/SyndicateDeal'
-    SyndicateDealDetailEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/SyndicateDealDetail'
-    SyndicateDealListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SyndicateDeal'
-        meta:
-          type: object
-          properties:
-            count:
-              type: integer
     DealInvestorListEnvelope:
       type: object
       properties:
@@ -376,71 +353,86 @@ components:
             count:
               type: integer
               description: Number of investors on this page
-    DealInvestor:
+    SyndicateDealListEnvelope:
       type: object
-      description: 'JSON:API resource representing a syndicate member''s investment in a specific deal.
-
-        Only syndicate members'' investments are included (scoped by member user IDs).
-
-        '
       properties:
-        id:
-          type: integer
-          description: Investment ID
-          example: 12345
-        type:
-          type: string
-          example: deal_investor
-        attributes:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyndicateDeal'
+        meta:
           type: object
           properties:
-            user_id:
+            count:
               type: integer
-              description: Investor's user ID
-              example: 456
-            user_name:
-              type:
-              - string
-              - 'null'
-              example: Jane Smith
-            user_email:
-              type:
-              - string
-              - 'null'
-              description: '**Moderator-only.** Investor''s email address.
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    SyndicateDealDetailEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateDealDetail'
+  responses:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
 
-                Returns null for non-moderator callers (users who are not a manager/operator).
+        This typically means:
 
-                '
-              example: user@example.com
-            avatar_url:
-              type:
-              - string
-              - 'null'
-              description: Investor's profile photo URL
-              example: https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg
-            amount:
-              type: string
-              description: Investment amount in cents, as a string to avoid floating-point precision issues
-              example: '500000'
-            state:
-              type: string
-              description: Investment state
-              example: confirmed
-            invested_at:
-              type: string
-              format: date-time
-              description: ISO 8601 timestamp when the investment was created
-              example: '2025-03-01T12:00:00Z'
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
-    syndicate_id:
-      name: syndicate_id
-      in: path
-      required: true
-      description: The syndicate ID
-      schema:
-        type: integer
-      example: 42
     fundraise_id:
       name: fundraise_id
       in: path
@@ -449,6 +441,14 @@ components:
       schema:
         type: integer
       example: 99
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
   securitySchemes:
     bearerAuth:
       type: oauth2

@@ -132,81 +132,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
-  responses:
-    RateLimitExceeded:
-      description: 'Too many requests in a short time period. The API enforces rate limits to ensure
-
-        fair usage and system stability. When you exceed the limit, you''ll receive this
-
-        error along with headers indicating when you can retry.
-
-
-        Check the `X-RateLimit-Reset` header to know when your limit will reset.
-
-        Consider implementing exponential backoff in your application.
-
-        '
-      headers:
-        X-RateLimit-Limit:
-          schema:
-            type: integer
-          description: Request limit per hour
-        X-RateLimit-Remaining:
-          schema:
-            type: integer
-          description: Remaining requests
-        X-RateLimit-Reset:
-          schema:
-            type: integer
-          description: UTC timestamp when the limit resets
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
-
-        - No Authorization header is provided
-
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
-
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    SyndicateDetailEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/SyndicateDetail'
     PaginationMeta:
       type: object
       properties:
@@ -221,29 +147,6 @@ components:
           - integer
           - 'null'
           example: 12345
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
     SyndicateDetail:
       description: Same as Syndicate (show and index use the same serializer)
       allOf:
@@ -321,6 +224,103 @@ components:
             $ref: '#/components/schemas/Syndicate'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
+    SyndicateDetailEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateDetail'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+  responses:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimitExceeded:
+      description: 'Too many requests in a short time period. The API enforces rate limits to ensure
+
+        fair usage and system stability. When you exceed the limit, you''ll receive this
+
+        error along with headers indicating when you can retry.
+
+
+        Check the `X-RateLimit-Reset` header to know when your limit will reset.
+
+        Consider implementing exponential backoff in your application.
+
+        '
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Request limit per hour
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Remaining requests
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: UTC timestamp when the limit resets
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     syndicate_id:
       name: syndicate_id

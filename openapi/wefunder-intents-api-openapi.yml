@@ -185,15 +185,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    IntentListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Intent'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     PaginationMeta:
       type: object
       properties:
@@ -208,34 +199,6 @@ components:
           - integer
           - 'null'
           example: 12345
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
-    IntentEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Intent'
     Intent:
       type: object
       description: JSON:API resource representing an intent (proposed dangerous action)
@@ -320,6 +283,43 @@ components:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
+    IntentListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Intent'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    IntentEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Intent'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
   responses:
     Unauthorized:
       description: 'Authentication required or token is invalid/expired. This error occurs when:
