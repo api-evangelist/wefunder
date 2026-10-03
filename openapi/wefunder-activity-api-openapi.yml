@@ -139,6 +139,27 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    ConnectedAppListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectedApp'
+    ConnectedAppRevocationEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ConnectedAppRevocation'
+    ConnectedAppRevocation:
+      type: object
+      properties:
+        revoked:
+          type: boolean
+          example: true
+        tokens_revoked:
+          type: integer
+          example: 2
     PaginationMeta:
       type: object
       properties:
@@ -153,27 +174,6 @@ components:
           - integer
           - 'null'
           example: 12345
-    AuditEventListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditEvent'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
-    ConnectedAppListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectedApp'
-    ConnectedAppRevocationEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/ConnectedAppRevocation'
     AuditEvent:
       type: object
       description: JSON:API resource representing an audit event
@@ -250,15 +250,6 @@ components:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
-    ConnectedAppRevocation:
-      type: object
-      properties:
-        revoked:
-          type: boolean
-          example: true
-        tokens_revoked:
-          type: integer
-          example: 2
     ConnectedApp:
       type: object
       description: An OAuth application authorized by the user
@@ -324,6 +315,15 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
+    AuditEventListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEvent'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
   responses:
     Unauthorized:
       description: 'Authentication required or token is invalid/expired. This error occurs when:

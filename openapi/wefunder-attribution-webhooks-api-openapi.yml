@@ -325,75 +325,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    WebhookSubscriptionWithSecret2Envelope:
-      type: object
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              secret:
-                type: string
-                description: New HMAC signing secret
-                example: whsec_a1b2c3d4e5f6g7h8i9j0...
-    WebhookSubscriptionWithSecretEnvelope:
-      type: object
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              secret:
-                type: string
-                description: 'HMAC signing secret. **Only returned on create.**
-
-                  Store this securely - it cannot be retrieved later.
-
-                  '
-                example: whsec_a1b2c3d4e5f6g7h8i9j0...
-    WebhookSubscriptionEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/WebhookSubscription'
-    WebhookTestResultEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/WebhookTestResult'
-    WebhookSubscriptionListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WebhookSubscription'
-        meta:
-          type: object
-          properties:
-            total:
-              type: integer
-              description: Number of active subscriptions
-              example: 2
-            limit:
-              type: integer
-              description: Maximum subscriptions per application
-              example: 10
-    WebhookTestResult:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Test webhook queued for delivery
-        delivery_id:
-          type: string
-          format: uuid
-          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
-        payload_preview:
-          type: object
-          description: The payload that was sent
     WebhookDelivery:
       type: object
       description: A single webhook delivery attempt
@@ -437,6 +368,88 @@ components:
           type: string
           format: date-time
           example: '2025-03-15T10:30:00Z'
+    WebhookSubscriptionEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookSubscription'
+    WebhookSubscriptionWithSecretEnvelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              secret:
+                type: string
+                description: 'HMAC signing secret. **Only returned on create.**
+
+                  Store this securely - it cannot be retrieved later.
+
+                  '
+                example: whsec_a1b2c3d4e5f6g7h8i9j0...
+    WebhookTestResult:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Test webhook queued for delivery
+        delivery_id:
+          type: string
+          format: uuid
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        payload_preview:
+          type: object
+          description: The payload that was sent
+    WebhookSubscriptionWithRecentDeliveriesEnvelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              recent_deliveries:
+                type: array
+                description: Last 10 delivery attempts
+                items:
+                  $ref: '#/components/schemas/WebhookDelivery'
+    WebhookSubscriptionWithSecret2Envelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              secret:
+                type: string
+                description: New HMAC signing secret
+                example: whsec_a1b2c3d4e5f6g7h8i9j0...
+    WebhookTestResultEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookTestResult'
+    WebhookSubscriptionListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookSubscription'
+        meta:
+          type: object
+          properties:
+            total:
+              type: integer
+              description: Number of active subscriptions
+              example: 2
+            limit:
+              type: integer
+              description: Maximum subscriptions per application
+              example: 10
     WebhookSubscription:
       type: object
       description: A webhook subscription for attribution events
@@ -501,19 +514,6 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
-    WebhookSubscriptionWithRecentDeliveriesEnvelope:
-      type: object
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              recent_deliveries:
-                type: array
-                description: Last 10 delivery attempts
-                items:
-                  $ref: '#/components/schemas/WebhookDelivery'
   responses:
     Forbidden:
       description: 'The authenticated user does not have permission to access this resource.

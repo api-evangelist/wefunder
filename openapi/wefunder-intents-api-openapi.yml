@@ -185,20 +185,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type:
-          - integer
-          - 'null'
-          example: 12345
     Intent:
       type: object
       description: JSON:API resource representing an intent (proposed dangerous action)
@@ -283,6 +269,25 @@ components:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
+    IntentEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Intent'
     IntentListEnvelope:
       type: object
       properties:
@@ -292,11 +297,6 @@ components:
             $ref: '#/components/schemas/Intent'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-    IntentEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Intent'
     Error:
       type: object
       properties:
@@ -321,25 +321,6 @@ components:
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
   responses:
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
-
-        - No Authorization header is provided
-
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Forbidden:
       description: 'The authenticated user does not have permission to access this resource.
 
@@ -353,6 +334,25 @@ components:
 
 
         Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
 
         '
       content:

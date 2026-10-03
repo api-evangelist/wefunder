@@ -127,34 +127,6 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
-    Exemption:
-      type: object
-      description: The offering's SEC exemption, in market vocabulary.
-      properties:
-        family:
-          type: string
-          enum:
-          - reg_cf
-          - reg_d
-          - reg_a
-          - reg_s
-          - ecsp
-          example: reg_cf
-        subtype:
-          type:
-          - string
-          - 'null'
-          description: Sub-type/flavor — `506b` or `506c` for the `reg_d` family, otherwise null.
-          example: null
-        label:
-          type: string
-          description: Human-readable label in normal market language.
-          example: Reg CF
-    OfferingEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Offering'
     Offering:
       type: object
       description: 'A public offering (a fundraise), addressed by its `ofr_` external id. Returned by the
@@ -302,6 +274,34 @@ components:
               - 'null'
               description: Opaque pagination cursor — pass as `cursor` to fetch the next page. Present only when `has_more` is true.
               example: 25
+    OfferingEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Offering'
+    Exemption:
+      type: object
+      description: The offering's SEC exemption, in market vocabulary.
+      properties:
+        family:
+          type: string
+          enum:
+          - reg_cf
+          - reg_d
+          - reg_a
+          - reg_s
+          - ecsp
+          example: reg_cf
+        subtype:
+          type:
+          - string
+          - 'null'
+          description: Sub-type/flavor — `506b` or `506c` for the `reg_d` family, otherwise null.
+          example: null
+        label:
+          type: string
+          description: Human-readable label in normal market language.
+          example: Reg CF
     Error:
       type: object
       properties:
@@ -326,6 +326,31 @@ components:
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
   responses:
+    NotFound:
+      description: The requested resource does not exist or is not visible to this token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     RateLimitExceeded:
       description: 'Too many requests in a short time period. The API enforces rate limits to ensure
 
@@ -352,31 +377,6 @@ components:
           schema:
             type: integer
           description: UTC timestamp when the limit resets
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource does not exist or is not visible to this token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
-
-        - No Authorization header is provided
-
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
-
-        '
       content:
         application/json:
           schema:

@@ -172,62 +172,23 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    DealInvestor:
+    SyndicateDealListEnvelope:
       type: object
-      description: 'JSON:API resource representing a syndicate member''s investment in a specific deal.
-
-        Only syndicate members'' investments are included (scoped by member user IDs).
-
-        '
       properties:
-        id:
-          type: integer
-          description: Investment ID
-          example: 12345
-        type:
-          type: string
-          example: deal_investor
-        attributes:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyndicateDeal'
+        meta:
           type: object
           properties:
-            user_id:
+            count:
               type: integer
-              description: Investor's user ID
-              example: 456
-            user_name:
-              type:
-              - string
-              - 'null'
-              example: Jane Smith
-            user_email:
-              type:
-              - string
-              - 'null'
-              description: '**Moderator-only.** Investor''s email address.
-
-                Returns null for non-moderator callers (users who are not a manager/operator).
-
-                '
-              example: user@example.com
-            avatar_url:
-              type:
-              - string
-              - 'null'
-              description: Investor's profile photo URL
-              example: https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg
-            amount:
-              type: string
-              description: Investment amount in cents, as a string to avoid floating-point precision issues
-              example: '500000'
-            state:
-              type: string
-              description: Investment state
-              example: confirmed
-            invested_at:
-              type: string
-              format: date-time
-              description: ISO 8601 timestamp when the investment was created
-              example: '2025-03-01T12:00:00Z'
+    SyndicateDealDetailEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateDealDetail'
     SyndicateDealDetail:
       description: Same as SyndicateDeal (show and index use the same serializer)
       allOf:
@@ -353,18 +314,6 @@ components:
             count:
               type: integer
               description: Number of investors on this page
-    SyndicateDealListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SyndicateDeal'
-        meta:
-          type: object
-          properties:
-            count:
-              type: integer
     Error:
       type: object
       properties:
@@ -388,11 +337,79 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
-    SyndicateDealDetailEnvelope:
+    DealInvestor:
       type: object
+      description: 'JSON:API resource representing a syndicate member''s investment in a specific deal.
+
+        Only syndicate members'' investments are included (scoped by member user IDs).
+
+        '
       properties:
-        data:
-          $ref: '#/components/schemas/SyndicateDealDetail'
+        id:
+          type: integer
+          description: Investment ID
+          example: 12345
+        type:
+          type: string
+          example: deal_investor
+        attributes:
+          type: object
+          properties:
+            user_id:
+              type: integer
+              description: Investor's user ID
+              example: 456
+            user_name:
+              type:
+              - string
+              - 'null'
+              example: Jane Smith
+            user_email:
+              type:
+              - string
+              - 'null'
+              description: '**Moderator-only.** Investor''s email address.
+
+                Returns null for non-moderator callers (users who are not a manager/operator).
+
+                '
+              example: user@example.com
+            avatar_url:
+              type:
+              - string
+              - 'null'
+              description: Investor's profile photo URL
+              example: https://uploads.wefunder.com/uploads/user/avatar/456/large_photo.jpg
+            amount:
+              type: string
+              description: Investment amount in cents, as a string to avoid floating-point precision issues
+              example: '500000'
+            state:
+              type: string
+              description: Investment state
+              example: confirmed
+            invested_at:
+              type: string
+              format: date-time
+              description: ISO 8601 timestamp when the investment was created
+              example: '2025-03-01T12:00:00Z'
+  parameters:
+    fundraise_id:
+      name: fundraise_id
+      in: path
+      required: true
+      description: The deal (fundraise) ID
+      schema:
+        type: integer
+      example: 99
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
   responses:
     Forbidden:
       description: 'The authenticated user does not have permission to access this resource.
@@ -432,23 +449,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    fundraise_id:
-      name: fundraise_id
-      in: path
-      required: true
-      description: The deal (fundraise) ID
-      schema:
-        type: integer
-      example: 99
-    syndicate_id:
-      name: syndicate_id
-      in: path
-      required: true
-      description: The syndicate ID
-      schema:
-        type: integer
-      example: 42
   securitySchemes:
     bearerAuth:
       type: oauth2
