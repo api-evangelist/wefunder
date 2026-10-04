@@ -368,65 +368,6 @@ components:
           type: string
           format: date-time
           example: '2025-03-15T10:30:00Z'
-    WebhookSubscriptionEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/WebhookSubscription'
-    WebhookSubscriptionWithSecretEnvelope:
-      type: object
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              secret:
-                type: string
-                description: 'HMAC signing secret. **Only returned on create.**
-
-                  Store this securely - it cannot be retrieved later.
-
-                  '
-                example: whsec_a1b2c3d4e5f6g7h8i9j0...
-    WebhookTestResult:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Test webhook queued for delivery
-        delivery_id:
-          type: string
-          format: uuid
-          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
-        payload_preview:
-          type: object
-          description: The payload that was sent
-    WebhookSubscriptionWithRecentDeliveriesEnvelope:
-      type: object
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              recent_deliveries:
-                type: array
-                description: Last 10 delivery attempts
-                items:
-                  $ref: '#/components/schemas/WebhookDelivery'
-    WebhookSubscriptionWithSecret2Envelope:
-      type: object
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              secret:
-                type: string
-                description: New HMAC signing secret
-                example: whsec_a1b2c3d4e5f6g7h8i9j0...
     WebhookTestResultEnvelope:
       type: object
       properties:
@@ -491,6 +432,60 @@ components:
           type: string
           format: date-time
           example: '2025-03-15T10:30:00Z'
+    WebhookSubscriptionWithRecentDeliveriesEnvelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              recent_deliveries:
+                type: array
+                description: Last 10 delivery attempts
+                items:
+                  $ref: '#/components/schemas/WebhookDelivery'
+    WebhookSubscriptionWithSecretEnvelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              secret:
+                type: string
+                description: 'HMAC signing secret. **Only returned on create.**
+
+                  Store this securely - it cannot be retrieved later.
+
+                  '
+                example: whsec_a1b2c3d4e5f6g7h8i9j0...
+    WebhookSubscriptionWithSecret2Envelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              secret:
+                type: string
+                description: New HMAC signing secret
+                example: whsec_a1b2c3d4e5f6g7h8i9j0...
+    WebhookTestResult:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Test webhook queued for delivery
+        delivery_id:
+          type: string
+          format: uuid
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        payload_preview:
+          type: object
+          description: The payload that was sent
     Error:
       type: object
       properties:
@@ -514,6 +509,11 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
+    WebhookSubscriptionEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookSubscription'
   responses:
     Forbidden:
       description: 'The authenticated user does not have permission to access this resource.

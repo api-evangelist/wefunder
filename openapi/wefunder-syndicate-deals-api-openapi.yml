@@ -172,6 +172,11 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    SyndicateDealDetailEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateDealDetail'
     SyndicateDealListEnvelope:
       type: object
       properties:
@@ -184,15 +189,21 @@ components:
           properties:
             count:
               type: integer
-    SyndicateDealDetailEnvelope:
+    DealInvestorListEnvelope:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/SyndicateDealDetail'
-    SyndicateDealDetail:
-      description: Same as SyndicateDeal (show and index use the same serializer)
-      allOf:
-      - $ref: '#/components/schemas/SyndicateDeal'
+          type: array
+          items:
+            $ref: '#/components/schemas/DealInvestor'
+        meta:
+          type: object
+          properties:
+            has_more:
+              type: boolean
+            count:
+              type: integer
+              description: Number of investors on this page
     SyndicateDeal:
       type: object
       description: JSON:API resource representing a syndicate deal (Fundraise)
@@ -299,44 +310,6 @@ components:
               format: date-time
               description: ISO 8601 timestamp when funding opened
               example: '2025-03-01T12:00:00Z'
-    DealInvestorListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DealInvestor'
-        meta:
-          type: object
-          properties:
-            has_more:
-              type: boolean
-            count:
-              type: integer
-              description: Number of investors on this page
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
     DealInvestor:
       type: object
       description: 'JSON:API resource representing a syndicate member''s investment in a specific deal.
@@ -393,23 +366,33 @@ components:
               format: date-time
               description: ISO 8601 timestamp when the investment was created
               example: '2025-03-01T12:00:00Z'
-  parameters:
-    fundraise_id:
-      name: fundraise_id
-      in: path
-      required: true
-      description: The deal (fundraise) ID
-      schema:
-        type: integer
-      example: 99
-    syndicate_id:
-      name: syndicate_id
-      in: path
-      required: true
-      description: The syndicate ID
-      schema:
-        type: integer
-      example: 42
+    SyndicateDealDetail:
+      description: Same as SyndicateDeal (show and index use the same serializer)
+      allOf:
+      - $ref: '#/components/schemas/SyndicateDeal'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
   responses:
     Forbidden:
       description: 'The authenticated user does not have permission to access this resource.
@@ -449,6 +432,23 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
+    fundraise_id:
+      name: fundraise_id
+      in: path
+      required: true
+      description: The deal (fundraise) ID
+      schema:
+        type: integer
+      example: 99
   securitySchemes:
     bearerAuth:
       type: oauth2

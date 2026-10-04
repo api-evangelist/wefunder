@@ -138,19 +138,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
+  responses:
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
+
+        - No Authorization header is provided
+
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    ConnectedAppListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectedApp'
-    ConnectedAppRevocationEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/ConnectedAppRevocation'
     ConnectedAppRevocation:
       type: object
       properties:
@@ -160,20 +168,6 @@ components:
         tokens_revoked:
           type: integer
           example: 2
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type:
-          - integer
-          - 'null'
-          example: 12345
     AuditEvent:
       type: object
       description: JSON:API resource representing an audit event
@@ -250,6 +244,55 @@ components:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
+    ConnectedAppListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectedApp'
+    ConnectedAppRevocationEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ConnectedAppRevocation'
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
     ConnectedApp:
       type: object
       description: An OAuth application authorized by the user
@@ -292,29 +335,6 @@ components:
               format: date-time
               description: When the user first authorized this app
               example: '2025-03-01T12:00:00Z'
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
     AuditEventListEnvelope:
       type: object
       properties:
@@ -324,26 +344,6 @@ components:
             $ref: '#/components/schemas/AuditEvent'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-  responses:
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
-
-        - No Authorization header is provided
-
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: oauth2

@@ -444,23 +444,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
-  parameters:
-    member_id:
-      name: member_id
-      in: path
-      required: true
-      description: The member ID
-      schema:
-        type: string
-      example: cr_123
-    syndicate_id:
-      name: syndicate_id
-      in: path
-      required: true
-      description: The syndicate ID
-      schema:
-        type: integer
-      example: 42
   schemas:
     MemberInvestment:
       type: object
@@ -503,37 +486,20 @@ components:
               format: date-time
               description: ISO 8601 timestamp when the investment was created
               example: '2025-03-01T12:00:00Z'
-    MemberInvestmentListEnvelope:
+    SyndicateMemberEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateMember'
+    SyndicateMemberListEnvelope:
       type: object
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/MemberInvestment'
+            $ref: '#/components/schemas/SyndicateMember'
         meta:
-          type: object
-          properties:
-            count:
-              type: integer
-              description: Number of investments
-            total_amount:
-              type: string
-              description: Sum of all investment amounts in cents, as a string
-              example: '800000'
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type:
-          - integer
-          - 'null'
-          example: 12345
+          $ref: '#/components/schemas/PaginationMeta'
     SyndicateMember:
       type: object
       description: JSON:API resource representing a syndicate member (ClubRole)
@@ -712,6 +678,23 @@ components:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
+    MemberInvestmentListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberInvestment'
+        meta:
+          type: object
+          properties:
+            count:
+              type: integer
+              description: Number of investments
+            total_amount:
+              type: string
+              description: Sum of all investment amounts in cents, as a string
+              example: '800000'
     Error:
       type: object
       properties:
@@ -735,20 +718,20 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
-    SyndicateMemberEnvelope:
+    PaginationMeta:
       type: object
       properties:
-        data:
-          $ref: '#/components/schemas/SyndicateMember'
-    SyndicateMemberListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SyndicateMember'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
   responses:
     Forbidden:
       description: 'The authenticated user does not have permission to access this resource.
@@ -788,6 +771,23 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
+    member_id:
+      name: member_id
+      in: path
+      required: true
+      description: The member ID
+      schema:
+        type: string
+      example: cr_123
   securitySchemes:
     bearerAuth:
       type: oauth2

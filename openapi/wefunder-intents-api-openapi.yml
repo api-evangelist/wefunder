@@ -185,6 +185,20 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    IntentListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Intent'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    IntentEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Intent'
     Intent:
       type: object
       description: JSON:API resource representing an intent (proposed dangerous action)
@@ -269,34 +283,6 @@ components:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type:
-          - integer
-          - 'null'
-          example: 12345
-    IntentEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Intent'
-    IntentListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Intent'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
     Error:
       type: object
       properties:
@@ -320,6 +306,20 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
   responses:
     Forbidden:
       description: 'The authenticated user does not have permission to access this resource.

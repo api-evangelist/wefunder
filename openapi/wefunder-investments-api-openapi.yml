@@ -69,20 +69,6 @@ components:
             $ref: '#/components/schemas/Investment'
         meta:
           $ref: '#/components/schemas/PaginationMeta'
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type:
-          - integer
-          - 'null'
-          example: 12345
     Investment:
       type: object
       properties:
@@ -156,26 +142,35 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
-  responses:
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
 
-        - No Authorization header is provided
+        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
 
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+        first page.
 
         '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+      schema:
+        type: integer
+      example: 12345
+  responses:
     RateLimitExceeded:
       description: 'Too many requests in a short time period. The API enforces rate limits to ensure
 
@@ -206,20 +201,25 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    cursor:
-      name: cursor
-      in: query
-      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
 
-        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+        - No Authorization header is provided
 
-        first page.
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
 
         '
-      schema:
-        type: integer
-      example: 12345
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: oauth2

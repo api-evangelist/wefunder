@@ -232,48 +232,11 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PartnerInviteListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartnerInvite'
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
     MarketingPartnerEnvelope:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/MarketingPartner'
-    AttributionCampaignSummaryListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributionCampaignSummary'
     MarketingPartner:
       type: object
       description: A registered marketing partner
@@ -304,6 +267,41 @@ components:
           type: string
           format: date-time
           example: '2025-03-15T10:30:00Z'
+    PartnerInviteEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/PartnerInvite'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    AttributionCampaignSummaryListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributionCampaignSummary'
     AttributionUser:
       type: object
       properties:
@@ -316,45 +314,6 @@ components:
         name:
           type: string
           example: Example Name
-    AttributionCampaignAccess:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 123
-        company_name:
-          type: string
-          example: Example Name
-        company_id:
-          type: integer
-          example: 123
-        access_level:
-          type: integer
-          example: 1
-    PartnerInviteEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/PartnerInvite'
-    AttributionCampaignSummary:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 123
-        company_name:
-          type: string
-          example: Example Name
-        company_id:
-          type: integer
-          example: 123
-        state:
-          type: string
-          example: active
-        access_level:
-          type: integer
-          description: 1=anonymized, 2=detailed (future)
-          example: 1
     PartnerInvite:
       type: object
       description: An invite to establish a partner-company connection
@@ -415,6 +374,32 @@ components:
           format: uri
           description: URL to accept the invite
           example: https://wefunder.com/attribution/invites/abc123xyz789
+    AttributionCampaignSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        company_name:
+          type: string
+          example: Example Name
+        company_id:
+          type: integer
+          example: 123
+        state:
+          type: string
+          example: active
+        access_level:
+          type: integer
+          description: 1=anonymized, 2=detailed (future)
+          example: 1
+    PartnerInviteListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerInvite'
     AttributionPartner:
       type:
       - object
@@ -435,6 +420,26 @@ components:
           - pending
           - approved
           - rejected
+    AttributionCampaignAccess:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        company_name:
+          type: string
+          example: Example Name
+        company_id:
+          type: integer
+          example: 123
+        access_level:
+          type: integer
+          example: 1
+    AttributionMeEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AttributionMe'
     AttributionMe:
       type: object
       properties:
@@ -446,11 +451,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AttributionCampaignAccess'
-    AttributionMeEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/AttributionMe'
   responses:
     Unauthorized:
       description: 'Authentication required or token is invalid/expired. This error occurs when:

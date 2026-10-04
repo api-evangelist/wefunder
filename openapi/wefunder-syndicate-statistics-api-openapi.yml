@@ -58,11 +58,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    SyndicateStatisticsEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/SyndicateStatistics'
     SyndicateStatistics:
       type: object
       description: Aggregate metrics for a syndicate
@@ -112,6 +107,11 @@ components:
               type: integer
               description: Count of audit events in the last 30 days for this syndicate
               example: 4
+    SyndicateStatisticsEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/SyndicateStatistics'
     Error:
       type: object
       properties:
@@ -135,15 +135,6 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
-  parameters:
-    syndicate_id:
-      name: syndicate_id
-      in: path
-      required: true
-      description: The syndicate ID
-      schema:
-        type: integer
-      example: 42
   responses:
     Forbidden:
       description: 'The authenticated user does not have permission to access this resource.
@@ -183,6 +174,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    syndicate_id:
+      name: syndicate_id
+      in: path
+      required: true
+      description: The syndicate ID
+      schema:
+        type: integer
+      example: 42
   securitySchemes:
     bearerAuth:
       type: oauth2

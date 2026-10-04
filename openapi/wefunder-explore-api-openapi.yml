@@ -127,6 +127,37 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
+    OfferingListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Offering'
+        meta:
+          type: object
+          properties:
+            total_count:
+              type: integer
+              description: Total number of offerings across all pages.
+              example: 119
+            page_count:
+              type: integer
+              description: Number of offerings on this page (at most 25).
+              example: 25
+            has_more:
+              type: boolean
+              example: true
+            sort:
+              type: string
+              description: The sort applied to this response.
+              example: most_raised
+            next_cursor:
+              type:
+              - integer
+              - 'null'
+              description: Opaque pagination cursor — pass as `cursor` to fetch the next page. Present only when `has_more` is true.
+              example: 25
     Offering:
       type: object
       description: 'A public offering (a fundraise), addressed by its `ofr_` external id. Returned by the
@@ -243,42 +274,6 @@ components:
 
             '
           example: a1b2c3d4e5f6
-    OfferingListEnvelope:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Offering'
-        meta:
-          type: object
-          properties:
-            total_count:
-              type: integer
-              description: Total number of offerings across all pages.
-              example: 119
-            page_count:
-              type: integer
-              description: Number of offerings on this page (at most 25).
-              example: 25
-            has_more:
-              type: boolean
-              example: true
-            sort:
-              type: string
-              description: The sort applied to this response.
-              example: most_raised
-            next_cursor:
-              type:
-              - integer
-              - 'null'
-              description: Opaque pagination cursor — pass as `cursor` to fetch the next page. Present only when `has_more` is true.
-              example: 25
-    OfferingEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/Offering'
     Exemption:
       type: object
       description: The offering's SEC exemption, in market vocabulary.
@@ -302,6 +297,11 @@ components:
           type: string
           description: Human-readable label in normal market language.
           example: Reg CF
+    OfferingEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Offering'
     Error:
       type: object
       properties:
@@ -325,32 +325,21 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
-  responses:
-    NotFound:
-      description: The requested resource does not exist or is not visible to this token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
 
-        - No Authorization header is provided
+        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
 
-        - The access token is invalid or malformed
-
-        - The access token has expired
-
-        - The access token has been revoked
-
-
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+        first page.
 
         '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+      schema:
+        type: integer
+      example: 12345
+  responses:
     RateLimitExceeded:
       description: 'Too many requests in a short time period. The API enforces rate limits to ensure
 
@@ -381,20 +370,31 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    cursor:
-      name: cursor
-      in: query
-      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+    NotFound:
+      description: The requested resource does not exist or is not visible to this token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
 
-        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+        - No Authorization header is provided
 
-        first page.
+        - The access token is invalid or malformed
+
+        - The access token has expired
+
+        - The access token has been revoked
+
+
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
 
         '
-      schema:
-        type: integer
-      example: 12345
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: oauth2
