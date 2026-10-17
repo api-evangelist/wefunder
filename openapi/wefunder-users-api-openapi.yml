@@ -104,11 +104,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    UserEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/User'
     Error:
       type: object
       properties:
@@ -132,6 +127,11 @@ components:
               type: string
               description: When present, a hint on how to resolve the error.
               example: Obtain a new access token using the OAuth 2.0 flow.
+    UserEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/User'
     User:
       type: object
       properties:

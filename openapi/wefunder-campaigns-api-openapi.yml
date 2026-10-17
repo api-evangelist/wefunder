@@ -64,15 +64,29 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
-    CampaignListEnvelope:
+    Error:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Campaign'
-        meta:
-          $ref: '#/components/schemas/PaginationMeta'
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
     Campaign:
       type: object
       properties:
@@ -122,29 +136,6 @@ components:
             investor_count:
               type: integer
               example: 42
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
     PaginationMeta:
       type: object
       properties:
@@ -159,20 +150,29 @@ components:
           - integer
           - 'null'
           example: 12345
+    CampaignListEnvelope:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Campaign'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
   responses:
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
 
-        This typically means:
+        - No Authorization header is provided
 
-        - The user is authenticated but lacks the required OAuth scope
+        - The access token is invalid or malformed
 
-        - The resource belongs to a different user
+        - The access token has expired
 
-        - The user''s role doesn''t allow this operation
+        - The access token has been revoked
 
 
-        Check that your OAuth token includes the necessary scopes for this endpoint.
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
 
         '
       content:
@@ -209,19 +209,19 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
 
-        - No Authorization header is provided
+        This typically means:
 
-        - The access token is invalid or malformed
+        - The user is authenticated but lacks the required OAuth scope
 
-        - The access token has expired
+        - The resource belongs to a different user
 
-        - The access token has been revoked
+        - The user''s role doesn''t allow this operation
 
 
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+        Check that your OAuth token includes the necessary scopes for this endpoint.
 
         '
       content:

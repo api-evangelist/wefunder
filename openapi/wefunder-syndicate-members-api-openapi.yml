@@ -445,52 +445,34 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    MemberInvestment:
-      type: object
-      description: 'JSON:API resource representing a member''s investment in a syndicate deal.
-
-        Scoped to the syndicate''s selected deals (one per company, matching directory semantics).
-
-        '
-      properties:
-        id:
-          type: integer
-          description: Investment ID
-          example: 789
-        type:
-          type: string
-          example: member_investment
-        attributes:
-          type: object
-          properties:
-            fundraise_id:
-              type: integer
-              description: Deal (fundraise) ID
-              example: 75496
-            company_name:
-              type:
-              - string
-              - 'null'
-              description: Name of the company the deal is for
-              example: Substack
-            amount:
-              type: string
-              description: Investment amount in cents, as a string to avoid floating-point precision issues
-              example: '500000'
-            state:
-              type: string
-              description: Investment state
-              example: confirmed
-            created_at:
-              type: string
-              format: date-time
-              description: ISO 8601 timestamp when the investment was created
-              example: '2025-03-01T12:00:00Z'
     SyndicateMemberEnvelope:
       type: object
       properties:
         data:
           $ref: '#/components/schemas/SyndicateMember'
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
     SyndicateMemberListEnvelope:
       type: object
       properties:
@@ -678,6 +660,20 @@ components:
               type: string
               format: date-time
               example: '2025-03-01T12:00:00Z'
+    PaginationMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
     MemberInvestmentListEnvelope:
       type: object
       properties:
@@ -695,63 +691,48 @@ components:
               type: string
               description: Sum of all investment amounts in cents, as a string
               example: '800000'
-    Error:
+    MemberInvestment:
       type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type:
-          - integer
-          - 'null'
-          example: 12345
-  responses:
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
+      description: 'JSON:API resource representing a member''s investment in a syndicate deal.
 
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
+        Scoped to the syndicate''s selected deals (one per company, matching directory semantics).
 
         '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+      properties:
+        id:
+          type: integer
+          description: Investment ID
+          example: 789
+        type:
+          type: string
+          example: member_investment
+        attributes:
+          type: object
+          properties:
+            fundraise_id:
+              type: integer
+              description: Deal (fundraise) ID
+              example: 75496
+            company_name:
+              type:
+              - string
+              - 'null'
+              description: Name of the company the deal is for
+              example: Substack
+            amount:
+              type: string
+              description: Investment amount in cents, as a string to avoid floating-point precision issues
+              example: '500000'
+            state:
+              type: string
+              description: Investment state
+              example: confirmed
+            created_at:
+              type: string
+              format: date-time
+              description: ISO 8601 timestamp when the investment was created
+              example: '2025-03-01T12:00:00Z'
+  responses:
     Unauthorized:
       description: 'Authentication required or token is invalid/expired. This error occurs when:
 
@@ -765,6 +746,25 @@ components:
 
 
         To resolve: Obtain a new access token using the OAuth 2.0 flow.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
 
         '
       content:

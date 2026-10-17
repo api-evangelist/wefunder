@@ -154,66 +154,6 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimitExceeded'
 components:
-  parameters:
-    utm_source:
-      name: utm_source
-      in: query
-      description: Filter by UTM source (e.g., "GoogleAds", "facebook", "Klaviyo")
-      schema:
-        type: string
-      example: GoogleAds
-    utm_campaign:
-      name: utm_campaign
-      in: query
-      description: Filter by UTM campaign name
-      schema:
-        type: string
-      example: winter_2025
-    start_date:
-      name: start_date
-      in: query
-      description: 'Filter results to attributions on or after this date. Format: YYYY-MM-DD.
-
-        Defaults to 90 days ago if not specified.
-
-        '
-      schema:
-        type: string
-        format: date
-      example: '2025-01-01'
-    end_date:
-      name: end_date
-      in: query
-      description: 'Filter results to attributions on or before this date. Format: YYYY-MM-DD.
-
-        Defaults to today if not specified.
-
-        '
-      schema:
-        type: string
-        format: date
-      example: '2025-03-31'
-    cursor:
-      name: cursor
-      in: query
-      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
-
-        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
-
-        first page.
-
-        '
-      schema:
-        type: integer
-      example: 12345
-    campaign_id:
-      name: campaign_id
-      in: path
-      required: true
-      description: The fundraise/campaign ID
-      schema:
-        type: integer
-      example: 789
   schemas:
     AttributedInvestmentListEnvelope:
       type: object
@@ -245,6 +185,121 @@ components:
                 type: boolean
                 description: Whether the user can request full details
                 example: false
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    AttributionStatsEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/AttributionStats'
+    AttributionStats:
+      type: object
+      description: Aggregate attribution statistics for a campaign
+      properties:
+        campaign_id:
+          type: integer
+          example: 789
+        period:
+          type: object
+          properties:
+            start_date:
+              type: string
+              format: date
+              example: '2025-01-01'
+            end_date:
+              type: string
+              format: date
+              example: '2025-03-31'
+        totals:
+          type: object
+          properties:
+            investment_count:
+              type: integer
+              description: Total number of attributed investments
+              example: 142
+            total_amount:
+              type: number
+              format: float
+              description: Total dollar amount of attributed investments
+              example: 425000
+            unique_investors:
+              type: integer
+              description: Count of unique investors
+              example: 138
+            conversion_rate:
+              type: number
+              format: float
+              description: UTM clicks to investments (percentage)
+              example: 3.08
+        quality_breakdown:
+          type: object
+          description: Attribution quality metrics
+          properties:
+            direct:
+              type: integer
+              description: Conversions within 1 hour of click
+              example: 98
+            assisted:
+              type: integer
+              description: Conversions 1-24 hours after click
+              example: 35
+            delayed:
+              type: integer
+              description: Conversions over 24 hours after click
+              example: 9
+        by_source:
+          type: array
+          description: Breakdown by UTM source
+          items:
+            type: object
+            properties:
+              utm_source:
+                type: string
+                example: GoogleAds
+              investment_count:
+                type: integer
+                example: 47
+              total_amount:
+                type: number
+                format: float
+                example: 142500
+        by_campaign:
+          type: array
+          description: Breakdown by UTM campaign
+          items:
+            type: object
+            properties:
+              utm_campaign:
+                type: string
+                example: winter_2025
+              investment_count:
+                type: integer
+                example: 47
+              total_amount:
+                type: number
+                format: float
+                example: 142500
     AnonymizedAttribution:
       type: object
       description: 'An attributed investment with anonymized investor data.
@@ -347,121 +402,20 @@ components:
               type: integer
               description: Number of other UTM sources in the attribution window
               example: 0
-    AttributionStats:
+    PaginationMeta:
       type: object
-      description: Aggregate attribution statistics for a campaign
       properties:
-        campaign_id:
+        count:
           type: integer
-          example: 789
-        period:
-          type: object
-          properties:
-            start_date:
-              type: string
-              format: date
-              example: '2025-01-01'
-            end_date:
-              type: string
-              format: date
-              example: '2025-03-31'
-        totals:
-          type: object
-          properties:
-            investment_count:
-              type: integer
-              description: Total number of attributed investments
-              example: 142
-            total_amount:
-              type: number
-              format: float
-              description: Total dollar amount of attributed investments
-              example: 425000
-            unique_investors:
-              type: integer
-              description: Count of unique investors
-              example: 138
-            conversion_rate:
-              type: number
-              format: float
-              description: UTM clicks to investments (percentage)
-              example: 3.08
-        quality_breakdown:
-          type: object
-          description: Attribution quality metrics
-          properties:
-            direct:
-              type: integer
-              description: Conversions within 1 hour of click
-              example: 98
-            assisted:
-              type: integer
-              description: Conversions 1-24 hours after click
-              example: 35
-            delayed:
-              type: integer
-              description: Conversions over 24 hours after click
-              example: 9
-        by_source:
-          type: array
-          description: Breakdown by UTM source
-          items:
-            type: object
-            properties:
-              utm_source:
-                type: string
-                example: GoogleAds
-              investment_count:
-                type: integer
-                example: 47
-              total_amount:
-                type: number
-                format: float
-                example: 142500
-        by_campaign:
-          type: array
-          description: Breakdown by UTM campaign
-          items:
-            type: object
-            properties:
-              utm_campaign:
-                type: string
-                example: winter_2025
-              investment_count:
-                type: integer
-                example: 47
-              total_amount:
-                type: number
-                format: float
-                example: 142500
-    AttributionStatsEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/AttributionStats'
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
+          example: 25
+        has_more:
+          type: boolean
+          example: true
+        next_cursor:
+          type:
+          - integer
+          - 'null'
+          example: 12345
     FullAttribution:
       type: object
       description: 'Full attribution data with investor PII (Tier 2 - founders only).
@@ -560,34 +514,20 @@ components:
             competing_sources:
               type: integer
               example: 1
-    PaginationMeta:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 25
-        has_more:
-          type: boolean
-          example: true
-        next_cursor:
-          type:
-          - integer
-          - 'null'
-          example: 12345
   responses:
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
+    Unauthorized:
+      description: 'Authentication required or token is invalid/expired. This error occurs when:
 
-        This typically means:
+        - No Authorization header is provided
 
-        - The user is authenticated but lacks the required OAuth scope
+        - The access token is invalid or malformed
 
-        - The resource belongs to a different user
+        - The access token has expired
 
-        - The user''s role doesn''t allow this operation
+        - The access token has been revoked
 
 
-        Check that your OAuth token includes the necessary scopes for this endpoint.
+        To resolve: Obtain a new access token using the OAuth 2.0 flow.
 
         '
       content:
@@ -624,25 +564,85 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: 'Authentication required or token is invalid/expired. This error occurs when:
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
 
-        - No Authorization header is provided
+        This typically means:
 
-        - The access token is invalid or malformed
+        - The user is authenticated but lacks the required OAuth scope
 
-        - The access token has expired
+        - The resource belongs to a different user
 
-        - The access token has been revoked
+        - The user''s role doesn''t allow this operation
 
 
-        To resolve: Obtain a new access token using the OAuth 2.0 flow.
+        Check that your OAuth token includes the necessary scopes for this endpoint.
 
         '
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+  parameters:
+    cursor:
+      name: cursor
+      in: query
+      description: 'Cursor-based pagination token. Use the `next_cursor` value from the previous response''s
+
+        `meta` object to retrieve the next page of results. Omit this parameter to retrieve the
+
+        first page.
+
+        '
+      schema:
+        type: integer
+      example: 12345
+    campaign_id:
+      name: campaign_id
+      in: path
+      required: true
+      description: The fundraise/campaign ID
+      schema:
+        type: integer
+      example: 789
+    utm_source:
+      name: utm_source
+      in: query
+      description: Filter by UTM source (e.g., "GoogleAds", "facebook", "Klaviyo")
+      schema:
+        type: string
+      example: GoogleAds
+    utm_campaign:
+      name: utm_campaign
+      in: query
+      description: Filter by UTM campaign name
+      schema:
+        type: string
+      example: winter_2025
+    start_date:
+      name: start_date
+      in: query
+      description: 'Filter results to attributions on or after this date. Format: YYYY-MM-DD.
+
+        Defaults to 90 days ago if not specified.
+
+        '
+      schema:
+        type: string
+        format: date
+      example: '2025-01-01'
+    end_date:
+      name: end_date
+      in: query
+      description: 'Filter results to attributions on or before this date. Format: YYYY-MM-DD.
+
+        Defaults to today if not specified.
+
+        '
+      schema:
+        type: string
+        format: date
+      example: '2025-03-31'
   securitySchemes:
     bearerAuth:
       type: oauth2

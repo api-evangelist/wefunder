@@ -325,6 +325,47 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              example: unauthorized
+            message:
+              type: string
+              example: Invalid or expired token
+            details:
+              type: object
+              additionalProperties: true
+            request_id:
+              type: string
+              description: Unique identifier for this request. Quote it in support tickets.
+              example: req_abc123
+            remediation:
+              type: string
+              description: When present, a hint on how to resolve the error.
+              example: Obtain a new access token using the OAuth 2.0 flow.
+    WebhookTestResult:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Test webhook queued for delivery
+        delivery_id:
+          type: string
+          format: uuid
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+        payload_preview:
+          type: object
+          description: The payload that was sent
+    WebhookSubscriptionEnvelope:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookSubscription'
     WebhookDelivery:
       type: object
       description: A single webhook delivery attempt
@@ -368,11 +409,35 @@ components:
           type: string
           format: date-time
           example: '2025-03-15T10:30:00Z'
-    WebhookTestResultEnvelope:
+    WebhookSubscriptionWithRecentDeliveriesEnvelope:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/WebhookTestResult'
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              recent_deliveries:
+                type: array
+                description: Last 10 delivery attempts
+                items:
+                  $ref: '#/components/schemas/WebhookDelivery'
+    WebhookSubscriptionWithSecretEnvelope:
+      type: object
+      properties:
+        data:
+          allOf:
+          - $ref: '#/components/schemas/WebhookSubscription'
+          - type: object
+            properties:
+              secret:
+                type: string
+                description: 'HMAC signing secret. **Only returned on create.**
+
+                  Store this securely - it cannot be retrieved later.
+
+                  '
+                example: whsec_a1b2c3d4e5f6g7h8i9j0...
     WebhookSubscriptionListEnvelope:
       type: object
       properties:
@@ -432,35 +497,11 @@ components:
           type: string
           format: date-time
           example: '2025-03-15T10:30:00Z'
-    WebhookSubscriptionWithRecentDeliveriesEnvelope:
+    WebhookTestResultEnvelope:
       type: object
       properties:
         data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              recent_deliveries:
-                type: array
-                description: Last 10 delivery attempts
-                items:
-                  $ref: '#/components/schemas/WebhookDelivery'
-    WebhookSubscriptionWithSecretEnvelope:
-      type: object
-      properties:
-        data:
-          allOf:
-          - $ref: '#/components/schemas/WebhookSubscription'
-          - type: object
-            properties:
-              secret:
-                type: string
-                description: 'HMAC signing secret. **Only returned on create.**
-
-                  Store this securely - it cannot be retrieved later.
-
-                  '
-                example: whsec_a1b2c3d4e5f6g7h8i9j0...
+          $ref: '#/components/schemas/WebhookTestResult'
     WebhookSubscriptionWithSecret2Envelope:
       type: object
       properties:
@@ -473,67 +514,24 @@ components:
                 type: string
                 description: New HMAC signing secret
                 example: whsec_a1b2c3d4e5f6g7h8i9j0...
-    WebhookTestResult:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Test webhook queued for delivery
-        delivery_id:
-          type: string
-          format: uuid
-          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
-        payload_preview:
-          type: object
-          description: The payload that was sent
-    Error:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            type:
-              type: string
-              example: unauthorized
-            message:
-              type: string
-              example: Invalid or expired token
-            details:
-              type: object
-              additionalProperties: true
-            request_id:
-              type: string
-              description: Unique identifier for this request. Quote it in support tickets.
-              example: req_abc123
-            remediation:
-              type: string
-              description: When present, a hint on how to resolve the error.
-              example: Obtain a new access token using the OAuth 2.0 flow.
-    WebhookSubscriptionEnvelope:
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/WebhookSubscription'
+  parameters:
+    webhook_id:
+      name: webhook_id
+      in: path
+      required: true
+      description: The webhook subscription ID
+      schema:
+        type: integer
+      example: 123
+    campaign_id:
+      name: campaign_id
+      in: path
+      required: true
+      description: The fundraise/campaign ID
+      schema:
+        type: integer
+      example: 789
   responses:
-    Forbidden:
-      description: 'The authenticated user does not have permission to access this resource.
-
-        This typically means:
-
-        - The user is authenticated but lacks the required OAuth scope
-
-        - The resource belongs to a different user
-
-        - The user''s role doesn''t allow this operation
-
-
-        Check that your OAuth token includes the necessary scopes for this endpoint.
-
-        '
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: 'Authentication required or token is invalid/expired. This error occurs when:
 
@@ -553,23 +551,25 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    webhook_id:
-      name: webhook_id
-      in: path
-      required: true
-      description: The webhook subscription ID
-      schema:
-        type: integer
-      example: 123
-    campaign_id:
-      name: campaign_id
-      in: path
-      required: true
-      description: The fundraise/campaign ID
-      schema:
-        type: integer
-      example: 789
+    Forbidden:
+      description: 'The authenticated user does not have permission to access this resource.
+
+        This typically means:
+
+        - The user is authenticated but lacks the required OAuth scope
+
+        - The resource belongs to a different user
+
+        - The user''s role doesn''t allow this operation
+
+
+        Check that your OAuth token includes the necessary scopes for this endpoint.
+
+        '
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     bearerAuth:
       type: oauth2
