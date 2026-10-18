@@ -25,8 +25,41 @@ edges:
     builder: unknown (not in the directory record)
   detected_by: sweep-workflow-automation.py
   first_seen: '2026-10-15'
+- partner_name: SEC (investment adviser registration)
+  partner: null
+  partner_match: register
+  type: contract
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://adviserinfo.sec.gov/firm/summary/167803
+  category: Investment adviser
+  contract_reference:
+    register: SEC Investment Adviser Public Disclosure (IAPD compilation feed, Form ADV Part 1A)
+    spec_file: null
+    standard: Investment Advisers Act of 1940 (SEC Form ADV)
+    role: sec-exempt-reporting-adviser
+    registered_name: WEFUNDER ADVISORS, LLC
+    business_name: WEFUNDER
+    register_id: CRD 167803
+    sec_file_number: 802-78113
+    registration_status: ACTIVE
+    registered_since: '2013-05-20'
+    main_office: SAN FRANCISCO, CA, United States
+    matched_domain: wefunder.com
+    matched_by: domain
+    identity_source: registrant's own Form ADV Item 1.I website address (no lookup)
+    custody_of_client_assets: false
+    signal_note: 'participation only: SEC registration is not a certification; firm type, custody and office are
+      context, never counted; regulatory AUM is not recorded (breadth is not credit)'
+    detected_by: sweep-asset-management.py
+    detected: '2026-10-18'
+  detected_by: sweep-asset-management.py
+  first_seen: '2026-10-18'
 method: searched
 checked:
+- https://reports.adviserinfo.sec.gov/reports/CompilationReports/IA_FIRM_SEC_Feed_10_17_2026.xml.gz
+- https://www.wealthbox.com/wp-json/wp/v2/integrations?per_page=100&page=1
 - https://zapier.com/api/v4/apps/
 source:
 - https://zapier.com/api/v4/apps/
